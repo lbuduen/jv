@@ -17,7 +17,7 @@ const UserSchema = new Schema({
         type: String,
         validate: [
             function (password) {
-                return password && password.length > 6;
+                return password && password.length >= 8;
             }, 'Password should be longer'
         ]
     }

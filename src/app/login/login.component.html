@@ -1,8 +1,20 @@
 <header>
-  Travel Asia
+  <h2>Travel on Asia</h2>
 </header>
 <main>
   <mat-card>
-    this is a card
+    <form #loginForm="ngForm" (ngSubmit)="login()">
+      <mat-form-field>
+        <input type="email" name="email" id="email" placeholder="Email" required [(ngModel)]="credentials.email" matInput>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input type="password" name="password" id="password" placeholder="Password" required [(ngModel)]="credentials.password" matInput>
+      </mat-form-field>
+
+      <button type="submit" [disabled]="!loginForm.valid" mat-raised-button>Log in</button>
+
+    </form>
   </mat-card>
+  <!-- <button mat-button (click)="create()">Create user</button> -->
 </main>

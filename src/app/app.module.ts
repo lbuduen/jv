@@ -1,40 +1,40 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
+import { AppRoutingModule } from "./app-routing/app-routing.module";
 import { MaterialComponentsModule } from './material-components/material-components.module';
+
+import { MainNavModule } from "./main-nav/main-nav.module";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { MainNavComponent } from './main-nav/main-nav.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
-const ROUTES = [
-  {
-    path: '',
-    component: MainNavComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  }
-];
+import { AuthService } from "./auth.service";
+import { AuthGuardService } from "./auth-guard.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MainNavComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(ROUTES),
+    HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    MaterialComponentsModule
+    MaterialComponentsModule,
+    MainNavModule,
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AuthGuardService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
