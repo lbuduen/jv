@@ -6,6 +6,7 @@ import { MainNavRoutingModule } from "./main-nav-routing.module";
 
 import { MainNavComponent } from "./main-nav.component";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AccomodationComponent } from './accomodation/accomodation.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   ],
   declarations: [
     MainNavComponent,
-    DashboardComponent
+    DashboardComponent,
+    AccomodationComponent
   ]
 })
 export class MainNavModule { }

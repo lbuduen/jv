@@ -7,6 +7,7 @@ import { AuthGuardService } from "../auth-guard.service";
 
 import { MainNavComponent } from "./main-nav.component";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AccomodationComponent } from "./accomodation/accomodation.component";
 
 const mainNavRoutes: Routes = [
   {
@@ -17,6 +18,10 @@ const mainNavRoutes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'accomodation',
+        component: AccomodationComponent
       }
     ]
   }

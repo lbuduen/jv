@@ -15,8 +15,6 @@ const httpOptions = {
 })
 export class AuthService {
 
-  isLoggedIn = false;
-
   redirectUrl: string;
 
   constructor(
@@ -28,7 +26,6 @@ export class AuthService {
     return this.http.post('api/users/login', credentials, httpOptions).pipe(
       tap(user => {
         window.localStorage.setItem('travelOnAsia_user', JSON.stringify(user));
-        this.isLoggedIn = true;
       }),
       catchError(this.handleError<any>('Log in', false))
     );
@@ -36,7 +33,10 @@ export class AuthService {
 
   logout(): void {
     window.localStorage.removeItem('travelOnAsia_user');
-    this.isLoggedIn = false;
+  }
+
+  isLoggedIn(): boolean {
+    return Boolean(window.localStorage.getItem('travelOnAsia_user'));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
