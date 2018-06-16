@@ -1,18 +1,24 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const AccomodationTypeSchema = new Schema({
-    type: String
-});
+const ACCOMODATION_TYPE = ['hotel', 'motel', 'hostel', 'campsite', 'inn', 'guest house', 'other'];
 
-const AccomodationAmenitySchema = new Schema({
-    name: String
-});
+const ROOM_TYPE = ['single', 'double', 'triple', 'quad', 'queen', 'king', 'studio', 'suite', 'apartment', 'cabana', 'villa', 'other'];
+
+const AMENITIES = ['pool', 'gym', 'spa'];
 
 const RoomSchema = new Schema({
     number: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        enum: ROOM_TYPE
+    },
+    beds: {
+        type: Number,
+        default: 1
     },
     available: {
         type: Boolean,
@@ -27,8 +33,9 @@ const AccomodationSchema = new Schema({
         required: true
     },
     type: {
-        type: AccomodationTypeSchema,
-        required: true
+        type: String,
+        required: true,
+        enum: ACCOMODATION_TYPE
     },
     address: {
         type: String,
@@ -40,8 +47,10 @@ const AccomodationSchema = new Schema({
     rooms: {
         type: [RoomSchema],
     },
-    amenities: [AccomodationAmenitySchema],
-    rating: { type: Number, min: 1, max: 5 },
+    amenities: {
+        type: [String],
+        enum: AMENITIES
+    },
     active: {
         type: Boolean,
         default: true

@@ -1,0 +1,64 @@
+<form [formGroup]="accomForm" (ngSubmit)="save()">
+  <mat-card>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Name" formControlName="name" required>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Type" formControlName="type">
+          <mat-option *ngFor="let h of hotel_types" [value]="h">
+            {{ h }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Phone" formControlName="phone">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Amenities" formControlName="amenities" multiple>
+          <mat-option *ngFor="let am of amenities" [value]="am">
+            {{ am }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-checkbox formControlName="active">Active</mat-checkbox>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Webpage" formControlName="webpage">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <input type="text" formControlName="photos">
+    </div>
+    <mat-card-actions>
+      <button type="submit" [disabled]="accomForm.invalid" mat-raised-button>Save</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<!-- <p>Form value: {{ accomForm.value | json }}</p>
+<p>Form status: {{ accomForm.status | json }}</p> -->

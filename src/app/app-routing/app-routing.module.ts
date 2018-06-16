@@ -9,7 +9,7 @@ import { PageNotFoundComponent } from '../page-not-found/page-not-found.componen
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: '/admin', pathMatch: 'full' },
+  { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -19,7 +19,7 @@ const appRoutes: Routes = [
     CommonModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      /* { enableTracing: true } */ // <-- debugging purposes only
     )
   ],
   exports: [

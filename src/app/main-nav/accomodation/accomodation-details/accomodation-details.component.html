@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-title>{{ accomodation.name}} ({{ accomodation.type}})</mat-card-title>
+  <mat-card-subtitle>
+    <a href="{{ accomodation.webpage}}" target="_blank">{{ accomodation.webpage}}</a>
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div>
+      <address>
+        {{ accomodation.address}}
+      </address>
+      <div>
+        {{ accomodation.phone }}
+      </div>
+    </div>
+    <div>
+      <p>{{ accomodation.description}}</p>
+      <div *ngIf="accomodation.amenities.length">
+        <h3>Amenities</h3>
+        <mat-chip-list>
+          <mat-chip *ngFor="let am of accomodation.amenities">{{ am }}</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
