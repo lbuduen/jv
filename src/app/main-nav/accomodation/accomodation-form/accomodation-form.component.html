@@ -1,64 +1,192 @@
-<form [formGroup]="accomForm" (ngSubmit)="save()">
-  <mat-card>
-    <div>
-      <mat-form-field class="full-width">
-        <input type="text" matInput placeholder="Name" formControlName="name" required>
-      </mat-form-field>
+<mat-toolbar>
+  <span class="tb-title">Accomodation</span>
+</mat-toolbar>
+
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="accomForm">
+    <form [formGroup]="accomForm">
+      <ng-template matStepLabel>Accomodation form</ng-template>
+
+      <div>
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Name" formControlName="name" required>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <mat-select placeholder="Type" formControlName="type" required>
+            <mat-option *ngFor="let h of hotel_types" [value]="h">
+              {{ h }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Phone" formControlName="phone">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <mat-select placeholder="Amenities" formControlName="amenities" multiple>
+            <mat-option *ngFor="let am of amenities" [value]="am">
+              {{ am }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-checkbox formControlName="active">Active</mat-checkbox>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Webpage" formControlName="webpage">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <input type="text" formControlName="photos">
+      </div>
+      <div>
+        <button mat-raised-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [optional]="true">
+    <div id="room-container">
+      <form [formGroup]="roomForm">
+        <ng-template matStepLabel>Room form</ng-template>
+
+        <div>
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Number" formControlName="number" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Type" formControlName="type" required>
+              <mat-option *ngFor="let rt of room_types" [value]="rt">
+                {{ rt }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <input type="number" matInput placeholder="Beds" formControlName="beds" required>
+            <mat-hint>Quantity of beds</mat-hint>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-checkbox formControlName="available">Available</mat-checkbox>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <input type="text" formControlName="photos">
+        </div>
+        <div>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button matStepperNext>Next</button>
+          <button mat-raised-button color="primary" (click)="addRoom()">Save room</button>
+        </div>
+      </form>
+      <table class="mat-table mat-elevation-z8" *ngIf="rooms.length">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Number</th>
+            <th class="mat-header-cell">Type</th>
+            <th class="mat-header-cell">Beds</th>
+            <th class="mat-header-cell"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
+            <td class="mat-cell">{{room.number}}</td>
+            <td class="mat-cell">{{room.type}}</td>
+            <td class="mat-cell">{{room.beds}}</td>
+            <td class="mat-cell">
+              <button mat-button (click)="deleteRoom(i)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <mat-card id="done-step">
+      <mat-card-title>{{ accomForm.get('name').value }} ({{ accomForm.get('type').value }})</mat-card-title>
+      <mat-card-subtitle>
+        <a href="{{ accomForm.get('webpage').value }}" target="_blank">{{ accomForm.get('webpage').value }}</a>
+      </mat-card-subtitle>
+      <mat-card-content>
+        <div>
+          <address>
+            {{ accomForm.get('address').value }}
+          </address>
+          <div>
+            {{ accomForm.get('phone').value }}
+          </div>
+        </div>
+        <div>
+          <p>{{ accomForm.get('description').value }}</p>
+          <p>{{ accomForm.get('observations').value }}</p>
+          <div *ngIf="accomForm.get('amenities').value[0] !== ''">
+            <h3>Amenities</h3>
+            <mat-chip-list>
+              <mat-chip *ngFor="let am of accomForm.get('amenities').value ">{{ am }}</mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+        <table class="mat-table" *ngIf="rooms.length">
+          <caption>Rooms</caption>
+          <thead>
+            <tr class="mat-header-row">
+              <th class="mat-header-cell">Number</th>
+              <th class="mat-header-cell">Type</th>
+              <th class="mat-header-cell">Beds</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
+              <td class="mat-cell">{{room.number}}</td>
+              <td class="mat-cell">{{room.type}}</td>
+              <td class="mat-cell">{{room.beds}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
     <div>
-      <mat-form-field class="full-width">
-        <mat-select placeholder="Type" formControlName="type">
-          <mat-option *ngFor="let h of hotel_types" [value]="h">
-            {{ h }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <button mat-raised-button matStepperPrevious>Back</button>
+      <button mat-raised-button (click)="save()">Save all</button>
     </div>
-    <div>
-      <mat-form-field class="full-width">
-        <textarea matInput placeholder="Address" formControlName="address" required></textarea>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <input type="text" matInput placeholder="Phone" formControlName="phone">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <mat-select placeholder="Amenities" formControlName="amenities" multiple>
-          <mat-option *ngFor="let am of amenities" [value]="am">
-            {{ am }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-checkbox formControlName="active">Active</mat-checkbox>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <textarea matInput placeholder="Description" formControlName="description"></textarea>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <input type="text" matInput placeholder="Webpage" formControlName="webpage">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
-      </mat-form-field>
-    </div>
-    <div>
-      <input type="text" formControlName="photos">
-    </div>
-    <mat-card-actions>
-      <button type="submit" [disabled]="accomForm.invalid" mat-raised-button>Save</button>
-    </mat-card-actions>
-  </mat-card>
-</form>
+  </mat-step>
+
+</mat-horizontal-stepper>
 
 <!-- <p>Form value: {{ accomForm.value | json }}</p>
 <p>Form status: {{ accomForm.status | json }}</p> -->

@@ -5,7 +5,7 @@ const ACCOMODATION_TYPE = ['hotel', 'motel', 'hostel', 'campsite', 'inn', 'guest
 
 const ROOM_TYPE = ['single', 'double', 'triple', 'quad', 'queen', 'king', 'studio', 'suite', 'apartment', 'cabana', 'villa', 'other'];
 
-const AMENITIES = ['pool', 'gym', 'spa'];
+const AMENITIES = ['pool', 'gym', 'spa', ''];
 
 const RoomSchema = new Schema({
     number: {
@@ -24,6 +24,8 @@ const RoomSchema = new Schema({
         type: Boolean,
         default: true
     },
+    description: String,
+    observations: String,
     photos: [String]
 });
 

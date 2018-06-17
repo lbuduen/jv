@@ -66,6 +66,7 @@ exports.update = function (req, res) {
     accomodation.photos = req.body.photos;
     accomodation.webpage = req.body.webpage;
     accomodation.observations = req.body.observations;
+    accomodation.rooms = req.body.rooms;
 
     accomodation.save(err => {
         if (err) {

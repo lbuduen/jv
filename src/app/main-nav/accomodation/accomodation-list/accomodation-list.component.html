@@ -1,5 +1,7 @@
-<a routerLink="/admin/accomodation/add" routerLinkActive="active">Add</a>
-<a routerLink="/admin/accomodation/edit/5" routerLinkActive="active">Edit</a>
+<mat-toolbar>
+  <span class="tb-title">Accomodation</span>
+  <a mat-button routerLink="/admin/accomodation/add">Add</a>
+</mat-toolbar>
 
 <div id="list-container">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

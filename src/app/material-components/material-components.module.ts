@@ -16,7 +16,8 @@ import {
   MatSelectModule,
   MatTableModule,
   MatMenuModule,
-  MatChipsModule
+  MatChipsModule,
+  MatStepperModule
 } from '@angular/material';
 
 
@@ -37,7 +38,8 @@ import {
     MatSelectModule,
     MatTableModule,
     MatMenuModule,
-    MatChipsModule
+    MatChipsModule,
+    MatStepperModule
   ],
   exports: [
     LayoutModule,
@@ -54,7 +56,8 @@ import {
     MatSelectModule,
     MatTableModule,
     MatMenuModule,
-    MatChipsModule
+    MatChipsModule,
+    MatStepperModule
   ],
   declarations: []
 })
