@@ -11,6 +11,11 @@ import { AccomodationComponent } from './accomodation/accomodation.component';
 import { AccomodationFormComponent } from './accomodation/accomodation-form/accomodation-form.component';
 import { AccomodationListComponent } from './accomodation/accomodation-list/accomodation-list.component';
 import { AccomodationDetailsComponent } from './accomodation/accomodation-details/accomodation-details.component';
+import { AccomodationDeleteDialog } from './accomodation/accomodation-delete-dialog.component';
+
+import { TransportationComponent } from './transportation/transportation.component';
+import { ActivitiesComponent } from './activities/activities.component';
+import { PackagesComponent } from './packages/packages.component';
 
 @NgModule({
   imports: [
@@ -25,7 +30,14 @@ import { AccomodationDetailsComponent } from './accomodation/accomodation-detail
     AccomodationComponent,
     AccomodationFormComponent,
     AccomodationListComponent,
-    AccomodationDetailsComponent
+    AccomodationDetailsComponent,
+    AccomodationDeleteDialog,
+    TransportationComponent,
+    ActivitiesComponent,
+    PackagesComponent
+  ],
+  entryComponents: [
+    AccomodationDeleteDialog
   ]
 })
 export class MainNavModule { }

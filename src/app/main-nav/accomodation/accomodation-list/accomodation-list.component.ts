@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { MatSnackBar, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { AccomodationDeleteDialog } from "../accomodation-delete-dialog.component";
 
 import { AccomodationService } from "../accomodation.service";
 
@@ -16,7 +17,8 @@ export class AccomodationListComponent implements OnInit {
 
   constructor(
     private accomServ: AccomodationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private delDialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -26,18 +28,26 @@ export class AccomodationListComponent implements OnInit {
   }
 
   delete(id: String) {
-    this.accomServ.delete(id).subscribe(res => {
+    let dialogRef = this.delDialog.open(AccomodationDeleteDialog, {
+      height: '200px',
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.accomServ.delete(id).subscribe(res => {
 
-      /*  this.dataSource.forEach((accom, i) => {
-         if (accom._id === id) {
-           this.dataSource.splice(i, 1);
-           console.log(`deleted ${i}`);
-         }
-       }); */
+          /*  this.dataSource.forEach((accom, i) => {
+             if (accom._id === id) {
+               this.dataSource.splice(i, 1);
+               console.log(`deleted ${i}`);
+             }
+           }); */
 
-      this.snackBar.open(`${res.name} ${res.type} has been deleted`, '', {
-        duration: 3000,
-      });
+          this.snackBar.open(`${res.name} ${res.type} has been deleted`, '', {
+            duration: 3000,
+          });
+        });
+      }
     });
   }
 }

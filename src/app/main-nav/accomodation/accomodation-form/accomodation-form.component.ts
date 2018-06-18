@@ -45,6 +45,11 @@ export class AccomodationFormComponent implements OnInit {
       this.accomServ.read(this.id).subscribe(accom => {
         this.accomForm.patchValue(accom);
         this.rooms = accom.rooms;
+      }, error => {
+        this.snackBar.open('Error retrieving the details of this accomodation', '', {
+          duration: 3000,
+        });
+        this.router.navigate(['/admin/accomodation']);
       });
     }
   }
