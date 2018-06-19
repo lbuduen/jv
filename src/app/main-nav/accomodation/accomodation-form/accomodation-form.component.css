@@ -12,11 +12,11 @@ form div:last-child {
     width: 100%;
 }
 
-#room-container {
+.wrap {
     display: flex;
 }
 
-#room-container table {
+.wrap table {
     width: 50%;
 }
 

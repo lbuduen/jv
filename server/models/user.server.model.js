@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const ROLES = ['admin', 'driver', 'landlord'];
+
 const UserSchema = new Schema({
     firstName: String,
     lastName: String,
@@ -12,12 +14,21 @@ const UserSchema = new Schema({
         required: 'Email is required',
         match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]
     },
+    photo: String,
+    phone: String,
+    role: {
+        type: [String],
+        enum: ROLES
+    },
     salt: String,
     password: {
         type: String,
         validate: [
             function (password) {
-                return password && password.length >= 8;
+                if (password) {
+                    return password && password.length >= 8;
+                }
+                return true;
             }, 'Password should be longer'
         ]
     }

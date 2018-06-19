@@ -1,0 +1,19 @@
+<mat-toolbar>
+  <span class="tb-title">Users</span>
+  <a mat-button routerLink="/admin/users/edit/{{user._id}}">Edit</a>
+  <button mat-button (click)="delete(user._id)" color="warn">Delete</button>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>{{ user.firstName }} {{user.lastName}}</mat-card-title>
+    <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+    </p>
+    <p>{{ user.phone }}</p>
+  </mat-card-content>
+</mat-card>

@@ -14,6 +14,10 @@ import { AuthService } from "../auth.service";
 export class MainNavComponent implements OnInit {
 
   user = {};
+  totals = {
+    accomodation: 0,
+    users: 0
+  };
 
   constructor(
     private router: Router,
@@ -24,6 +28,9 @@ export class MainNavComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(this.appsrv.getSession('user'));
+    this.appsrv.getTotals().subscribe(res => {
+      this.totals = res;
+    })
   }
 
   logout() {

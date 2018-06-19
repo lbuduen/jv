@@ -13,24 +13,36 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AppService {
-
-  private appPrefix = 'travelOnAsia_';
+export class UserService {
+  private apiURL = 'api/users';  // URL to web api
 
   constructor(
     private http: HttpClient,
     public snackBar: MatSnackBar
   ) { }
 
-  login(credentials): Observable<any> {
-    return this.http.post(`api/users/login`, credentials, httpOptions).pipe(
-      tap(user => this.setSession('user', JSON.stringify(user))),
-      catchError(this.handleError<any>('Log in'))
+  create(user): Observable<any> {
+    return this.http.post(this.apiURL, user, httpOptions).pipe(
+      catchError(this.handleError('Create user'))
     );
   }
 
-  getTotals(): Observable<any> {
-    return this.http.get('api/totals');
+  read(id: String): Observable<any> {
+    return this.http.get(`${this.apiURL}/${id}`);
+  }
+
+  update(id, user): Observable<any> {
+    return this.http.put(`${this.apiURL}/${id}`, user, httpOptions).pipe(
+      catchError(this.handleError('Update user'))
+    );
+  }
+
+  list(): Observable<any> {
+    return this.http.get(this.apiURL);
+  }
+
+  delete(id: String): Observable<any> {
+    return this.http.delete(`${this.apiURL}/${id}`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -41,17 +53,5 @@ export class AppService {
       });
       return of(result as T);
     }
-  }
-
-  getSession(elem: string) {
-    return window.localStorage.getItem(this.appPrefix + elem);
-  }
-
-  setSession(elem: string, val: any) {
-    window.localStorage.setItem(this.appPrefix + elem, val);
-  }
-
-  removeSession(elem: string) {
-    window.localStorage.removeItem(this.appPrefix + elem);
   }
 }

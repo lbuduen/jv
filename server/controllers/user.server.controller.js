@@ -15,8 +15,71 @@ exports.create = function (req, res, next) {
     });
 }
 
+exports.list = function (req, res, next) {
+    User.find((err, users) => {
+        if (err) {
+            return next(err);
+        }
+        else {
+            res.status(200).json(users);
+        }
+    });
+};
+
+exports.delete = function (req, res) {
+    const user = req.user;
+    user.remove(err => {
+        if (err) {
+            return next(err);
+        }
+        res.status(200).json(user);
+    })
+};
+
+exports.userById = function (req, res, next, id) {
+    User.findById(id, 'firstName lastName email photo phone role', (err, user) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return next(new Error('Failed to load user ' + id));
+        }
+
+        req.user = user;
+        next();
+    });
+};
+
+exports.read = function (req, res) {
+    res.status(200).json(req.user);
+};
+
+exports.update = function (req, res) {
+    const user = req.user;
+
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.email = req.body.email;
+    user.phone = req.body.phone;
+    user.role = req.body.role;
+    user.password = req.body.password;
+    user.photo = req.body.photo;
+
+    user.save(err => {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+        else {
+            res.status(204).end();
+        }
+    });
+};
+
+
 exports.login = function (req, res) {
-    User.findOne({ "email": req.body.email }, (err, user) => {
+    User.findOne({ "email": req.body.email }, 'firstName lastName email photo phone role', (err, user) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)

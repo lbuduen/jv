@@ -19,6 +19,11 @@ import { ActivitiesComponent } from './activities/activities.component';
 
 import { PackagesComponent } from './packages/packages.component';
 
+import { UserComponent } from './user/user.component';
+import { UserFormComponent } from './user/user-form/user-form.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserDetailsComponent } from './user/user-details/user-details.component';
+
 const mainNavRoutes: Routes = [
   {
     path: 'admin',
@@ -63,6 +68,28 @@ const mainNavRoutes: Routes = [
         path: 'packages',
         component: PackagesComponent
       },
+      {
+        path: 'users',
+        component: UserComponent,
+        children: [
+          {
+            path: 'add',
+            component: UserFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: UserFormComponent
+          },
+          {
+            path: 'details/:id',
+            component: UserDetailsComponent
+          },
+          {
+            path: '',
+            component: UserListComponent
+          }
+        ]
+      }
     ]
   }
 ]

@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
-
 
 import { AccomodationService } from "../accomodation.service";
 
@@ -32,7 +31,8 @@ export class AccomodationFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accomServ: AccomodationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class AccomodationFormComponent implements OnInit {
         this.accomForm.patchValue(accom);
         this.rooms = accom.rooms;
       }, error => {
-        this.snackBar.open('Error retrieving the details of this accomodation', '', {
+        this.snackBar.open(`Error retrieving accomodation ${this.id}`, '', {
           duration: 3000,
         });
         this.router.navigate(['/admin/accomodation']);
@@ -79,6 +79,28 @@ export class AccomodationFormComponent implements OnInit {
       observations: '',
       photos: ''
     });
+  }
+
+  onFileChange(event) {
+    let reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const files = event.target.files;
+      let photos = [];
+      files.forEach(photo => {
+        reader.readAsDataURL(photo);
+
+        reader.onload = () => {
+          let img = window.document.createElement('img');
+
+          photos.push(photo);
+        }
+      });
+      this.accomForm.patchValue({
+        photos: photos
+      });
+      this.cd.markForCheck();
+    }
   }
 
   addRoom() {

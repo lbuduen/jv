@@ -18,7 +18,10 @@ import {
   MatMenuModule,
   MatChipsModule,
   MatStepperModule,
-  MatDialogModule
+  MatDialogModule,
+  MatBadgeModule,
+  MatPaginatorModule,
+  MatSortModule
 } from '@angular/material';
 
 
@@ -41,7 +44,10 @@ import {
     MatMenuModule,
     MatChipsModule,
     MatStepperModule,
-    MatDialogModule
+    MatDialogModule,
+    MatBadgeModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   exports: [
     LayoutModule,
@@ -60,7 +66,10 @@ import {
     MatMenuModule,
     MatChipsModule,
     MatStepperModule,
-    MatDialogModule
+    MatDialogModule,
+    MatBadgeModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   declarations: []
 })

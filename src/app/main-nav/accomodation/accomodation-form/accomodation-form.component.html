@@ -4,70 +4,76 @@
 
 <mat-horizontal-stepper [linear]="true" #stepper>
   <mat-step [stepControl]="accomForm">
-    <form [formGroup]="accomForm">
-      <ng-template matStepLabel>Accomodation form</ng-template>
+    <div class="wrap">
+      <form [formGroup]="accomForm">
+        <ng-template matStepLabel>Accomodation form</ng-template>
 
-      <div>
-        <mat-form-field class="full-width">
-          <input type="text" matInput placeholder="Name" formControlName="name" required>
-        </mat-form-field>
+        <div>
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Name" formControlName="name" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Type" formControlName="type" required>
+              <mat-option *ngFor="let h of hotel_types" [value]="h">
+                {{ h }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Phone" formControlName="phone">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Amenities" formControlName="amenities" multiple>
+              <mat-option *ngFor="let am of amenities" [value]="am">
+                {{ am }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-checkbox formControlName="active">Active</mat-checkbox>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Webpage" formControlName="webpage">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <input type="file" accept="image/png, image/jpeg" multiple mat-button (change)="onFileChange($event)">
+        </div>
+        <div>
+          <button mat-raised-button matStepperNext>Next</button>
+        </div>
+      </form>
+      <div class="gallery">
+        here comes the gallery
       </div>
-      <div>
-        <mat-form-field class="full-width">
-          <mat-select placeholder="Type" formControlName="type" required>
-            <mat-option *ngFor="let h of hotel_types" [value]="h">
-              {{ h }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <textarea matInput placeholder="Address" formControlName="address" required></textarea>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <input type="text" matInput placeholder="Phone" formControlName="phone">
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <mat-select placeholder="Amenities" formControlName="amenities" multiple>
-            <mat-option *ngFor="let am of amenities" [value]="am">
-              {{ am }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-checkbox formControlName="active">Active</mat-checkbox>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <textarea matInput placeholder="Description" formControlName="description"></textarea>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <input type="text" matInput placeholder="Webpage" formControlName="webpage">
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="full-width">
-          <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
-        </mat-form-field>
-      </div>
-      <div>
-        <input type="text" formControlName="photos">
-      </div>
-      <div>
-        <button mat-raised-button matStepperNext>Next</button>
-      </div>
-    </form>
+    </div>
+
   </mat-step>
   <mat-step [optional]="true">
-    <div id="room-container">
+    <div class="wrap">
       <form [formGroup]="roomForm">
         <ng-template matStepLabel>Room form</ng-template>
 
