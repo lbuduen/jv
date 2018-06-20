@@ -26,6 +26,8 @@ export class AccomodationFormComponent implements OnInit {
   rooms = [];
   selectedRoom: any = false;
 
+  contacts = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -36,6 +38,10 @@ export class AccomodationFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.accomServ.getAccomodationContacts().subscribe(users => {
+      this.contacts = users;
+    });
+
     this.createAccomodationForm();
     this.createRoomForm();
 
@@ -44,6 +50,9 @@ export class AccomodationFormComponent implements OnInit {
     if (this.id) {
       this.accomServ.read(this.id).subscribe(accom => {
         this.accomForm.patchValue(accom);
+        this.accomForm.patchValue({
+          contact: accom.contact._id
+        });
         this.rooms = accom.rooms;
       }, error => {
         this.snackBar.open(`Error retrieving accomodation ${this.id}`, '', {
@@ -60,6 +69,7 @@ export class AccomodationFormComponent implements OnInit {
       type: ['', Validators.required],
       address: ['', Validators.required],
       phone: '',
+      contact: ['', Validators.required],
       amenities: '',
       active: true,
       description: '',

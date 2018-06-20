@@ -1,10 +1,10 @@
-const Accomodation = require('mongoose').model('Accomodation');
+const Activity = require('mongoose').model('Activity');
 const User = require('mongoose').model('User');
 
 exports.create = function (req, res, next) {
-    const accom = new Accomodation(req.body);
+    const act = new Activity(req.body);
 
-    accom.save(err => {
+    act.save(err => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
@@ -17,62 +17,53 @@ exports.create = function (req, res, next) {
 };
 
 exports.list = function (req, res, next) {
-    Accomodation.find((err, accoms) => {
+    Activity.find((err, activities) => {
         if (err) {
             return next(err);
         }
         else {
-            res.status(200).json(accoms);
+            res.status(200).json(activities);
         }
     });
 };
 
-exports.accomById = function (req, res, next, id) {
-    Accomodation.findById(id)
-        .populate('contact', 'firstName lastName')
-        .exec((err, accom) => {
+exports.activityById = function (req, res, next, id) {
+    Activity.findById(id)
+        .populate('guide', 'firstName lastName')
+        .exec((err, activity) => {
             if (err) {
                 return next(err);
             }
-            if (!accom) {
-                return next(new Error('Failed to load accomodotation ' + id));
+            if (!activity) {
+                return next(new Error('Failed to load activity ' + id));
             }
-            req.accomodation = accom;
+            req.activity = activity;
             next();
         });
 };
 
 exports.read = function (req, res) {
-    res.status(200).json(req.accomodation);
+    res.status(200).json(req.activity);
 };
 
 exports.delete = function (req, res) {
-    const accomodation = req.accomodation;
-    accomodation.remove(err => {
+    const activity = req.activity;
+    activity.remove(err => {
         if (err) {
             return next(err);
         }
-        res.status(200).json(accomodation);
+        res.status(200).json(activity);
     })
 };
 
 exports.update = function (req, res) {
-    const accomodation = req.accomodation;
+    const activity = req.activity;
 
-    accomodation.name = req.body.name;
-    accomodation.type = req.body.type;
-    accomodation.address = req.body.address;
-    accomodation.phone = req.body.phone;
-    accomodation.amenities = req.body.amenities;
-    accomodation.active = req.body.active;
-    accomodation.description = req.body.description;
-    accomodation.photos = req.body.photos;
-    accomodation.webpage = req.body.webpage;
-    accomodation.observations = req.body.observations;
-    accomodation.rooms = req.body.rooms;
-    accomodation.contact = req.body.contact;
+    activity.name = req.body.name;
+    activity.description = req.body.description;
+    activity.photos = req.body.photos;
 
-    accomodation.save(err => {
+    activity.save(err => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
@@ -84,11 +75,8 @@ exports.update = function (req, res) {
     });
 };
 
-/**
- * Returns an array of users with landlord role
- */
 exports.getContacts = function (req, res) {
-    User.find({ role: 'landlord' }, 'firstName lastName')
+    User.find({ role: 'guide' }, 'firstName lastName')
         .sort('firstName')
         .exec((err, users) => {
             if (err) {

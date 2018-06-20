@@ -16,7 +16,8 @@ export class MainNavComponent implements OnInit {
   user = {};
   totals = {
     accomodation: 0,
-    users: 0
+    users: 0,
+    activities: 0
   };
 
   constructor(

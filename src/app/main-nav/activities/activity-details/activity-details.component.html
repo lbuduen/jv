@@ -1,0 +1,15 @@
+<mat-toolbar>
+  <span class="tb-title">Activities</span>
+  <a mat-button routerLink="/admin/activities/edit/{{activity._id}}">Edit</a>
+  <button mat-button (click)="delete(activity._id)" color="warn">Delete</button>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ activity.name }}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    {{ activity.description }}
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,17 @@
+form {
+    width: 50%;
+    padding: 0px 16px;
+    margin: 20px 0px;
+}
+  
+  form div:last-child {
+    margin-top: 20px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+
+  button[type=submit] {
+    margin-top: 20px;
+  }

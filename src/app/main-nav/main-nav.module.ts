@@ -16,8 +16,6 @@ import { AccomodationDeleteDialog } from './accomodation/accomodation-delete-dia
 
 import { TransportationComponent } from './transportation/transportation.component';
 
-import { ActivitiesComponent } from './activities/activities.component';
-
 import { PackagesComponent } from './packages/packages.component';
 
 import { UserComponent } from './user/user.component';
@@ -25,6 +23,12 @@ import { UserFormComponent } from './user/user-form/user-form.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDeleteDialog } from "./user/user-delete-dialog.component";
 import { UserDetailsComponent } from './user/user-details/user-details.component';
+
+import { ActivitiesComponent } from './activities/activities.component';
+import { ActivityFormComponent } from './activities/activity-form/activity-form.component';
+import { ActivityListComponent } from './activities/activity-list/activity-list.component';
+import { ActivityDeleteDialog } from "./activities/activity-delete-dialog.component";
+import { ActivityDetailsComponent } from './activities/activity-details/activity-details.component';
 
 @NgModule({
   imports: [
@@ -48,11 +52,16 @@ import { UserDetailsComponent } from './user/user-details/user-details.component
     UserFormComponent,
     UserListComponent,
     UserDeleteDialog,
-    UserDetailsComponent
+    UserDetailsComponent,
+    ActivityFormComponent,
+    ActivityListComponent,
+    ActivityDeleteDialog,
+    ActivityDetailsComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,
-    UserDeleteDialog
+    UserDeleteDialog,
+    ActivityDeleteDialog
   ]
 })
 export class MainNavModule { }

@@ -1,5 +1,6 @@
 const Accomodation = require('mongoose').model('Accomodation');
 const User = require('mongoose').model('User');
+const Activity = require('mongoose').model('Activity');
 
 exports.totalCounts = function (req, res, next) {
     let totals = {};
@@ -14,7 +15,13 @@ exports.totalCounts = function (req, res, next) {
                 return next(err);
             }
             totals.users = ucount;
-            res.status(200).json(totals);
+            Activity.count({}, (err, actcount) => {
+                if (err) {
+                    return next(err);
+                }
+                totals.activities = actcount;
+                res.status(200).json(totals);
+            })
         });
     });
 };

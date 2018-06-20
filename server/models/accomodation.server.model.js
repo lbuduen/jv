@@ -39,6 +39,11 @@ const AccomodationSchema = new Schema({
         required: true,
         enum: ACCOMODATION_TYPE
     },
+    contact: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
     address: {
         type: String,
         required: true

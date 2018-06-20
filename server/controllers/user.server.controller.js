@@ -37,7 +37,7 @@ exports.delete = function (req, res) {
 };
 
 exports.userById = function (req, res, next, id) {
-    User.findById(id, 'firstName lastName email photo phone role', (err, user) => {
+    User.findById(id, '-password -salt', (err, user) => {
         if (err) {
             return next(err);
         }
@@ -79,7 +79,7 @@ exports.update = function (req, res) {
 
 
 exports.login = function (req, res) {
-    User.findOne({ "email": req.body.email }, 'firstName lastName email photo phone role', (err, user) => {
+    User.findOne({ "email": req.body.email }, (err, user) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)

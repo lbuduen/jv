@@ -14,18 +14,18 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AccomodationService {
+export class ActivityService {
 
-  private apiURL = 'api/accomodation';
+  private apiURL = 'api/activities';
 
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) { }
 
-  create(accomodation): Observable<any> {
-    return this.http.post(this.apiURL, accomodation, httpOptions).pipe(
-      catchError(this.handleError('Create accomodation'))
+  create(activity): Observable<any> {
+    return this.http.post(this.apiURL, activity, httpOptions).pipe(
+      catchError(this.handleError('Create activity'))
     );
   }
 
@@ -37,9 +37,9 @@ export class AccomodationService {
     return this.http.get(`${this.apiURL}/${id}`);
   }
 
-  update(id, accomodation): Observable<any> {
-    return this.http.put(`${this.apiURL}/${id}`, accomodation, httpOptions).pipe(
-      catchError(this.handleError('Update accomodation'))
+  update(id, activity): Observable<any> {
+    return this.http.put(`${this.apiURL}/${id}`, activity, httpOptions).pipe(
+      catchError(this.handleError('Update activity'))
     );
   }
 
@@ -47,7 +47,7 @@ export class AccomodationService {
     return this.http.delete(`${this.apiURL}/${id}`);
   }
 
-  getAccomodationContacts(): Observable<any> {
+  getActivityContacts(): Observable<any> {
     return this.http.get(`${this.apiURL}/contacts`);
   }
 
@@ -60,5 +60,4 @@ export class AccomodationService {
       return of(result as T);
     }
   }
-
 }

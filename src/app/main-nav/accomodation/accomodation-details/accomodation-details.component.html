@@ -5,30 +5,35 @@
 </mat-toolbar>
 
 <mat-card>
-  <mat-card-title>{{ accomodation.name}} ({{ accomodation.type}})</mat-card-title>
-  <mat-card-subtitle>
-    <a href="{{ accomodation.webpage}}" target="_blank">{{ accomodation.webpage}}</a>
-  </mat-card-subtitle>
+  <mat-card-header>
+    <mat-card-title>{{ accomodation.name}} ({{ accomodation.type}})</mat-card-title>
+    <mat-card-subtitle>
+      <a href="{{ accomodation.webpage}}" target="_blank">{{ accomodation.webpage}}</a>
+    </mat-card-subtitle>
+  </mat-card-header>
   <mat-card-content>
+    <div>
+      <a routerLink="/admin/users/details/{{accomodation.contact._id}}">{{ accomodation.contact.firstName }} {{ accomodation.contact.lastName }}</a>
+    </div>
     <div>
       <address>
         {{ accomodation.address}}
       </address>
-      <div>
-        {{ accomodation.phone }}
-      </div>
+    </div>
+    <div>
+      {{ accomodation.phone }}
     </div>
     <div>
       <p>{{ accomodation.description}}</p>
-      <div *ngIf="accomodation.amenities[0] != ''">
+      <div *ngIf="accomodation.amenities">
         <h3>Amenities</h3>
         <mat-chip-list>
           <mat-chip *ngFor="let am of accomodation.amenities">{{ am }}</mat-chip>
         </mat-chip-list>
       </div>
     </div>
+    <h3>Rooms</h3>
     <table class="mat-table" *ngIf="rooms.length">
-      <caption>Rooms</caption>
       <thead>
         <tr class="mat-header-row">
           <th class="mat-header-cell">Number</th>
@@ -44,5 +49,8 @@
         </tr>
       </tbody>
     </table>
+    <div>
+      {{ accomodation.observations }}
+    </div>
   </mat-card-content>
 </mat-card>

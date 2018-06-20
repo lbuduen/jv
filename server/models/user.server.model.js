@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ROLES = ['admin', 'driver', 'landlord'];
+const ROLES = ['admin', 'driver', 'landlord', 'guide'];
 
 const UserSchema = new Schema({
     firstName: String,

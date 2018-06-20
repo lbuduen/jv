@@ -15,14 +15,17 @@ import { AccomodationDetailsComponent } from "./accomodation/accomodation-detail
 
 import { TransportationComponent } from './transportation/transportation.component';
 
-import { ActivitiesComponent } from './activities/activities.component';
-
 import { PackagesComponent } from './packages/packages.component';
 
 import { UserComponent } from './user/user.component';
 import { UserFormComponent } from './user/user-form/user-form.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailsComponent } from './user/user-details/user-details.component';
+
+import { ActivitiesComponent } from './activities/activities.component';
+import { ActivityFormComponent } from './activities/activity-form/activity-form.component';
+import { ActivityListComponent } from './activities/activity-list/activity-list.component';
+import { ActivityDetailsComponent } from './activities/activity-details/activity-details.component';
 
 const mainNavRoutes: Routes = [
   {
@@ -62,7 +65,25 @@ const mainNavRoutes: Routes = [
       },
       {
         path: 'activities',
-        component: ActivitiesComponent
+        component: ActivitiesComponent,
+        children: [
+          {
+            path: 'add',
+            component: ActivityFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: ActivityFormComponent
+          },
+          {
+            path: 'details/:id',
+            component: ActivityDetailsComponent
+          },
+          {
+            path: '',
+            component: ActivityListComponent
+          }
+        ]
       },
       {
         path: 'packages',
