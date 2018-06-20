@@ -1,0 +1,12 @@
+mat-card {
+    margin: 16px;
+    width: 400px;
+}
+
+#plate {
+    border: 1px solid;
+    width: 100px;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.3em;
+}

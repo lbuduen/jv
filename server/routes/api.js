@@ -5,6 +5,7 @@ const users = require('../controllers/user.server.controller');
 const accom = require('../controllers/accomodation.server.controller');
 const app = require('../controllers/app.server.controller');
 const activity = require('../controllers/activity.server.controller');
+const transportation = require('../controllers/transportation.server.controller');
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -45,4 +46,22 @@ router.route('/activities/:actId')
     .delete(activity.delete)
     .put(activity.update);
 router.param('actId', activity.activityById);
+
+//transportation routes
+// router.param('means', transportation.setTransportationMeans);
+router.param('transId', transportation.transportationById);
+
+router.route('/transportation/drivers').get(transportation.getDrivers);
+
+router.route('/transportation/land')
+    .post(transportation.create)
+    .get(transportation.list);
+
+router.route('/transportation/land/:transId')
+    .get(transportation.read)
+    .delete(transportation.delete)
+    .put(transportation.update);
+
+
+
 module.exports = router;

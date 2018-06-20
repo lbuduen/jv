@@ -29,7 +29,6 @@ exports.list = function (req, res, next) {
 
 exports.activityById = function (req, res, next, id) {
     Activity.findById(id)
-        .populate('guide', 'firstName lastName')
         .exec((err, activity) => {
             if (err) {
                 return next(err);

@@ -14,8 +14,6 @@ import { AccomodationListComponent } from './accomodation/accomodation-list/acco
 import { AccomodationDetailsComponent } from './accomodation/accomodation-details/accomodation-details.component';
 import { AccomodationDeleteDialog } from './accomodation/accomodation-delete-dialog.component';
 
-import { TransportationComponent } from './transportation/transportation.component';
-
 import { PackagesComponent } from './packages/packages.component';
 
 import { UserComponent } from './user/user.component';
@@ -29,6 +27,12 @@ import { ActivityFormComponent } from './activities/activity-form/activity-form.
 import { ActivityListComponent } from './activities/activity-list/activity-list.component';
 import { ActivityDeleteDialog } from "./activities/activity-delete-dialog.component";
 import { ActivityDetailsComponent } from './activities/activity-details/activity-details.component';
+
+import { TransportationComponent } from './transportation/transportation.component';
+import { TransportationFormComponent } from './transportation/transportation-form/transportation-form.component';
+import { TransportationListComponent } from './transportation/transportation-list/transportation-list.component';
+import { TransportationDeleteDialog } from "./transportation/transportation-delete-dialog.component";
+import { TransportationDetailsComponent } from './transportation/transportation-details/transportation-details.component';
 
 @NgModule({
   imports: [
@@ -45,23 +49,28 @@ import { ActivityDetailsComponent } from './activities/activity-details/activity
     AccomodationListComponent,
     AccomodationDetailsComponent,
     AccomodationDeleteDialog,
-    TransportationComponent,
-    ActivitiesComponent,
     PackagesComponent,
     UserComponent,
     UserFormComponent,
     UserListComponent,
     UserDeleteDialog,
     UserDetailsComponent,
+    ActivitiesComponent,
     ActivityFormComponent,
     ActivityListComponent,
     ActivityDeleteDialog,
-    ActivityDetailsComponent
+    ActivityDetailsComponent,
+    TransportationComponent,
+    TransportationFormComponent,
+    TransportationListComponent,
+    TransportationDeleteDialog,
+    TransportationDetailsComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,
     UserDeleteDialog,
-    ActivityDeleteDialog
+    ActivityDeleteDialog,
+    TransportationDeleteDialog
   ]
 })
 export class MainNavModule { }

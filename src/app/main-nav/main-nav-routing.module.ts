@@ -13,8 +13,6 @@ import { AccomodationFormComponent } from "./accomodation/accomodation-form/acco
 import { AccomodationListComponent } from "./accomodation/accomodation-list/accomodation-list.component";
 import { AccomodationDetailsComponent } from "./accomodation/accomodation-details/accomodation-details.component";
 
-import { TransportationComponent } from './transportation/transportation.component';
-
 import { PackagesComponent } from './packages/packages.component';
 
 import { UserComponent } from './user/user.component';
@@ -26,6 +24,11 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { ActivityFormComponent } from './activities/activity-form/activity-form.component';
 import { ActivityListComponent } from './activities/activity-list/activity-list.component';
 import { ActivityDetailsComponent } from './activities/activity-details/activity-details.component';
+
+import { TransportationComponent } from './transportation/transportation.component';
+import { TransportationFormComponent } from './transportation/transportation-form/transportation-form.component';
+import { TransportationListComponent } from './transportation/transportation-list/transportation-list.component';
+import { TransportationDetailsComponent } from './transportation/transportation-details/transportation-details.component';
 
 const mainNavRoutes: Routes = [
   {
@@ -61,7 +64,25 @@ const mainNavRoutes: Routes = [
       },
       {
         path: 'transportation',
-        component: TransportationComponent
+        component: TransportationComponent,
+        children: [
+          {
+            path: 'add',
+            component: TransportationFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: TransportationFormComponent
+          },
+          {
+            path: 'details/:id',
+            component: TransportationDetailsComponent
+          },
+          {
+            path: '',
+            component: TransportationListComponent
+          }
+        ]
       },
       {
         path: 'activities',

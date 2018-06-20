@@ -7,6 +7,7 @@ module.exports = function () {
   require('../models/user.server.model');
   require('../models/accomodation.server.model');
   require('../models/activity.server.model');
+  require('../models/transportation.server.model');
 
   return db;
 };

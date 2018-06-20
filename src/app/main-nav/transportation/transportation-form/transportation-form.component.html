@@ -1,0 +1,93 @@
+<mat-toolbar>
+  <span class="tb-title">Transportation</span>
+  <mat-radio-group [formControl]="means">
+    <mat-radio-button value="land">By Land</mat-radio-button>
+    <mat-radio-button value="air">By Air</mat-radio-button>
+  </mat-radio-group>
+</mat-toolbar>
+
+<form [formGroup]="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
+  <div>
+    <mat-form-field class="full-width">
+      <mat-select placeholder="Driver" formControlName="driver">
+        <mat-option *ngFor="let d of drivers" [value]="d._id">
+          {{ d.firstName }} {{ d.lastName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Brand" formControlName="brand">
+      <!-- <mat-error *ngIf="userForm.get('email').hasError('email')">Please input a valid email address</mat-error> -->
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Model" formControlName="model">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Plate" formControlName="plate">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="number" matInput placeholder="Capacity" formControlName="capacity">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Color" formControlName="color">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+    </mat-form-field>
+  </div>
+  <div>
+    <input type="file" formControlName="photo">
+  </div>
+  <button type="submit" [disabled]="byLandForm.invalid" mat-raised-button>Save</button>
+</form>
+
+<form [formGroup]="byAirForm" (submit)="save()" *ngIf="means.value == 'air'">
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Company" formControlName="company">
+      <!-- <mat-error *ngIf="userForm.get('email').hasError('email')">Please input a valid email address</mat-error> -->
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Flight" formControlName="flight">
+    </mat-form-field>
+  </div>
+  <div id="cards">
+    <mat-card>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Origin" formControlName="origin">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="departure" placeholder="Departure date" formControlName="departure">
+        <mat-datepicker-toggle matSuffix [for]="departure"></mat-datepicker-toggle>
+        <mat-datepicker #departure></mat-datepicker>
+      </mat-form-field>
+    </mat-card>
+    <mat-card>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Destination" formControlName="destination">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="arrival" placeholder="Arrival date" formControlName="arrival">
+        <mat-datepicker-toggle matSuffix [for]="arrival"></mat-datepicker-toggle>
+        <mat-datepicker #arrival></mat-datepicker>
+      </mat-form-field>
+    </mat-card>
+  </div>
+
+  <button type="submit" [disabled]="byAirForm.invalid" mat-raised-button>Save</button>
+</form>

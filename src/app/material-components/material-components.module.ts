@@ -21,7 +21,10 @@ import {
   MatDialogModule,
   MatBadgeModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 
@@ -47,7 +50,10 @@ import {
     MatDialogModule,
     MatBadgeModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     LayoutModule,
@@ -69,7 +75,10 @@ import {
     MatDialogModule,
     MatBadgeModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   declarations: []
 })
