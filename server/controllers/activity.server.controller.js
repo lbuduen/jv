@@ -1,20 +1,61 @@
 const Activity = require('mongoose').model('Activity');
 const User = require('mongoose').model('User');
 
+const fs = require('fs');
+
+const dir = './assets/img/activities';
+
 exports.create = function (req, res, next) {
     const act = new Activity(req.body);
 
-    act.save(err => {
+    act.save((err, activity) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${activity._id}`;
+                fs.mkdirSync(updir);
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(activity, photos);
+            }
             res.status(201).end();
         }
     });
 };
+
+function savePhotosDB(activity, photos) {
+    activity.photos = photos;
+    activity.save(err => {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+    });
+}
 
 exports.list = function (req, res, next) {
     Activity.find((err, activities) => {
@@ -51,6 +92,15 @@ exports.delete = function (req, res) {
         if (err) {
             return next(err);
         }
+        const updir = `${dir}/${activity._id}`;
+        activity.photos.forEach(photo => {
+            fs.unlinkSync(`${updir}/${photo}`);
+        });
+        fs.rmdir(updir, (err) => {
+            if (err) {
+                return next(err);
+            }
+        });
         res.status(200).json(activity);
     })
 };
@@ -69,6 +119,37 @@ exports.update = function (req, res) {
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${activity._id}`;
+
+                try {
+                    fs.accessSync(updir, fs.constants.R_OK);
+                } catch (err) {
+                    fs.mkdirSync(updir);
+                }
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(activity, photos);
+            }
             res.status(204).end();
         }
     });

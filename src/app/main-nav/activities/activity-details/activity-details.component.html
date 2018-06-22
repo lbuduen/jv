@@ -8,7 +8,8 @@
   <mat-card-header>
     <mat-card-title>{{ activity.name }}</mat-card-title>
   </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+  <img *ngIf="activity.photos[0]" mat-card-image src="http://localhost:3001/img/activities/{{activity._id}}/{{ activity.photos[0]}}"
+    alt="{{ activity.name}}">
   <mat-card-content>
     {{ activity.description }}
   </mat-card-content>

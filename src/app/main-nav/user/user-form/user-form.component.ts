@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
@@ -20,6 +20,7 @@ export class UserFormComponent implements OnInit {
   id: String = ''; //user id
 
   userForm: FormGroup;
+  data = new FormData();
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +29,7 @@ export class UserFormComponent implements OnInit {
     private usrv: UserService,
     private snackBar: MatSnackBar,
     private cd: ChangeDetectorRef,
+    private elemRef: ElementRef,
     private eventServ: EventService
   ) { }
 
@@ -60,9 +62,38 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  onFileChange(event) {
+    if (event.target.files && event.target.files.length) {
+
+      let gallery: HTMLElement = this.elemRef.nativeElement.querySelector('.gallery');
+      gallery.innerHTML = '';
+
+      const files = event.target.files;
+      this.data.append('photo', files[0], files[0].name);
+
+      let reader = new FileReader();
+      reader.onload = function () {
+        let img: HTMLImageElement = window.document.createElement('img');
+        img.src = reader.result;
+        img.style.width = '60%';
+        img.style.marginBottom = '10px';
+
+        gallery.appendChild(img);
+      }
+      reader.readAsDataURL(files[0]);
+      this.cd.markForCheck();
+    }
+  }
+
   save() {
+    let formkeys = Object.keys(this.userForm.controls);
+
+    formkeys.forEach(key => {
+      this.data.append(key, this.userForm.controls[key].value);
+    });
+
     if (this.id) {
-      this.usrv.update(this.id, this.userForm.value).subscribe(res => {
+      this.usrv.update(this.id, this.data).subscribe(res => {
         this.snackBar.open(`User ${this.userForm.get('firstName').value} has been updated`, '', {
           duration: 3000,
         });
@@ -70,7 +101,7 @@ export class UserFormComponent implements OnInit {
       });
     }
     else {
-      this.usrv.create(this.userForm.value).subscribe(res => {
+      this.usrv.create(this.data).subscribe(res => {
         this.eventServ.broadcast('recount');
 
         this.snackBar.open(`User ${this.userForm.get('firstName').value} has been created`, '', {

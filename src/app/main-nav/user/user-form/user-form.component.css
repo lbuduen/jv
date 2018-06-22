@@ -4,22 +4,36 @@ form {
     margin: 20px 0px;
 }
   
-  form div:last-child {
-    margin-top: 20px;
-  }
-  
-  .full-width {
-    width: 100%;
-  }
+form div:last-child {
+  margin-top: 20px;
+}
 
-  #names mat-form-field {
-    width: 49%;
-  }
+.full-width {
+  width: 100%;
+}
 
-  #names mat-form-field:first-child {
-    margin-right: 10px;
-  }
+#names mat-form-field {
+  width: 49%;
+}
 
-  button[type=submit] {
-    margin-top: 20px;
-  }
+#names mat-form-field:first-child {
+  margin-right: 10px;
+}
+
+button[type=submit] {
+  margin-top: 20px;
+}
+
+.wrap {
+  display: flex;
+}
+
+.wrap table {
+  width: 49%;
+}
+
+.wrap .gallery {
+  text-align: center;
+  width: 49%;
+  margin: 15px 0px;
+}

@@ -3,13 +3,13 @@
   <a mat-button routerLink="/admin/transportation/edit/{{transportation._id}}">Edit</a>
   <button mat-button (click)="delete(transportation._id)" color="warn">Delete</button>
 </mat-toolbar>
-
 <mat-card>
   <mat-card-header>
     <mat-card-title>{{ transportation.brand }}</mat-card-title>
     <mat-card-subtitle>{{ transportation.model }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+  <img *ngIf="transportation.photos[0]" mat-card-image src="http://localhost:3001/img/transportation/{{transportation._id}}/{{ transportation.photos[0]}}"
+    alt="{{ transportation.brand}} {{ transportation.model}}">
   <mat-card-content>
     <p id="plate">{{transportation.plate}} </p>
     <p>Capacity: {{transportation.capacity}} </p>

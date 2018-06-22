@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
@@ -19,6 +19,7 @@ export class TransportationFormComponent implements OnInit {
 
   byLandForm: FormGroup;
   byAirForm: FormGroup;
+  data = new FormData();
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +28,7 @@ export class TransportationFormComponent implements OnInit {
     private tranServ: TransportationService,
     private snackBar: MatSnackBar,
     private cd: ChangeDetectorRef,
+    private elemRef: ElementRef,
     private eventServ: EventService
   ) { }
 
@@ -84,11 +86,42 @@ export class TransportationFormComponent implements OnInit {
     });
   }
 
+  onFileChange(event) {
+    if (event.target.files && event.target.files.length) {
+
+      let gallery: HTMLElement = this.elemRef.nativeElement.querySelector('.gallery');
+      gallery.innerHTML = '';
+
+      const files = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        this.data.append('photos', files[i], files[i].name);
+
+        let reader = new FileReader();
+        reader.onload = function () {
+          let img: HTMLImageElement = window.document.createElement('img');
+          img.src = reader.result;
+          img.style.width = '60%';
+          img.style.marginBottom = '10px';
+
+          gallery.appendChild(img);
+        }
+        reader.readAsDataURL(files[i]);
+      }
+      this.cd.markForCheck();
+    }
+  }
+
   save() {
     let form = (this.means.value == 'land') ? this.byLandForm : this.byAirForm;
+    let formkeys = Object.keys(form.controls);
+
+    formkeys.forEach(key => {
+      this.data.append(key, form.controls[key].value);
+    });
+
     if (this.id) {
 
-      this.tranServ.update(this.means.value, this.id, form.value).subscribe(res => {
+      this.tranServ.update(this.means.value, this.id, this.data).subscribe(res => {
         this.snackBar.open(`Transportation updated`, '', {
           duration: 3000,
         });
@@ -96,7 +129,7 @@ export class TransportationFormComponent implements OnInit {
       });
     }
     else {
-      this.tranServ.create(this.means.value, form.value).subscribe(res => {
+      this.tranServ.create(this.means.value, this.data).subscribe(res => {
         this.eventServ.broadcast('recount');
 
         this.snackBar.open(`Transportation created`, '', {

@@ -15,3 +15,17 @@ form {
   button[type=submit] {
     margin-top: 20px;
   }
+
+.wrap {
+  display: flex;
+}
+
+.wrap table {
+    width: 49%;
+}
+
+.wrap .gallery {
+    text-align: center;
+    width: 49%;
+    margin: 15px 0px;
+}

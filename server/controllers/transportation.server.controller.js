@@ -3,21 +3,61 @@ const TransportationByAir = require('mongoose').model('TransportationByAir');
 let TransportationModel;
 
 const User = require('mongoose').model('User');
+const fs = require('fs');
+
+const dir = './assets/img/transportation';
 
 exports.create = function (req, res, next) {
     const trans = new TransportationByLand(req.body);
 
-    trans.save(err => {
+    trans.save((err, transportation) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${transportation._id}`;
+                fs.mkdirSync(updir);
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(transportation, photos);
+            }
             res.status(201).end();
         }
     });
 };
+
+function savePhotosDB(transportation, photos) {
+    transportation.photos = photos;
+    transportation.save(err => {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+    });
+}
 
 exports.list = function (req, res, next) {
     TransportationByLand.find()
@@ -87,6 +127,37 @@ exports.update = function (req, res) {
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${transportation._id}`;
+
+                try {
+                    fs.accessSync(updir, fs.constants.R_OK);
+                } catch (err) {
+                    fs.mkdirSync(updir);
+                }
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(transportation, photos);
+            }
             res.status(204).end();
         }
     });
@@ -98,6 +169,15 @@ exports.delete = function (req, res) {
         if (err) {
             return next(err);
         }
+        const updir = `${dir}/${transport._id}`;
+        transport.photos.forEach(photo => {
+            fs.unlinkSync(`${updir}/${photo}`);
+        });
+        fs.rmdir(updir, (err) => {
+            if (err) {
+                return next(err);
+            }
+        });
         res.status(200).json(transport);
     })
 };

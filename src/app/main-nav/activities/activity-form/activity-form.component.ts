@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
@@ -14,6 +14,7 @@ import { EventService } from "../../../event.service";
 export class ActivityFormComponent implements OnInit {
 
   actForm: FormGroup;
+  data = new FormData();
   id: String = ''; //activity id
 
   constructor(
@@ -23,6 +24,7 @@ export class ActivityFormComponent implements OnInit {
     private actServ: ActivityService,
     private snackBar: MatSnackBar,
     private cd: ChangeDetectorRef,
+    private elemRef: ElementRef,
     private eventServ: EventService
   ) { }
 
@@ -51,9 +53,40 @@ export class ActivityFormComponent implements OnInit {
     });
   }
 
+  onFileChange(event) {
+    if (event.target.files && event.target.files.length) {
+
+      let gallery: HTMLElement = this.elemRef.nativeElement.querySelector('.gallery');
+      gallery.innerHTML = '';
+
+      const files = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        this.data.append('photos', files[i], files[i].name);
+
+        let reader = new FileReader();
+        reader.onload = function () {
+          let img: HTMLImageElement = window.document.createElement('img');
+          img.src = reader.result;
+          img.style.width = '60%';
+          img.style.marginBottom = '10px';
+
+          gallery.appendChild(img);
+        }
+        reader.readAsDataURL(files[i]);
+      }
+      this.cd.markForCheck();
+    }
+  }
+
   save() {
+    let formkeys = Object.keys(this.actForm.controls);
+
+    formkeys.forEach(key => {
+      this.data.append(key, this.actForm.controls[key].value);
+    });
+
     if (this.id) {
-      this.actServ.update(this.id, this.actForm.value).subscribe(res => {
+      this.actServ.update(this.id, this.data).subscribe(res => {
         this.snackBar.open(`Activity ${this.actForm.get('name').value} has been updated`, '', {
           duration: 3000,
         });
@@ -61,7 +94,7 @@ export class ActivityFormComponent implements OnInit {
       });
     }
     else {
-      this.actServ.create(this.actForm.value).subscribe(res => {
+      this.actServ.create(this.data).subscribe(res => {
         this.eventServ.broadcast('recount');
         this.snackBar.open(`Activity ${this.actForm.get('name').value} has been created`, '', {
           duration: 3000,
@@ -70,5 +103,4 @@ export class ActivityFormComponent implements OnInit {
       });
     }
   }
-
 }

@@ -1,16 +1,43 @@
+const fs = require('fs');
+
 const User = require('mongoose').model('User');
+
+const dir = './assets/img/user';
 
 exports.create = function (req, res, next) {
     const user = new User(req.body);
 
-    user.save(err => {
+    user.save((err, usr) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${usr._id}`;
+                fs.mkdirSync(updir);
+
+                let photo = req.files.photo;
+                photo.mv(`${updir}/${photo.name}`, function (err) {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+                });
+                savePhotosDB(usr, photo.name);
+            }
             res.status(201).end();
+        }
+    });
+}
+
+function savePhotosDB(user, photo) {
+    user.photo = photo;
+    user.save(err => {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
         }
     });
 }
@@ -32,6 +59,15 @@ exports.delete = function (req, res) {
         if (err) {
             return next(err);
         }
+        const updir = `${dir}/${user._id}`;
+
+        fs.unlinkSync(`${updir}/${photo}`);
+
+        fs.rmdir(updir, (err) => {
+            if (err) {
+                return next(err);
+            }
+        });
         res.status(200).json(user);
     })
 };
@@ -63,7 +99,6 @@ exports.update = function (req, res) {
     user.phone = req.body.phone;
     user.role = req.body.role;
     user.password = req.body.password;
-    user.photo = req.body.photo;
 
     user.save(err => {
         if (err) {
@@ -72,6 +107,23 @@ exports.update = function (req, res) {
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${user._id}`;
+
+                try {
+                    fs.accessSync(updir, fs.constants.R_OK);
+                } catch (err) {
+                    fs.mkdirSync(updir);
+                }
+
+                let photo = req.files.photo;
+                photo.mv(`${updir}/${photo.name}`, function (err) {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+                });
+                savePhotosDB(user, photo.name);
+            }
             res.status(204).end();
         }
     });

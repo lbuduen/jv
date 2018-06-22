@@ -14,7 +14,7 @@ const TransportationByLandSchema = new Schema({
     },
     brand: String,
     model: String,
-    photo: String,
+    photos: [String],
     observations: String
 });
 mongoose.model('TransportationByLand', TransportationByLandSchema);

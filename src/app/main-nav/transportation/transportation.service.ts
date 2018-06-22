@@ -24,7 +24,7 @@ export class TransportationService {
   ) { }
 
   create(means, transport): Observable<any> {
-    return this.http.post(`${this.apiURL}/${means}`, transport, httpOptions).pipe(
+    return this.http.post(`${this.apiURL}/${means}`, transport, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Create transportation'))
     );
   }
@@ -38,7 +38,7 @@ export class TransportationService {
   }
 
   update(means, id, transport): Observable<any> {
-    return this.http.put(`${this.apiURL}/${means}/${id}`, transport, httpOptions).pipe(
+    return this.http.put(`${this.apiURL}/${means}/${id}`, transport, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Update transportation'))
     );
   }

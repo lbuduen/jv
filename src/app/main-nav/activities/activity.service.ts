@@ -24,7 +24,7 @@ export class ActivityService {
   ) { }
 
   create(activity): Observable<any> {
-    return this.http.post(this.apiURL, activity, httpOptions).pipe(
+    return this.http.post(this.apiURL, activity, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Create activity'))
     );
   }
@@ -38,7 +38,7 @@ export class ActivityService {
   }
 
   update(id, activity): Observable<any> {
-    return this.http.put(`${this.apiURL}/${id}`, activity, httpOptions).pipe(
+    return this.http.put(`${this.apiURL}/${id}`, activity, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Update activity'))
     );
   }

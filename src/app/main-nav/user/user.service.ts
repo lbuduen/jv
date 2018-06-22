@@ -22,7 +22,7 @@ export class UserService {
   ) { }
 
   create(user): Observable<any> {
-    return this.http.post(this.apiURL, user, httpOptions).pipe(
+    return this.http.post(this.apiURL, user, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Create user'))
     );
   }
@@ -32,7 +32,7 @@ export class UserService {
   }
 
   update(id, user): Observable<any> {
-    return this.http.put(`${this.apiURL}/${id}`, user, httpOptions).pipe(
+    return this.http.put(`${this.apiURL}/${id}`, user, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Update user'))
     );
   }

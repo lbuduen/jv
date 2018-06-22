@@ -2,19 +2,22 @@
   <span class="tb-title">Activities</span>
 </mat-toolbar>
 
-<form [formGroup]="actForm" (submit)="save()">
-  <div>
-    <mat-form-field class="full-width">
-      <input type="text" matInput placeholder="Name" formControlName="name" required>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <textarea matInput placeholder="Description" formControlName="description"></textarea>
-    </mat-form-field>
-  </div>
-  <div>
-    <input type="file" formControlName="photos">
-  </div>
-  <button type="submit" [disabled]="actForm.invalid" mat-raised-button>Save</button>
-</form>
+<div class="wrap">
+  <form [formGroup]="actForm" (submit)="save()">
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Name" formControlName="name" required>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+    </div>
+    <button type="submit" [disabled]="actForm.invalid" mat-raised-button>Save</button>
+  </form>
+  <div class="gallery"></div>
+</div>

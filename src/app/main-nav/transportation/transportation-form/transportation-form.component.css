@@ -34,3 +34,16 @@ form {
   mat-card mat-form-field:first-child {
     margin-right: 10px;
   }
+  .wrap {
+    display: flex;
+}
+
+.wrap table {
+    width: 49%;
+}
+
+.wrap .gallery {
+    text-align: center;
+    width: 49%;
+    margin: 15px 0px;
+}

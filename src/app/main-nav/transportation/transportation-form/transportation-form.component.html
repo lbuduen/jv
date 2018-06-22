@@ -5,54 +5,58 @@
     <mat-radio-button value="air">By Air</mat-radio-button>
   </mat-radio-group>
 </mat-toolbar>
+<div class="wrap">
 
-<form [formGroup]="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
-  <div>
-    <mat-form-field class="full-width">
-      <mat-select placeholder="Driver" formControlName="driver">
-        <mat-option *ngFor="let d of drivers" [value]="d._id">
-          {{ d.firstName }} {{ d.lastName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <input type="text" matInput placeholder="Brand" formControlName="brand">
-      <!-- <mat-error *ngIf="userForm.get('email').hasError('email')">Please input a valid email address</mat-error> -->
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <input type="text" matInput placeholder="Model" formControlName="model">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <input type="text" matInput placeholder="Plate" formControlName="plate">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <input type="number" matInput placeholder="Capacity" formControlName="capacity">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <input type="text" matInput placeholder="Color" formControlName="color">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="full-width">
-      <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
-    </mat-form-field>
-  </div>
-  <div>
-    <input type="file" formControlName="photo">
-  </div>
-  <button type="submit" [disabled]="byLandForm.invalid" mat-raised-button>Save</button>
-</form>
+  <form [formGroup]="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
+    <div>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Driver" formControlName="driver">
+          <mat-option *ngFor="let d of drivers" [value]="d._id">
+            {{ d.firstName }} {{ d.lastName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Brand" formControlName="brand">
+        <!-- <mat-error *ngIf="userForm.get('email').hasError('email')">Please input a valid email address</mat-error> -->
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Model" formControlName="model">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Plate" formControlName="plate">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="number" matInput placeholder="Capacity" formControlName="capacity">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Color" formControlName="color">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+    </div>
+    <button type="submit" [disabled]="byLandForm.invalid" mat-raised-button>Save</button>
+  </form>
+  <div class="gallery">
 
+  </div>
+</div>
 <form [formGroup]="byAirForm" (submit)="save()" *ngIf="means.value == 'air'">
   <div>
     <mat-form-field class="full-width">
