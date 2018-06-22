@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
 
 import { UserService } from "../user.service";
+import { EventService } from "../../../event.service";
 
 import { ROLES } from "../data.model";
 
@@ -26,7 +27,8 @@ export class UserFormComponent implements OnInit {
     private router: Router,
     private usrv: UserService,
     private snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -69,6 +71,8 @@ export class UserFormComponent implements OnInit {
     }
     else {
       this.usrv.create(this.userForm.value).subscribe(res => {
+        this.eventServ.broadcast('recount');
+
         this.snackBar.open(`User ${this.userForm.get('firstName').value} has been created`, '', {
           duration: 3000,
         });

@@ -1,20 +1,73 @@
 const Accomodation = require('mongoose').model('Accomodation');
 const User = require('mongoose').model('User');
 
-exports.create = function (req, res, next) {
-    const accom = new Accomodation(req.body);
+const fs = require('fs');
 
-    accom.save(err => {
+const dir = './assets/img/accomodation';
+
+exports.create = function (req, res, next) {
+    const accomodation = {};
+    accomodation.name = req.body.name;
+    accomodation.type = req.body.type;
+    accomodation.address = req.body.address;
+    accomodation.phone = req.body.phone;
+    accomodation.amenities = req.body.amenities.split(',');
+    accomodation.active = req.body.active;
+    accomodation.description = req.body.description;
+    accomodation.webpage = req.body.webpage;
+    accomodation.observations = req.body.observations;
+    accomodation.rooms = JSON.parse(req.body.rooms);
+    accomodation.contact = req.body.contact;
+
+    accom = new Accomodation(accomodation);
+    accom.save((err, accomodation) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${accomodation._id}`;
+                fs.mkdirSync(updir);
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(accomodation, photos);
+            }
             res.status(201).end();
         }
     });
 };
+
+function savePhotosDB(accomodation, photos) {
+    accomodation.photos = photos;
+    accomodation.save(err => {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+    });
+}
 
 exports.list = function (req, res, next) {
     Accomodation.find((err, accoms) => {
@@ -46,12 +99,21 @@ exports.read = function (req, res) {
     res.status(200).json(req.accomodation);
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res, next) {
     const accomodation = req.accomodation;
     accomodation.remove(err => {
         if (err) {
             return next(err);
         }
+        const updir = `${dir}/${accomodation._id}`;
+        accomodation.photos.forEach(photo => {
+            fs.unlinkSync(`${updir}/${photo}`);
+        });
+        fs.rmdir(updir, (err) => {
+            if (err) {
+                return next(err);
+            }
+        });
         res.status(200).json(accomodation);
     })
 };
@@ -63,13 +125,12 @@ exports.update = function (req, res) {
     accomodation.type = req.body.type;
     accomodation.address = req.body.address;
     accomodation.phone = req.body.phone;
-    accomodation.amenities = req.body.amenities;
+    accomodation.amenities = req.body.amenities.split(',');
     accomodation.active = req.body.active;
     accomodation.description = req.body.description;
-    accomodation.photos = req.body.photos;
     accomodation.webpage = req.body.webpage;
     accomodation.observations = req.body.observations;
-    accomodation.rooms = req.body.rooms;
+    accomodation.rooms = JSON.parse(req.body.rooms);
     accomodation.contact = req.body.contact;
 
     accomodation.save(err => {
@@ -79,6 +140,37 @@ exports.update = function (req, res) {
             });
         }
         else {
+            if (req.files) {
+                const updir = `${dir}/${accomodation._id}`;
+
+                try {
+                    fs.accessSync(updir, fs.constants.R_OK);
+                } catch (err) {
+                    fs.mkdirSync(updir);
+                }
+
+                let photos = [];
+                if (Array.isArray(req.files.photos)) {
+                    req.files.photos.forEach(photo => {
+                        photo.mv(`${updir}/${photo.name}`, function (err) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                        });
+                        photos.push(photo.name);
+                    });
+                }
+                else {
+                    let photo = req.files.photos;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    photos.push(photo.name);
+                }
+                savePhotosDB(accomodation, photos);
+            }
             res.status(204).end();
         }
     });

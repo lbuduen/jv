@@ -4,6 +4,7 @@ import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatD
 import { TransportationDeleteDialog } from "../transportation-delete-dialog.component";
 
 import { TransportationService } from "../transportation.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-transportation-list',
@@ -20,7 +21,8 @@ export class TransportationListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private tranServ: TransportationService
+    private tranServ: TransportationService,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class TransportationListComponent implements OnInit {
               this.dataSource.sort = this.sort;
             }
           });
+          this.eventServ.broadcast('recount');
 
           this.snackBar.open(`Transportation deleted`, '', {
             duration: 3000,

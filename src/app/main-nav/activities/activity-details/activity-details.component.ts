@@ -5,6 +5,7 @@ import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/
 import { ActivityDeleteDialog } from "../activity-delete-dialog.component";
 
 import { ActivityService } from "../activity.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-activity-details',
@@ -20,7 +21,8 @@ export class ActivityDetailsComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private actServ: ActivityService
+    private actServ: ActivityService,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,8 @@ export class ActivityDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.actServ.delete(id).subscribe(res => {
+          this.eventServ.broadcast('recount');
+
           this.snackBar.open(`Activity ${res.name} has been deleted`, '', {
             duration: 3000,
           });

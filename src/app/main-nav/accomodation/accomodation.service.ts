@@ -24,7 +24,7 @@ export class AccomodationService {
   ) { }
 
   create(accomodation): Observable<any> {
-    return this.http.post(this.apiURL, accomodation, httpOptions).pipe(
+    return this.http.post(this.apiURL, accomodation, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Create accomodation'))
     );
   }
@@ -38,7 +38,7 @@ export class AccomodationService {
   }
 
   update(id, accomodation): Observable<any> {
-    return this.http.put(`${this.apiURL}/${id}`, accomodation, httpOptions).pipe(
+    return this.http.put(`${this.apiURL}/${id}`, accomodation, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Update accomodation'))
     );
   }

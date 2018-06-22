@@ -1,7 +1,7 @@
 form {
     width: 50%;
     padding: 0px 16px;
-    margin: 20px 0px;
+    margin: 15px 0px;
 }
 
 form div:last-child {
@@ -17,7 +17,13 @@ form div:last-child {
 }
 
 .wrap table {
-    width: 50%;
+    width: 49%;
+}
+
+.wrap .gallery {
+    text-align: center;
+    width: 49%;
+    margin: 15px 0px;
 }
 
 #done-step {

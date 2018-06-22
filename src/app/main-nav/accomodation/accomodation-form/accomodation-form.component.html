@@ -70,17 +70,15 @@
           </mat-form-field>
         </div>
         <div>
-          <input type="file" accept="image/png, image/jpeg" multiple mat-button (change)="onFileChange($event)">
+          <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
         </div>
         <div>
           <button mat-raised-button matStepperNext>Next</button>
         </div>
       </form>
       <div class="gallery">
-        here comes the gallery
       </div>
     </div>
-
   </mat-step>
   <mat-step [optional]="true">
     <div class="wrap">
@@ -119,9 +117,6 @@
           <mat-form-field class="full-width">
             <textarea matInput placeholder="Observations" formControlName="observations"></textarea>
           </mat-form-field>
-        </div>
-        <div>
-          <input type="text" formControlName="photos">
         </div>
         <div>
           <button mat-raised-button matStepperPrevious>Back</button>

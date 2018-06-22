@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
 
 import { AccomodationService } from "../accomodation.service";
+import { EventService } from "../../../event.service";
 
 import { ACCOMODATION_TYPE, ROOM_TYPE, AMENITIES } from "../data.model";
 
@@ -16,6 +17,7 @@ export class AccomodationFormComponent implements OnInit {
 
   accomForm: FormGroup;
   roomForm: FormGroup;
+  data = new FormData();
 
   room_types = ROOM_TYPE;
   hotel_types = ACCOMODATION_TYPE;
@@ -34,7 +36,9 @@ export class AccomodationFormComponent implements OnInit {
     private router: Router,
     private accomServ: AccomodationService,
     private snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private elemRef: ElementRef,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -73,7 +77,6 @@ export class AccomodationFormComponent implements OnInit {
       amenities: '',
       active: true,
       description: '',
-      photos: '',
       webpage: '',
       observations: ''
     });
@@ -92,23 +95,26 @@ export class AccomodationFormComponent implements OnInit {
   }
 
   onFileChange(event) {
-    let reader = new FileReader();
-
     if (event.target.files && event.target.files.length) {
+
+      let gallery: HTMLElement = this.elemRef.nativeElement.querySelector('.gallery');
+      gallery.innerHTML = '';
+
       const files = event.target.files;
-      let photos = [];
-      files.forEach(photo => {
-        reader.readAsDataURL(photo);
+      for (let i = 0; i < files.length; i++) {
+        this.data.append('photos', files[i], files[i].name);
 
-        reader.onload = () => {
-          let img = window.document.createElement('img');
+        let reader = new FileReader();
+        reader.onload = function () {
+          let img: HTMLImageElement = window.document.createElement('img');
+          img.src = reader.result;
+          img.style.width = '60%';
+          img.style.marginBottom = '10px';
 
-          photos.push(photo);
+          gallery.appendChild(img);
         }
-      });
-      this.accomForm.patchValue({
-        photos: photos
-      });
+        reader.readAsDataURL(files[i]);
+      }
       this.cd.markForCheck();
     }
   }
@@ -135,11 +141,16 @@ export class AccomodationFormComponent implements OnInit {
   }
 
   save() {
-    let data = this.accomForm.value;
-    data['rooms'] = this.rooms;
+    let formkeys = Object.keys(this.accomForm.controls);
+
+    formkeys.forEach(key => {
+      this.data.append(key, this.accomForm.controls[key].value);
+    });
+
+    this.data.append('rooms', JSON.stringify(this.rooms));
 
     if (this.id) {
-      this.accomServ.update(this.id, data).subscribe(res => {
+      this.accomServ.update(this.id, this.data).subscribe(res => {
         this.snackBar.open(`${this.accomForm.get('name').value} ${this.accomForm.get('type').value} has been updated`, '', {
           duration: 3000,
         });
@@ -147,7 +158,8 @@ export class AccomodationFormComponent implements OnInit {
       });
     }
     else {
-      this.accomServ.create(data).subscribe(res => {
+      this.accomServ.create(this.data).subscribe(res => {
+        this.eventServ.broadcast('recount');
         this.snackBar.open(`${this.accomForm.get('name').value} ${this.accomForm.get('type').value} has been created`, '', {
           duration: 3000,
         });

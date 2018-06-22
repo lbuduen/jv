@@ -5,6 +5,7 @@ import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/
 import { AccomodationDeleteDialog } from "../accomodation-delete-dialog.component";
 
 import { AccomodationService } from "../accomodation.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-accomodation-details',
@@ -21,7 +22,8 @@ export class AccomodationDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private delDialog: MatDialog
+    private delDialog: MatDialog,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -44,6 +46,8 @@ export class AccomodationDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.accomServ.delete(id).subscribe(res => {
+          this.eventServ.broadcast('recount');
+
           this.snackBar.open(`${res.name} ${res.type} has been deleted`, '', {
             duration: 3000,
           });

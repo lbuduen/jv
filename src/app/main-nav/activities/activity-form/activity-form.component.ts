@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
 
 import { ActivityService } from "../activity.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-activity-form',
@@ -21,7 +22,8 @@ export class ActivityFormComponent implements OnInit {
     private router: Router,
     private actServ: ActivityService,
     private snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -60,6 +62,7 @@ export class ActivityFormComponent implements OnInit {
     }
     else {
       this.actServ.create(this.actForm.value).subscribe(res => {
+        this.eventServ.broadcast('recount');
         this.snackBar.open(`Activity ${this.actForm.get('name').value} has been created`, '', {
           duration: 3000,
         });

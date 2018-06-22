@@ -30,6 +30,8 @@ import { TransportationFormComponent } from './transportation/transportation-for
 import { TransportationListComponent } from './transportation/transportation-list/transportation-list.component';
 import { TransportationDetailsComponent } from './transportation/transportation-details/transportation-details.component';
 
+import { MediaComponent } from './media/media.component';
+
 const mainNavRoutes: Routes = [
   {
     path: 'admin',
@@ -131,6 +133,10 @@ const mainNavRoutes: Routes = [
             component: UserListComponent
           }
         ]
+      },
+      {
+        path: 'media',
+        component: MediaComponent
       }
     ]
   }

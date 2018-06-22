@@ -34,6 +34,8 @@ import { TransportationListComponent } from './transportation/transportation-lis
 import { TransportationDeleteDialog } from "./transportation/transportation-delete-dialog.component";
 import { TransportationDetailsComponent } from './transportation/transportation-details/transportation-details.component';
 
+import { MediaComponent } from './media/media.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { TransportationDetailsComponent } from './transportation/transportation-
     TransportationFormComponent,
     TransportationListComponent,
     TransportationDeleteDialog,
-    TransportationDetailsComponent
+    TransportationDetailsComponent,
+    MediaComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,

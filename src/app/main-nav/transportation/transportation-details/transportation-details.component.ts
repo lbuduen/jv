@@ -5,6 +5,7 @@ import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/
 import { TransportationDeleteDialog } from "../transportation-delete-dialog.component";
 
 import { TransportationService } from "../transportation.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-transportation-details',
@@ -20,7 +21,8 @@ export class TransportationDetailsComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private tranServ: TransportationService
+    private tranServ: TransportationService,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,8 @@ export class TransportationDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.tranServ.delete('land', id).subscribe(res => {
+          this.eventServ.broadcast('recount');
+
           this.snackBar.open(`Transportation deleted`, '', {
             duration: 3000,
           });

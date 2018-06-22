@@ -25,8 +25,7 @@ const RoomSchema = new Schema({
         default: true
     },
     description: String,
-    observations: String,
-    photos: [String]
+    observations: String
 });
 
 const AccomodationSchema = new Schema({

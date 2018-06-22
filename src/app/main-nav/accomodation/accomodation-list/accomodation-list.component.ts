@@ -4,6 +4,7 @@ import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatD
 import { AccomodationDeleteDialog } from "../accomodation-delete-dialog.component";
 
 import { AccomodationService } from "../accomodation.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-accomodation-list',
@@ -20,7 +21,8 @@ export class AccomodationListComponent implements OnInit {
   constructor(
     private accomServ: AccomodationService,
     private snackBar: MatSnackBar,
-    private delDialog: MatDialog
+    private delDialog: MatDialog,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -49,7 +51,13 @@ export class AccomodationListComponent implements OnInit {
             }
           });
 
+          this.eventServ.broadcast('recount');
+
           this.snackBar.open(`${res.name} ${res.type} has been deleted`, '', {
+            duration: 3000,
+          });
+        }, error => {
+          this.snackBar.open('Error: ' + error.statusText, '', {
             duration: 3000,
           });
         });

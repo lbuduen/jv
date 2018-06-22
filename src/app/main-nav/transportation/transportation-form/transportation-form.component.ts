@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
 
 import { TransportationService } from "../transportation.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-transportation-form',
@@ -25,7 +26,8 @@ export class TransportationFormComponent implements OnInit {
     private router: Router,
     private tranServ: TransportationService,
     private snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -95,6 +97,8 @@ export class TransportationFormComponent implements OnInit {
     }
     else {
       this.tranServ.create(this.means.value, form.value).subscribe(res => {
+        this.eventServ.broadcast('recount');
+
         this.snackBar.open(`Transportation created`, '', {
           duration: 3000,
         });

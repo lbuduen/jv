@@ -4,6 +4,7 @@ import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatD
 import { ActivityDeleteDialog } from "../activity-delete-dialog.component";
 
 import { ActivityService } from "../activity.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-activity-list',
@@ -20,7 +21,8 @@ export class ActivityListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private actServ: ActivityService
+    private actServ: ActivityService,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class ActivityListComponent implements OnInit {
               this.dataSource.sort = this.sort;
             }
           });
+          this.eventServ.broadcast('recount');
 
           this.snackBar.open(`Activity ${res.name} has been deleted`, '', {
             duration: 3000,

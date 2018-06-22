@@ -5,6 +5,7 @@ import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/
 import { UserDeleteDialog } from "../user-delete-dialog.component";
 
 import { UserService } from "../user.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-user-details',
@@ -20,7 +21,8 @@ export class UserDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private delDialog: MatDialog
+    private delDialog: MatDialog,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,8 @@ export class UserDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.usrv.delete(id).subscribe(res => {
+          this.eventServ.broadcast('recount');
+
           this.snackBar.open(`User ${res.firstName} has been deleted`, '', {
             duration: 3000,
           });

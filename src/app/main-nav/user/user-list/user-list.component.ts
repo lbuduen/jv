@@ -4,6 +4,7 @@ import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatD
 import { UserDeleteDialog } from "../user-delete-dialog.component";
 
 import { UserService } from "../user.service";
+import { EventService } from "../../../event.service";
 
 @Component({
   selector: 'app-user-list',
@@ -20,7 +21,8 @@ export class UserListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private usrv: UserService
+    private usrv: UserService,
+    private eventServ: EventService
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class UserListComponent implements OnInit {
               this.dataSource.sort = this.sort;
             }
           });
+          this.eventServ.broadcast('recount');
 
           this.snackBar.open(`User ${res.firstName} has been deleted`, '', {
             duration: 3000,
