@@ -14,8 +14,6 @@ import { AccomodationListComponent } from './accomodation/accomodation-list/acco
 import { AccomodationDetailsComponent } from './accomodation/accomodation-details/accomodation-details.component';
 import { AccomodationDeleteDialog } from './accomodation/accomodation-delete-dialog.component';
 
-import { PackagesComponent } from './packages/packages.component';
-
 import { UserComponent } from './user/user.component';
 import { UserFormComponent } from './user/user-form/user-form.component';
 import { UserListComponent } from './user/user-list/user-list.component';
@@ -35,6 +33,9 @@ import { TransportationDeleteDialog } from "./transportation/transportation-dele
 import { TransportationDetailsComponent } from './transportation/transportation-details/transportation-details.component';
 
 import { MediaComponent } from './media/media.component';
+
+import { PackagesComponent } from './packages/packages.component';
+import { PackageFormComponent } from './packages/package-form/package-form.component';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { MediaComponent } from './media/media.component';
     TransportationListComponent,
     TransportationDeleteDialog,
     TransportationDetailsComponent,
-    MediaComponent
+    MediaComponent,
+    PackageFormComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,
