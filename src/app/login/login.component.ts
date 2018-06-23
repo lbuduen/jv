@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from "../auth.service";
+import { UserService } from "../main-nav/user/user.service";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private usrv: UserService
   ) { }
 
   ngOnInit() {
@@ -36,15 +38,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  /*   create() {
-      this.usrv.create({
-        firstName: 'Leodan',
-        lastName: 'A Buduen',
-        email: 'lbuduen@gmail.com',
-        password: 'hope2018'
-      }).subscribe(
-        res => { },
-        error => { }
-      );
-    } */
+  createAdmin() {
+    this.usrv.create({
+      firstName: 'Leodan',
+      lastName: 'A Buduen',
+      email: 'lbuduen@gmail.com',
+      password: 'hope2018',
+      role: ['admin']
+    }).subscribe(
+      res => { },
+      error => { }
+    );
+  }
 }

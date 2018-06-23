@@ -1,6 +1,7 @@
 {
-  "name": "blank",
-  "version": "0.0.0",
+  "name": "Travel Now Asia",
+  "author": "Leodan A Buduen",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

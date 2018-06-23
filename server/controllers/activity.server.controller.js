@@ -86,7 +86,7 @@ exports.read = function (req, res) {
     res.status(200).json(req.activity);
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res, next) {
     const activity = req.activity;
     activity.remove(err => {
         if (err) {

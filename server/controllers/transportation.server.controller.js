@@ -163,7 +163,7 @@ exports.update = function (req, res) {
     });
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res, next) {
     const transport = req.transport;
     transport.remove(err => {
         if (err) {

@@ -53,21 +53,24 @@ exports.list = function (req, res, next) {
     });
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res, next) {
     const user = req.user;
     user.remove(err => {
         if (err) {
             return next(err);
         }
-        const updir = `${dir}/${user._id}`;
+        if (user.photo) {
+            const updir = `${dir}/${user._id}`;
 
-        fs.unlinkSync(`${updir}/${photo}`);
+            fs.unlinkSync(`${updir}/${user.photo}`);
 
-        fs.rmdir(updir, (err) => {
-            if (err) {
-                return next(err);
-            }
-        });
+            fs.rmdir(updir, (err) => {
+                if (err) {
+                    return next(err);
+                }
+            });
+        }
+
         res.status(200).json(user);
     })
 };
