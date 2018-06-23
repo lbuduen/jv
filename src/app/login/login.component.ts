@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { MatSnackBar } from '@angular/material';
@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     public snackBar: MatSnackBar,
-    private usrv: UserService
+    private usrv: UserService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
@@ -46,7 +47,9 @@ export class LoginComponent implements OnInit {
       password: 'hope2018',
       role: ['admin']
     }).subscribe(
-      res => { },
+      res => {
+        this.elementRef.nativeElement.querySelector('#admin_btn').remove();
+      },
       error => { }
     );
   }

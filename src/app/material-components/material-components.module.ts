@@ -24,7 +24,8 @@ import {
   MatSortModule,
   MatRadioModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTreeModule
 } from '@angular/material';
 
 
@@ -53,7 +54,8 @@ import {
     MatSortModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTreeModule
   ],
   exports: [
     LayoutModule,
@@ -78,7 +80,8 @@ import {
     MatSortModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTreeModule
   ],
   declarations: []
 })

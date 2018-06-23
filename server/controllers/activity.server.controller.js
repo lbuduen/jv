@@ -92,15 +92,18 @@ exports.delete = function (req, res, next) {
         if (err) {
             return next(err);
         }
-        const updir = `${dir}/${activity._id}`;
-        activity.photos.forEach(photo => {
-            fs.unlinkSync(`${updir}/${photo}`);
-        });
-        fs.rmdir(updir, (err) => {
-            if (err) {
-                return next(err);
-            }
-        });
+        if (activity.photos.length) {
+            const updir = `${dir}/${activity._id}`;
+            activity.photos.forEach(photo => {
+                fs.unlinkSync(`${updir}/${photo}`);
+            });
+            fs.rmdir(updir, (err) => {
+                if (err) {
+                    return next(err);
+                }
+            });
+        }
+
         res.status(200).json(activity);
     })
 };
