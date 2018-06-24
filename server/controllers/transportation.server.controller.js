@@ -169,7 +169,7 @@ exports.delete = function (req, res, next) {
         if (err) {
             return next(err);
         }
-        if (transport.photos.length) {
+        if (transport.photos[0]) {
             const updir = `${dir}/${transport._id}`;
             transport.photos.forEach(photo => {
                 fs.unlinkSync(`${updir}/${photo}`);

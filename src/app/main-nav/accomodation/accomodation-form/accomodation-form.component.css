@@ -37,3 +37,7 @@ form div:last-child {
 #done-step table {
     width: 60%
 }
+
+mat-icon {
+    vertical-align: middle
+}

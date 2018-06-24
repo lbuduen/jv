@@ -2,3 +2,12 @@ mat-card {
     margin: 16px;
     width: 500px;
 }
+
+mat-toolbar mat-icon {
+    vertical-align: text-bottom;
+    padding: 0px 14px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}

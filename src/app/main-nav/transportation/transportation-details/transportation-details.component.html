@@ -1,7 +1,15 @@
 <mat-toolbar>
   <span class="tb-title">Transportation</span>
-  <a mat-button routerLink="/admin/transportation/edit/{{transportation._id}}">Edit</a>
-  <button mat-button (click)="delete(transportation._id)" color="warn">Delete</button>
+  <span class="spacer"></span>
+  <a routerLink="/admin/transportation/add">
+    <mat-icon>add_circle_outline</mat-icon>
+  </a>
+  <a routerLink="/admin/transportation/edit/{{transportation._id}}">
+    <mat-icon>edit</mat-icon>
+  </a>
+  <a (click)="delete(transportation._id)">
+    <mat-icon>delete_outline</mat-icon>
+  </a>
 </mat-toolbar>
 <mat-card>
   <mat-card-header>

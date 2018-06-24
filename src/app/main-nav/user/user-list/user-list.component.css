@@ -15,3 +15,8 @@ table, mat-form-field {
 th.mat-sort-header-sorted {
     color: black;
 }
+
+mat-toolbar mat-icon {
+    vertical-align: text-bottom;
+    padding: 0px 14px;
+}

@@ -1,7 +1,15 @@
 <mat-toolbar>
   <span class="tb-title">Users</span>
-  <a mat-button routerLink="/admin/users/edit/{{user._id}}">Edit</a>
-  <button mat-button (click)="delete(user._id)" color="warn">Delete</button>
+  <span class="spacer"></span>
+  <a routerLink="/admin/users/add">
+    <mat-icon>add_circle_outline</mat-icon>
+  </a>
+  <a routerLink="/admin/users/edit/{{user._id}}">
+    <mat-icon>edit</mat-icon>
+  </a>
+  <a (click)="delete(users._id)">
+    <mat-icon>delete_outline</mat-icon>
+  </a>
 </mat-toolbar>
 
 <mat-card>

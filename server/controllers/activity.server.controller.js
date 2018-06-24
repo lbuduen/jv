@@ -92,7 +92,7 @@ exports.delete = function (req, res, next) {
         if (err) {
             return next(err);
         }
-        if (activity.photos.length) {
+        if (activity.photos[0]) {
             const updir = `${dir}/${activity._id}`;
             activity.photos.forEach(photo => {
                 fs.unlinkSync(`${updir}/${photo}`);

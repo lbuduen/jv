@@ -105,7 +105,7 @@ exports.delete = function (req, res, next) {
         if (err) {
             return next(err);
         }
-        if (accomodation.photos.length) {
+        if (accomodation.photos[0]) {
             const updir = `${dir}/${accomodation._id}`;
             accomodation.photos.forEach(photo => {
                 fs.unlinkSync(`${updir}/${photo}`);
