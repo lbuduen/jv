@@ -6,6 +6,8 @@ import { ActivityDeleteDialog } from "../activity-delete-dialog.component";
 
 import { ActivityService } from "../activity.service";
 import { EventService } from "../../../event.service";
+import { Globals } from "../../../globals";
+
 
 @Component({
   selector: 'app-activity-details',
@@ -13,6 +15,8 @@ import { EventService } from "../../../event.service";
   styleUrls: ['./activity-details.component.css']
 })
 export class ActivityDetailsComponent implements OnInit {
+
+  private MEDIA_URL = Globals.MEDIA_URL;
 
   activity = {};
 

@@ -8,7 +8,7 @@
     <mat-card-title>{{ transportation.brand }}</mat-card-title>
     <mat-card-subtitle>{{ transportation.model }}</mat-card-subtitle>
   </mat-card-header>
-  <img *ngIf="transportation.photos[0]" mat-card-image src="http://localhost:3001/img/transportation/{{transportation._id}}/{{ transportation.photos[0]}}"
+  <img *ngIf="transportation.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/transportation/{{transportation._id}}/{{ transportation.photos[0]}}"
     alt="{{ transportation.brand}} {{ transportation.model}}">
   <mat-card-content>
     <p id="plate">{{transportation.plate}} </p>

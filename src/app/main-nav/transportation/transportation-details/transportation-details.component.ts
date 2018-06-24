@@ -6,6 +6,7 @@ import { TransportationDeleteDialog } from "../transportation-delete-dialog.comp
 
 import { TransportationService } from "../transportation.service";
 import { EventService } from "../../../event.service";
+import { Globals } from "../../../globals";
 
 @Component({
   selector: 'app-transportation-details',
@@ -13,6 +14,8 @@ import { EventService } from "../../../event.service";
   styleUrls: ['./transportation-details.component.css']
 })
 export class TransportationDetailsComponent implements OnInit {
+
+  private MEDIA_URL = Globals.MEDIA_URL;
 
   transportation: {};
 

@@ -6,6 +6,7 @@ import { UserDeleteDialog } from "../user-delete-dialog.component";
 
 import { UserService } from "../user.service";
 import { EventService } from "../../../event.service";
+import { Globals } from "../../../globals";
 
 @Component({
   selector: 'app-user-details',
@@ -13,6 +14,8 @@ import { EventService } from "../../../event.service";
   styleUrls: ['./user-details.component.css']
 })
 export class UserDetailsComponent implements OnInit {
+
+  private MEDIA_URL = Globals.MEDIA_URL;
 
   user = {};
 

@@ -12,7 +12,7 @@
       <a href="{{ accomodation.webpage}}" target="_blank">{{ accomodation.webpage}}</a>
     </mat-card-subtitle>
   </mat-card-header>
-  <img *ngIf="accomodation.photos[0]" mat-card-image src="http://localhost:3001/img/accomodation/{{accomodation._id}}/{{ accomodation.photos[0]}}"
+  <img *ngIf="accomodation.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/accomodation/{{accomodation._id}}/{{ accomodation.photos[0]}}"
     alt="{{ accomodation.name}} {{ accomodation.type}}">
   <mat-card-content>
     <div>

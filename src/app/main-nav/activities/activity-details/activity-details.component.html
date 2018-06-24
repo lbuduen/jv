@@ -8,7 +8,7 @@
   <mat-card-header>
     <mat-card-title>{{ activity.name }}</mat-card-title>
   </mat-card-header>
-  <img *ngIf="activity.photos[0]" mat-card-image src="http://localhost:3001/img/activities/{{activity._id}}/{{ activity.photos[0]}}"
+  <img *ngIf="activity.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/activities/{{activity._id}}/{{ activity.photos[0]}}"
     alt="{{ activity.name}}">
   <mat-card-content>
     {{ activity.description }}

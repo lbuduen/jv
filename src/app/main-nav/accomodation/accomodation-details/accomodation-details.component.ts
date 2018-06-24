@@ -6,6 +6,7 @@ import { AccomodationDeleteDialog } from "../accomodation-delete-dialog.componen
 
 import { AccomodationService } from "../accomodation.service";
 import { EventService } from "../../../event.service";
+import { Globals } from "../../../globals";
 
 @Component({
   selector: 'app-accomodation-details',
@@ -13,6 +14,8 @@ import { EventService } from "../../../event.service";
   styleUrls: ['./accomodation-details.component.css']
 })
 export class AccomodationDetailsComponent implements OnInit {
+
+  private MEDIA_URL = Globals.MEDIA_URL;
 
   accomodation = {};
   rooms = [];
