@@ -1,0 +1,44 @@
+mat-card {
+    margin: 16px;
+}
+
+.tab-content {
+    padding: 16px;
+}
+
+form {
+    width: 50%;
+    margin: 10px 0px;
+}
+
+#transportationForm, #activitiesForm {
+    width: 45%;
+}
+  
+form div:last-child {
+  margin-top: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+button[type=submit] {
+  margin-top: 20px;
+}
+
+.dates mat-form-field {
+    width: 49%;
+}
+
+.dates mat-form-field:first-child {
+    margin-right: 10px;
+}
+
+.wrap {
+    display: flex;
+}
+
+.wrap table {
+    width: 54%;
+}

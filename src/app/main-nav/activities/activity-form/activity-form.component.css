@@ -4,17 +4,17 @@ form {
     margin: 20px 0px;
 }
   
-  form div:last-child {
-    margin-top: 20px;
-  }
-  
-  .full-width {
-    width: 100%;
-  }
+form div:last-child {
+  margin-top: 20px;
+}
 
-  button[type=submit] {
-    margin-top: 20px;
-  }
+.full-width {
+  width: 100%;
+}
+
+button[type=submit] {
+  margin-top: 20px;
+}
 
 .wrap {
   display: flex;

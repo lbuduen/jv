@@ -1,3 +1,179 @@
 <mat-toolbar>
   <span class="tb-title">Packages</span>
 </mat-toolbar>
+
+<mat-card>
+  <mat-card-content>
+    <mat-tab-group class="demo-tab-group">
+      <mat-tab label="Details">
+        <div class="tab-content">
+          <form [formGroup]="detailsForm">
+            <div>
+              <mat-form-field class="full-width">
+                <input type="text" matInput placeholder="Name" formControlName="name" required>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input type="number" matInput placeholder="Quota" formControlName="quota">
+                <mat-hint>Quantity of persons that might join the tour</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="dates">
+              <mat-form-field>
+                <input matInput [matDatepicker]="startDate" placeholder="Start date" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput [matDatepicker]="endDate" placeholder="End date" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input type="number" matInput placeholder="Private rate" formControlName="privateRate">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input type="number" matInput placeholder="Joiner rate" formControlName="joinerRate">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <textarea matInput placeholder="Description" formControlName="description"></textarea>
+              </mat-form-field>
+            </div>
+            <input type="file">
+          </form>
+        </div>
+      </mat-tab>
+      <mat-tab label="Customers">
+        <div class="tab-content">
+
+        </div>
+      </mat-tab>
+      <mat-tab label="Transportation">
+        <div class="tab-content wrap">
+          <form id="transportationForm" [formGroup]="transportationForm">
+            <div>
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Vehicle" formControlName="id">
+                  <mat-option *ngFor="let tr of transportation" [value]="tr._id">
+                    {{ tr.plate }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Customers" formControlName="customers" multiple>
+                  <mat-option *ngFor="let c of customers" [value]="c._id">
+                    {{ c.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input matInput [matDatepicker]="trdate" placeholder="Date" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="trdate"></mat-datepicker-toggle>
+                <mat-datepicker #trdate></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <button mat-raised-button color="primary">Save</button>
+          </form>
+          <table class="mat-table mat-elevation-z8" *ngIf="riders.length">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Customer</th>
+                <th class="mat-header-cell">Vehicle</th>
+                <th class="mat-header-cell">Date</th>
+                <th class="mat-header-cell"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row" *ngFor="let rd of riders; index as i" (click)="selectRide(i)">
+                <td class="mat-cell"></td>
+                <td class="mat-cell"></td>
+                <td class="mat-cell"></td>
+                <td class="mat-cell">
+                  <button mat-button (click)="deleteRide(i)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-tab>
+      <mat-tab label="Accomodation">
+        <div class="tab-content">
+
+        </div>
+      </mat-tab>
+      <mat-tab label="Activities">
+        <div class="tab-content wrap">
+          <form id="activitiesForm" [formGroup]="activitiesForm">
+            <div>
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Activity" formControlName="id">
+                  <mat-option *ngFor="let act of activities" [value]="act._id">
+                    {{ act.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Guide" formControlName="guide">
+                  <mat-option *ngFor="let g of guides" [value]="g._id">
+                    {{ g.firstName }} {{ g.lastName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Customers" formControlName="customers" multiple>
+                  <mat-option *ngFor="let c of customers" [value]="c._id">
+                    {{ c.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input matInput [matDatepicker]="actdate" placeholder="Date" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="actdate"></mat-datepicker-toggle>
+                <mat-datepicker #actdate></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <button mat-raised-button color="primary">Save</button>
+          </form>
+          <table class="mat-table mat-elevation-z8" *ngIf="activists.length">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Customer</th>
+                <th class="mat-header-cell">Vehicle</th>
+                <th class="mat-header-cell">Date</th>
+                <th class="mat-header-cell"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row" *ngFor="let rd of riders; index as i" (click)="selectRide(i)">
+                <td class="mat-cell"></td>
+                <td class="mat-cell"></td>
+                <td class="mat-cell"></td>
+                <td class="mat-cell">
+                  <button mat-button (click)="deleteRide(i)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

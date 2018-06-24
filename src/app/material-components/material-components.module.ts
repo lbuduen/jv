@@ -25,7 +25,8 @@ import {
   MatRadioModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatTreeModule
+  MatTreeModule,
+  MatTabsModule
 } from '@angular/material';
 
 
@@ -55,7 +56,8 @@ import {
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTreeModule
+    MatTreeModule,
+    MatTabsModule
   ],
   exports: [
     LayoutModule,
@@ -81,7 +83,8 @@ import {
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTreeModule
+    MatTreeModule,
+    MatTabsModule
   ],
   declarations: []
 })
