@@ -20,7 +20,8 @@ export class MainNavComponent implements OnInit {
     users: 0,
     activities: 0,
     transportation: 0,
-    customers: 0
+    customers: 0,
+    packages: 0
   };
 
   constructor(

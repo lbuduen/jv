@@ -30,12 +30,14 @@ import { TransportationDetailsComponent } from './transportation/transportation-
 
 import { MediaComponent } from './media/media.component';
 
-import { PackagesComponent } from './packages/packages.component';
-import { PackageFormComponent } from './packages/package-form/package-form.component';
-
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerFormComponent } from './customer/customer-form/customer-form.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+
+import { PackagesComponent } from './packages/packages.component';
+import { PackageFormComponent } from './packages/package-form/package-form.component';
+import { PackageSetupComponent } from './packages/package-setup/package-setup.component';
+import { PackageListComponent } from './packages/package-list/package-list.component';
 
 const mainNavRoutes: Routes = [
   {
@@ -120,6 +122,14 @@ const mainNavRoutes: Routes = [
           {
             path: 'add',
             component: PackageFormComponent
+          },
+          {
+            path: 'setup/:id',
+            component: PackageSetupComponent
+          },
+          {
+            path: '',
+            component: PackageListComponent
           }
         ]
       },

@@ -1,6 +1,6 @@
 <mat-toolbar>
-  <span class="tb-title">Users</span>
-  <a routerLink="/admin/users/add">
+  <span class="tb-title">Packages</span>
+  <a routerLink="/admin/packages/add">
     <mat-icon>add_circle_outline</mat-icon>
   </a>
   <div class="filter">
@@ -15,22 +15,29 @@
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.startDate | date}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
-      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.endDate | date}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-      <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+    <ng-container matColumnDef="quota">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Quota </th>
+      <td mat-cell *matCellDef="let element"> {{element.quota}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="requests">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Requests </th>
+      <td mat-cell *matCellDef="let element">
+        <span class="requests">{{element.customers.length }}</span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="menu">
@@ -40,8 +47,7 @@
           <mat-icon aria-label="Menu">more_vertical</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <a routerLink="/admin/users/details/{{element._id}}" mat-menu-item>Details</a>
-          <a routerLink="/admin/users/edit/{{element._id}}" mat-menu-item>Edit</a>
+          <a routerLink="/admin/packages/setup/{{element._id}}" mat-menu-item>Set up</a>
           <button mat-menu-item (click)="delete(element._id)">Delete</button>
         </mat-menu>
       </td>

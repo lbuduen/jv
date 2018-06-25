@@ -1,39 +1,65 @@
 const fs = require('fs');
 
 const Customer = require('mongoose').model('Customer');
+const Package = require('mongoose').model('Package');
 
 const dir = './assets/img/customer';
 
 exports.create = function (req, res, next) {
-    const customer = new Customer();
-
-    customer.firstName = req.body.firstName;
-    customer.lastName = req.body.lastName;
-    customer.email = req.body.email;
-    customer.phone = req.body.phone;
-    customer.password = req.body.password;
-    customer.packages = JSON.parse(req.body.package);
-
-    customer.save((err, usr) => {
+    Package.findById(req.body.pkg, (err, package) => {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
-        else {
-            if (req.files) {
-                const updir = `${dir}/${usr._id}`;
-                fs.mkdirSync(updir);
+        if (package.customers.length < package.quota) {
+            const customer = new Customer();
 
-                let photo = req.files.photo;
-                photo.mv(`${updir}/${photo.name}`, function (err) {
+            customer.firstName = req.body.firstName;
+            customer.lastName = req.body.lastName;
+            customer.email = req.body.email;
+            customer.phone = req.body.phone;
+            customer.password = req.body.password;
+
+            customer.save((err, usr) => {
+                if (err) {
+                    return res.status(400).send({
+                        message: getErrorMessage(err)
+                    });
+                }
+
+                package.customers.push({
+                    id: usr._id,
+                    rate: req.body.rate,
+                    status: req.body.status
+                });
+
+                package.save((err, pkg) => {
                     if (err) {
-                        return res.status(500).send(err);
+                        return res.status(400).send({
+                            message: getErrorMessage(err)
+                        });
                     }
                 });
-                savePhotosDB(usr, photo.name);
-            }
-            res.status(201).end();
+
+                if (req.files) {
+                    const updir = `${dir}/${usr._id}`;
+                    fs.mkdirSync(updir);
+
+                    let photo = req.files.photo;
+                    photo.mv(`${updir}/${photo.name}`, function (err) {
+                        if (err) {
+                            return res.status(500).send(err);
+                        }
+                    });
+                    savePhotosDB(usr, photo.name);
+                }
+
+                res.status(201).end();
+            });
+        }
+        else {
+            res.status(412).end();
         }
     });
 }
@@ -108,6 +134,10 @@ exports.update = function (req, res) {
     customer.email = req.body.email;
     customer.phone = req.body.phone;
     customer.password = req.body.password;
+    customer.packages = [];
+    customer.packages.push(req.body.pkg);
+    customer.rate = req.body.rate;
+    customer.status = req.body.status;
 
     customer.save(err => {
         if (err) {
@@ -157,6 +187,19 @@ exports.login = function (req, res) {
             }
         }
     });
+};
+
+exports.getPackages = function (req, res) {
+    Package.find({}, 'name startDate endDate')
+        .sort('name')
+        .exec((err, act) => {
+            if (err) {
+                return next(err);
+            }
+            else {
+                res.status(200).json(act);
+            }
+        });
 };
 
 function getErrorMessage(err) {

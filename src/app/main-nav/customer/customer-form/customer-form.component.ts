@@ -37,6 +37,10 @@ export class CustomerFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.customServ.getPackages().subscribe(pkgs => {
+      this.packages = pkgs;
+    });
+
     this.createCustomerForm();
 
     this.id = this.route.snapshot.paramMap.get('id');

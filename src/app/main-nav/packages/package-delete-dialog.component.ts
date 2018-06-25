@@ -4,10 +4,10 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 @Component({
     selector: 'delete-dialog',
     template: `
-    <h2 mat-dialog-title>Delete customer</h2>
+    <h2 mat-dialog-title>Delete package</h2>
     <mat-dialog-content>
       <p>
-        Are you sure you want to delete this customer?
+        Are you sure you want to delete this package?
       </p>
     </mat-dialog-content>
     <mat-dialog-actions>
@@ -17,10 +17,10 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     `,
     styles: [`mat-dialog-content p {margin-top:5px; margin-bottom:35px; }`]
 })
-export class CustomerDeleteDialog {
+export class PackageDeleteDialog {
 
     constructor(
-        public dialogRef: MatDialogRef<CustomerDeleteDialog>,
+        public dialogRef: MatDialogRef<PackageDeleteDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     onNoClick(): void {

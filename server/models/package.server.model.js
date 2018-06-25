@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const RATES = ['private', 'joiner'];
+const STATUS = ['requested', 'approved', 'paid', 'completed'];
+
 const PackageSchema = new Schema({
     name: {
         type: String,
@@ -14,20 +17,46 @@ const PackageSchema = new Schema({
     endDate: Date,
     joinerRate: Number,
     privateRate: Number,
-    activities: [{
-        id: { type: Schema.Types.ObjectId, ref: 'Activity' },
-        guide: { type: Schema.Types.ObjectId, ref: 'User' },
-        customers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-        date: Date
-    }],
-    transportation: [{
-        id: { type: Schema.Types.ObjectId, ref: 'TransportationByLand' },
-        customers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-        date: Date
+    customers: [{
+        id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Customer'
+        },
+        rate: {
+            type: String,
+            enum: RATES
+        },
+        status: {
+            type: String,
+            enum: STATUS
+        }
     }],
     accomodation: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Accomodation'
+    }],
+    transportation: [{
+        type: Schema.Types.ObjectId,
+        ref: 'TransportationByLand'
+    }],
+    activities: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Activity'
+    }],
+    activists: [{
+        id: { type: Schema.Types.ObjectId, ref: 'Activity' },
+        guide: { type: Schema.Types.ObjectId, ref: 'User' },
+        customers: [{ type: Schema.Types.ObjectId, ref: 'Customer' }],
+        date: Date
+    }],
+    riders: [{
+        id: { type: Schema.Types.ObjectId, ref: 'TransportationByLand' },
+        customers: [{ type: Schema.Types.ObjectId, ref: 'Customer' }],
+        date: Date
+    }],
+    guests: [{
         id: { type: Schema.Types.ObjectId, ref: 'Accomodation' },
-        customers: { type: Schema.Types.ObjectId, ref: 'User' },
+        customers: { type: Schema.Types.ObjectId, ref: 'Customer' },
         startDate: Date,
         endDate: Date
     }],

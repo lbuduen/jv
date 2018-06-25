@@ -16,20 +16,12 @@ export class PackageFormComponent implements OnInit {
   id: String = ''; //package id
 
   detailsForm: FormGroup;
-  transportationForm: FormGroup;
-  accomodationForm: FormGroup;
-  activitiesForm: FormGroup;
 
   data = new FormData();
 
-  customers = [];
-  riders = [];  // customers in a vehicle
-
   activities = '';
-  activists = []; // customers in an activity
-  guides = [];
-
   transportation = [];
+  accomodation = [];
 
 
   constructor(
@@ -44,9 +36,19 @@ export class PackageFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.pkgServ.get('accomodation').subscribe(acc => {
+      this.accomodation = acc;
+    });
+
+    this.pkgServ.get('transportation').subscribe(trans => {
+      this.transportation = trans;
+    });
+
+    this.pkgServ.get('activities').subscribe(act => {
+      this.activities = act;
+    });
+
     this.createDetailsForm();
-    this.createTransportationForm();
-    this.createActivitiesForm();
   }
 
   createDetailsForm() {
@@ -57,25 +59,52 @@ export class PackageFormComponent implements OnInit {
       endDate: '',
       privateRate: '',
       joinerRate: '',
+      transportation: '',
+      accomodation: '',
+      activities: '',
       description: ''
     });
   }
 
-  createTransportationForm() {
-    this.transportationForm = this.fb.group({
-      id: '',
-      customers: '',
-      date: ''
-    });
+  onFileChange(event) {
+    if (event.target.files && event.target.files.length) {
+
+      let gallery: HTMLElement = this.elemRef.nativeElement.querySelector('.gallery');
+      gallery.innerHTML = '';
+
+      const files = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        this.data.append('photos', files[i], files[i].name);
+
+        let reader = new FileReader();
+        reader.onload = function () {
+          let img: HTMLImageElement = window.document.createElement('img');
+          img.src = reader.result;
+          img.style.width = '60%';
+          img.style.marginBottom = '10px';
+
+          gallery.appendChild(img);
+        }
+        reader.readAsDataURL(files[i]);
+      }
+      this.cd.markForCheck();
+    }
   }
 
-  createActivitiesForm() {
-    this.activitiesForm = this.fb.group({
-      id: '',
-      guide: '',
-      customers: '',
-      date: ''
-    });
-  }
+  save() {
+    let formkeys = Object.keys(this.detailsForm.controls);
 
+    formkeys.forEach(key => {
+      this.data.append(key, this.detailsForm.controls[key].value);
+    });
+
+    this.pkgServ.create(this.data).subscribe(res => {
+      this.eventServ.broadcast('recount');
+      this.snackBar.open(`Package ${this.detailsForm.get('name').value} has been created`, '', {
+        duration: 3000,
+      });
+      this.router.navigate(['/admin/packages']);
+    });
+
+  }
 }

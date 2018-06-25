@@ -1,0 +1,26 @@
+table, mat-form-field {
+    width: 100%;
+}
+
+.filter {
+    margin-left: 10px;
+    width: 100%;
+    font-size: .9em
+}
+
+.table-container {
+    margin: 16px;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+mat-toolbar mat-icon {
+    vertical-align: text-bottom;
+    padding: 0px 14px;
+}
+
+.requests {
+    color: #3F51B5;
+}

@@ -31,6 +31,10 @@ export class CustomerService {
     return this.http.get(`${this.apiURL}/${id}`);
   }
 
+  getPackages(): Observable<any> {
+    return this.http.get(`${this.apiURL}/packages`);
+  }
+
   update(id, user): Observable<any> {
     return this.http.put(`${this.apiURL}/${id}`, user, { headers: new HttpHeaders() }).pipe(
       catchError(this.handleError('Update user'))

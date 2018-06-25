@@ -18,7 +18,9 @@
       <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
         <span matBadge="{{ totals.users }}" matBadgeOverlap="false">Users</span>
       </a>
-      <a mat-list-item routerLink="/admin/packages" routerLinkActive="active">Packages</a>
+      <a mat-list-item routerLink="/admin/packages" routerLinkActive="active">
+        <span matBadge="{{ totals.packages }}" matBadgeOverlap="false">Packages</span>
+      </a>
       <a mat-list-item routerLink="/admin/media" routerLinkActive="active">Media</a>
     </mat-nav-list>
   </mat-sidenav>

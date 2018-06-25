@@ -3,9 +3,6 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const RATES = ['private', 'joiner'];
-const STATUS = ['requested', 'approved', 'paid', 'completed'];
-
 const CustomerSchema = new Schema({
     firstName: String,
     lastName: String,
@@ -17,20 +14,6 @@ const CustomerSchema = new Schema({
     },
     photo: String,
     phone: String,
-    packages: [{
-        id: {
-            type: Schema.Types.ObjectId,
-            ref: 'Package'
-        },
-        rate: {
-            type: String,
-            enum: RATES
-        },
-        status: {
-            type: String,
-            enum: STATUS
-        },
-    }],
     salt: String,
     password: {
         type: String,

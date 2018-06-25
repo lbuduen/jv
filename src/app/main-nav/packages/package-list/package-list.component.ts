@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { CustomerDeleteDialog } from "../customer-delete-dialog.component";
+import { PackageDeleteDialog } from "../package-delete-dialog.component";
 
-import { CustomerService } from "../customer.service";
+import { PackageService } from "../package.service";
 import { EventService } from "../../../event.service";
 
 @Component({
-  selector: 'app-customer-list',
-  templateUrl: './customer-list.component.html',
-  styleUrls: ['./customer-list.component.css']
+  selector: 'app-package-list',
+  templateUrl: './package-list.component.html',
+  styleUrls: ['./package-list.component.css']
 })
-export class CustomerListComponent implements OnInit {
+export class PackageListComponent implements OnInit {
 
-  displayedColumns = ['name', 'email', 'phone', 'menu'];
+  displayedColumns = ['name', 'startDate', 'endDate', 'quota', 'requests', 'menu'];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -21,26 +21,26 @@ export class CustomerListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private customerServ: CustomerService,
+    private pkgServ: PackageService,
     private eventServ: EventService
   ) { }
 
   ngOnInit() {
-    this.customerServ.list().subscribe(users => {
-      this.dataSource = new MatTableDataSource(users);
+    this.pkgServ.list().subscribe(pkgs => {
+      this.dataSource = new MatTableDataSource(pkgs);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
 
   delete(id: String) {
-    let dialogRef = this.delDialog.open(CustomerDeleteDialog, {
+    let dialogRef = this.delDialog.open(PackageDeleteDialog, {
       height: '200px',
       width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.customerServ.delete(id).subscribe(res => {
+        this.pkgServ.delete(id).subscribe(res => {
 
           this.dataSource.data.forEach((user, i) => {
             if (user._id === id) {
@@ -52,7 +52,7 @@ export class CustomerListComponent implements OnInit {
           });
           this.eventServ.broadcast('recount');
 
-          this.snackBar.open(`Customer ${res.firstName} has been deleted`, '', {
+          this.snackBar.open(`Package ${res.name} has been deleted`, '', {
             duration: 3000,
           });
         });

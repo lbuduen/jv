@@ -34,13 +34,16 @@ import { TransportationDetailsComponent } from './transportation/transportation-
 
 import { MediaComponent } from './media/media.component';
 
-import { PackagesComponent } from './packages/packages.component';
-import { PackageFormComponent } from './packages/package-form/package-form.component';
-
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerFormComponent } from './customer/customer-form/customer-form.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { CustomerDeleteDialog } from "./customer/customer-delete-dialog.component";
+
+import { PackagesComponent } from './packages/packages.component';
+import { PackageFormComponent } from './packages/package-form/package-form.component';
+import { PackageSetupComponent } from './packages/package-setup/package-setup.component';
+import { PackageListComponent } from './packages/package-list/package-list.component';
+import { PackageDeleteDialog } from './packages/package-delete-dialog.component';
 
 @NgModule({
   imports: [
@@ -78,14 +81,18 @@ import { CustomerDeleteDialog } from "./customer/customer-delete-dialog.componen
     CustomerComponent,
     CustomerFormComponent,
     CustomerListComponent,
-    CustomerDeleteDialog
+    CustomerDeleteDialog,
+    PackageSetupComponent,
+    PackageListComponent,
+    PackageDeleteDialog
   ],
   entryComponents: [
     AccomodationDeleteDialog,
     UserDeleteDialog,
     ActivityDeleteDialog,
     TransportationDeleteDialog,
-    CustomerDeleteDialog
+    CustomerDeleteDialog,
+    PackageDeleteDialog
   ]
 })
 export class MainNavModule { }

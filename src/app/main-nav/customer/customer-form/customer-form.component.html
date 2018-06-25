@@ -25,9 +25,9 @@
     </div>
     <div>
       <mat-form-field class="full-width">
-        <mat-select placeholder="Package" formControlName="pkg" multiple>
-          <mat-option *ngFor="let p of packages" [value]="p">
-            {{ p }}
+        <mat-select placeholder="Package" formControlName="pkg">
+          <mat-option *ngFor="let p of packages" [value]="p._id">
+            {{ p.name }} ({{ p.startDate | date }} - {{ p.endDate | date }})
           </mat-option>
         </mat-select>
       </mat-form-field>

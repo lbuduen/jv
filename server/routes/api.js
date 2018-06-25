@@ -7,6 +7,7 @@ const app = require('../controllers/app.server.controller');
 const activity = require('../controllers/activity.server.controller');
 const transportation = require('../controllers/transportation.server.controller');
 const customers = require('../controllers/customer.server.controller');
+const package = require('../controllers/package.server.controller');
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -31,6 +32,7 @@ router.route('/customers')
     .post(customers.create)
     .get(customers.list);
 router.route('/customers/login').post(customers.login);
+router.route('/customers/packages').get(customers.getPackages);
 router.route('/customers/:customerId')
     .get(customers.read)
     .delete(customers.delete)
@@ -62,18 +64,27 @@ router.param('actId', activity.activityById);
 //transportation routes
 // router.param('means', transportation.setTransportationMeans);
 router.param('transId', transportation.transportationById);
-
 router.route('/transportation/drivers').get(transportation.getDrivers);
-
 router.route('/transportation/land')
     .post(transportation.create)
     .get(transportation.list);
-
 router.route('/transportation/land/:transId')
     .get(transportation.read)
     .delete(transportation.delete)
     .put(transportation.update);
 
-
+//user routes
+router.route('/packages')
+    .post(package.create)
+    .get(package.list);
+router.route('/packages/accomodation').get(package.getAccomodation);
+router.route('/packages/transportation').get(package.getTransportation);
+router.route('/packages/activities').get(package.getActivities);
+/* 
+router.route('/packages/:pkgId')
+    .get(users.read)
+    .delete(users.delete)
+    .put(users.update);
+router.param('pkgId', users.userById); */
 
 module.exports = router;
