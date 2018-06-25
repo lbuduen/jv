@@ -1,0 +1,52 @@
+<mat-toolbar>
+  <span class="tb-title">Customers</span>
+  <a routerLink="/admin/customers/add">
+    <mat-icon>add_circle_outline</mat-icon>
+  </a>
+  <div class="filter">
+    <mat-form-field>
+      <mat-label></mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+</mat-toolbar>
+
+<div class="table-container mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="packages">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Packages </th>
+      <td mat-cell *matCellDef="let element"> {{element.packages.length}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="menu">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+        <mat-menu #menu="matMenu">
+          <a routerLink="/admin/customers/details/{{element._id}}" mat-menu-item>Details</a>
+          <a routerLink="/admin/customers/edit/{{element._id}}" mat-menu-item>Edit</a>
+          <button mat-menu-item (click)="delete(element._id)">Delete</button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

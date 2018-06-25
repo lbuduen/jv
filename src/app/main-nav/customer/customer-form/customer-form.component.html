@@ -1,0 +1,62 @@
+<mat-toolbar>
+  <span class="tb-title">Customers</span>
+</mat-toolbar>
+
+<div class="wrap">
+  <form [formGroup]="customerForm" (submit)="save()">
+    <div id="names">
+      <mat-form-field>
+        <input type="text" matInput placeholder="First name" formControlName="firstName" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Last name" formControlName="lastName">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="email" matInput placeholder="Email" formControlName="email" required>
+        <mat-error *ngIf="customerForm.get('email').hasError('email')">Please input a valid email address</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Phone" formControlName="phone">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Package" formControlName="pkg" multiple>
+          <mat-option *ngFor="let p of packages" [value]="p">
+            {{ p }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div id="rate">
+      <mat-radio-group formControlName="rate" aria-label="price rate">
+        <label>Price rate</label>
+        <mat-radio-button value="private">Private</mat-radio-button>
+        <mat-radio-button value="joiner" selected>Joiner</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Status" formControlName="status">
+          <mat-option *ngFor="let s of status" [value]="s">
+            {{ s }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width">
+        <input type="password" matInput placeholder="Password" formControlName="password">
+      </mat-form-field>
+    </div>
+    <div>
+      <input type="file" accept="image/png, image/jpeg" (change)="onFileChange($event)">
+    </div>
+    <button type="submit" [disabled]="customerForm.invalid" mat-raised-button>Save</button>
+  </form>
+  <div class="gallery"></div>
+</div>

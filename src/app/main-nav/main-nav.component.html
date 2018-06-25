@@ -3,6 +3,9 @@
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a mat-list-item routerLink="/admin/customers" routerLinkActive="active">
+        <span matBadge="{{ totals.customers }}" matBadgeOverlap="false">Customers</span>
+      </a>
       <a mat-list-item routerLink="/admin/accomodation" routerLinkActive="active">
         <span matBadge="{{ totals.accomodation }}" matBadgeOverlap="false">Accomodation</span>
       </a>

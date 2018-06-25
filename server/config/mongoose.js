@@ -8,6 +8,8 @@ module.exports = function () {
   require('../models/accomodation.server.model');
   require('../models/activity.server.model');
   require('../models/transportation.server.model');
+  require('../models/customer.server.model');
+  require('../models/package.server.model');
 
   return db;
 };

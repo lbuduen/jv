@@ -37,6 +37,11 @@ import { MediaComponent } from './media/media.component';
 import { PackagesComponent } from './packages/packages.component';
 import { PackageFormComponent } from './packages/package-form/package-form.component';
 
+import { CustomerComponent } from './customer/customer.component';
+import { CustomerFormComponent } from './customer/customer-form/customer-form.component';
+import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+import { CustomerDeleteDialog } from "./customer/customer-delete-dialog.component";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -69,13 +74,18 @@ import { PackageFormComponent } from './packages/package-form/package-form.compo
     TransportationDeleteDialog,
     TransportationDetailsComponent,
     MediaComponent,
-    PackageFormComponent
+    PackageFormComponent,
+    CustomerComponent,
+    CustomerFormComponent,
+    CustomerListComponent,
+    CustomerDeleteDialog
   ],
   entryComponents: [
     AccomodationDeleteDialog,
     UserDeleteDialog,
     ActivityDeleteDialog,
-    TransportationDeleteDialog
+    TransportationDeleteDialog,
+    CustomerDeleteDialog
   ]
 })
 export class MainNavModule { }

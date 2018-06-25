@@ -6,6 +6,7 @@ const accom = require('../controllers/accomodation.server.controller');
 const app = require('../controllers/app.server.controller');
 const activity = require('../controllers/activity.server.controller');
 const transportation = require('../controllers/transportation.server.controller');
+const customers = require('../controllers/customer.server.controller');
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -24,6 +25,17 @@ router.route('/users/:userId')
     .delete(users.delete)
     .put(users.update);
 router.param('userId', users.userById);
+
+//customer routes
+router.route('/customers')
+    .post(customers.create)
+    .get(customers.list);
+router.route('/customers/login').post(customers.login);
+router.route('/customers/:customerId')
+    .get(customers.read)
+    .delete(customers.delete)
+    .put(customers.update);
+router.param('customerId', customers.customerById);
 
 //accomodation routes
 router.route('/accomodation')

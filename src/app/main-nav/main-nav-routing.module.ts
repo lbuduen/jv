@@ -33,6 +33,10 @@ import { MediaComponent } from './media/media.component';
 import { PackagesComponent } from './packages/packages.component';
 import { PackageFormComponent } from './packages/package-form/package-form.component';
 
+import { CustomerComponent } from './customer/customer.component';
+import { CustomerFormComponent } from './customer/customer-form/customer-form.component';
+import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+
 const mainNavRoutes: Routes = [
   {
     path: 'admin',
@@ -138,6 +142,28 @@ const mainNavRoutes: Routes = [
           {
             path: '',
             component: UserListComponent
+          }
+        ]
+      },
+      {
+        path: 'customers',
+        component: CustomerComponent,
+        children: [
+          {
+            path: 'add',
+            component: CustomerFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: CustomerFormComponent
+          },
+          /* {
+            path: 'details/:id',
+            component: UserDetailsComponent
+          },*/
+          {
+            path: '',
+            component: CustomerListComponent
           }
         ]
       },

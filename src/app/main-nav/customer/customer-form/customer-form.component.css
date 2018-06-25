@@ -1,0 +1,53 @@
+form {
+    width: 50%;
+    padding: 0px 16px;
+    margin: 20px 0px;
+}
+  
+form div:last-child {
+  margin-top: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+#names mat-form-field {
+  width: 49%;
+}
+
+#names mat-form-field:first-child {
+  margin-right: 10px;
+}
+
+button[type=submit] {
+  margin-top: 20px;
+}
+
+.wrap {
+  display: flex;
+}
+
+.wrap table {
+  width: 49%;
+}
+
+.wrap .gallery {
+  text-align: center;
+  width: 49%;
+  margin: 15px 0px;
+}
+
+#rate {
+    margin: 16px 0px;
+}
+
+#rate label {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    display: block;
+    margin-bottom: 16px;
+}
+
+#rate mat-radio-button:last-child {
+    margin-left: 16px;
+}
