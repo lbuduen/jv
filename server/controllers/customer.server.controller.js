@@ -12,7 +12,7 @@ exports.create = function (req, res, next) {
                 message: getErrorMessage(err)
             });
         }
-        if (package.customers.length < package.quota) {
+        if (package) {
             const customer = new Customer();
 
             customer.firstName = req.body.firstName;
@@ -59,7 +59,7 @@ exports.create = function (req, res, next) {
             });
         }
         else {
-            res.status(412).end();
+            res.status(404).end();
         }
     });
 }

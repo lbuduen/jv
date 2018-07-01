@@ -41,4 +41,17 @@ button[type=submit] {
 
 .wrap table {
     width: 54%;
+    margin-left: 16px;
+}
+
+table, mat-form-field {
+    width: 100%;
+}
+
+.filter {
+    width: 100%;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
 }

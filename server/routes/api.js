@@ -80,11 +80,10 @@ router.route('/packages')
 router.route('/packages/accomodation').get(package.getAccomodation);
 router.route('/packages/transportation').get(package.getTransportation);
 router.route('/packages/activities').get(package.getActivities);
-/* 
 router.route('/packages/:pkgId')
-    .get(users.read)
-    .delete(users.delete)
-    .put(users.update);
-router.param('pkgId', users.userById); */
+    .get(package.read)
+/*     .delete(package.delete)
+    .put(package.update); */
+router.param('pkgId', package.packageById);
 
 module.exports = router;

@@ -126,3 +126,28 @@ exports.list = function (req, res, next) {
         }
     });
 };
+
+exports.packageById = function (req, res, next, id) {
+    Package.findById(id)
+        .populate({
+            path: 'customers.id',
+            select: '-_id -salt -password',
+        })
+        .populate('accomodation')
+        .populate('transportation')
+        .populate('activities')
+        .exec((err, package) => {
+            if (err) {
+                return next(err);
+            }
+            if (!package) {
+                return next(new Error('Failed to load package ' + id));
+            }
+            req.package = package;
+            next();
+        });
+};
+
+exports.read = function (req, res) {
+    res.status(200).json(req.package);
+};

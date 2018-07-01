@@ -25,6 +25,10 @@ const CustomerSchema = new Schema({
                 return true;
             }, 'Password should be longer'
         ]
+    },
+    created: {
+        type: Date,
+        default: Date.now
     }
 });
 

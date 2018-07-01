@@ -29,6 +29,10 @@ const PackageSchema = new Schema({
         status: {
             type: String,
             enum: STATUS
+        },
+        requested: {
+            type: Date,
+            default: Date.now
         }
     }],
     accomodation: [{
