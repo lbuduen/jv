@@ -1,19 +1,39 @@
-import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ElementRef,
+  ViewChild
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl
+} from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
-import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import {
+  MatSnackBar,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from "@angular/material";
 
 import { PackageService } from "../package.service";
 import { EventService } from "../../../event.service";
+import { AddCustomerToRideDialog } from "./add-customer-ride-dialog.component";
+import { refCount } from "rxjs/operators";
 
 @Component({
-  selector: 'app-package-setup',
-  templateUrl: './package-setup.component.html',
-  styleUrls: ['./package-setup.component.css']
+  selector: "app-package-setup",
+  templateUrl: "./package-setup.component.html",
+  styleUrls: ["./package-setup.component.css"]
 })
 export class PackageSetupComponent implements OnInit {
-
-  id: String = ''; //package id
+  id: String = ""; // package id
   pkg = {};
 
   // forms
@@ -30,11 +50,19 @@ export class PackageSetupComponent implements OnInit {
   activities = [];
   guides = [];
 
-  riders = [];  // customers in a vehicle
+  riders = []; // customers in a vehicle
   activists = []; // customers in an activity
   guests = []; // customers in accomodation
 
-  displayedColumns = ['name', 'email', 'phone', 'rate', 'status', 'requested', 'menu'];
+  displayedColumns = [
+    "name",
+    "email",
+    "phone",
+    "rate",
+    "status",
+    "requested",
+    "menu"
+  ];
   customerDataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -47,19 +75,20 @@ export class PackageSetupComponent implements OnInit {
     private snackBar: MatSnackBar,
     private cd: ChangeDetectorRef,
     private elemRef: ElementRef,
-    private eventServ: EventService
-  ) { }
+    private eventServ: EventService,
+    private addCustomerDlg: MatDialog
+  ) {}
 
   ngOnInit() {
-    this.pkgServ.get('accomodation').subscribe(acc => {
+    this.pkgServ.get("accomodation").subscribe(acc => {
       this.accomodation = acc;
     });
 
-    this.pkgServ.get('transportation').subscribe(trans => {
+    this.pkgServ.get("transportation").subscribe(trans => {
       this.transportation = trans;
     });
 
-    this.pkgServ.get('activities').subscribe(act => {
+    this.pkgServ.get("activities").subscribe(act => {
       this.activities = act;
     });
 
@@ -67,79 +96,84 @@ export class PackageSetupComponent implements OnInit {
     this.createTransportationForm();
     this.createActivitiesForm();
 
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id) {
-      this.pkgServ.read(this.id).subscribe(pkg => {
-        this.pkg = pkg;
+      this.pkgServ.read(this.id).subscribe(
+        pkg => {
+          this.pkg = pkg;
 
-        this.detailsForm.patchValue(pkg);
+          this.detailsForm.patchValue(pkg);
 
-        let accomodations = [];
-        pkg.accomodation.forEach(acc => {
-          accomodations.push(acc._id)
-        });
-        this.detailsForm.patchValue({
-          accomodation: accomodations
-        });
+          const accomodations = [];
+          pkg.accomodation.forEach(acc => {
+            accomodations.push(acc._id);
+          });
+          this.detailsForm.patchValue({
+            accomodation: accomodations
+          });
 
-        let transportations = [];
-        pkg.transportation.forEach(tr => {
-          transportations.push(tr._id)
-        });
-        this.detailsForm.patchValue({
-          transportation: transportations
-        });
+          const transportations = [];
+          pkg.transportation.forEach(tr => {
+            transportations.push(tr._id);
+          });
+          this.detailsForm.patchValue({
+            transportation: transportations
+          });
 
-        let activities = [];
-        pkg.activities.forEach(act => {
-          activities.push(act._id)
-        });
-        this.detailsForm.patchValue({
-          activities: activities
-        });
+          const activities = [];
+          pkg.activities.forEach(act => {
+            activities.push(act._id);
+          });
+          this.detailsForm.patchValue({
+            activities: activities
+          });
 
-        pkg.customers.forEach(c => {
-          let customer = c.id;
-          customer.rate = c.rate;
-          customer.status = c.status;
-          customer._id = c._id;
-          customer.requested = c.requested;
-          this.customers.push(customer);
-        });
+          pkg.customers.forEach(c => {
+            const customer = c.id;
+            customer.rate = c.rate;
+            customer.status = c.status;
+            customer._id = c._id;
+            customer.requested = c.requested;
+            this.customers.push(customer);
+          });
 
-        this.customerDataSource = new MatTableDataSource(this.customers);
-        this.customerDataSource.paginator = this.paginator;
-        this.customerDataSource.sort = this.sort;
-      }, error => {
-        this.snackBar.open(`Error retrieving package ${this.id}`, '', {
-          duration: 3000,
-        });
-        this.router.navigate(['/admin/packages']);
-      });
+          this.customerDataSource = new MatTableDataSource(this.customers);
+          this.customerDataSource.paginator = this.paginator;
+          this.customerDataSource.sort = this.sort;
+        },
+        error => {
+          this.snackBar.open(`Error retrieving package ${this.id}`, "", {
+            duration: 3000
+          });
+          this.router.navigate(["/admin/packages"]);
+        }
+      );
     }
   }
 
   createDetailsForm() {
     this.detailsForm = this.fb.group({
-      name: ['', Validators.required],
-      quota: '',
-      startDate: '',
-      endDate: '',
-      privateRate: '',
-      joinerRate: '',
-      transportation: '',
-      accomodation: '',
-      activities: '',
-      description: ''
+      name: ["", Validators.required],
+      quota: "",
+      startDate: "",
+      endDate: "",
+      privateRate: "",
+      joinerRate: "",
+      transportation: "",
+      accomodation: "",
+      activities: "",
+      description: ""
     });
   }
 
   createTransportationForm() {
     this.transportationForm = this.fb.group({
-      vehicle: ['', Validators.required],
-      customers: ['', Validators.required],
-      date: ['', Validators.required]
+      vehicle: ["", Validators.required],
+      customers: ["", Validators.required],
+      pickup: ["", Validators.required],
+      dropoff: ["", Validators.required],
+      date: ["", Validators.required]
     });
   }
   clearTransportationForm() {
@@ -148,10 +182,10 @@ export class PackageSetupComponent implements OnInit {
 
   createActivitiesForm() {
     this.activitiesForm = this.fb.group({
-      id: '',
-      guide: '',
-      customers: '',
-      date: ''
+      id: "",
+      guide: "",
+      customers: "",
+      date: ""
     });
   }
 
@@ -165,17 +199,100 @@ export class PackageSetupComponent implements OnInit {
   }
 
   setRiders() {
-    let ride = {
+    const ride = {
       vehicle: {},
       riders: [],
-      date: ''
+      pickup: "",
+      dropoff: "",
+      date: ""
     };
-    ride.vehicle = this.transportationForm.get('vehicle').value;
-    ride.riders = this.transportationForm.get('customers').value;
-    ride.date = this.transportationForm.get('date').value;
 
-    this.riders.push(ride);
-    console.log(this.riders);
+    const veh = this.transportationForm.get("vehicle").value;
+    const date = this.transportationForm.get("date").value;
+
+    const in_array = this.riders.some(r => {
+      return r.vehicle === veh && r.date === date;
+    });
+
+    if (!in_array) {
+      const ridersTmp = this.transportationForm.get("customers").value;
+      const ridersCpy = [];
+      ridersTmp.forEach(rider => {
+        ridersCpy.push(Object.assign({}, rider));
+      });
+
+      ride.vehicle = veh;
+      ride.date = date;
+      ride.riders = ridersCpy;
+      ride.pickup = this.transportationForm.get("pickup").value;
+      ride.dropoff = this.transportationForm.get("dropoff").value;
+      this.riders.push(ride);
+      this.transportationForm.reset();
+    } else {
+      this.snackBar.open(
+        `There is already a ride set up for this vehicle at this date`,
+        "",
+        {
+          duration: 3000
+        }
+      );
+    }
   }
 
+  deleteRide(pos) {
+    this.riders.splice(pos, 1);
+  }
+
+  deleteRider(ride, rider) {
+    this.riders[ride].riders.splice(rider, 1);
+    if (!this.riders[ride].riders.length) {
+      this.riders.splice(ride, 1);
+    }
+  }
+
+  setStatus(customer, toStatus) {
+    this.pkgServ.setStatus(this.id, customer._id, toStatus).subscribe(res => {
+      customer.status = toStatus;
+    });
+  }
+
+  removeFromPackage(customer) {
+    this.pkgServ.removeCustomer(this.id, customer._id).subscribe(res => {
+      this.customers.forEach((c, i) => {
+        if (c._id === customer._id) {
+          this.customers.splice(i, 1);
+          this.customerDataSource = new MatTableDataSource(this.customers);
+          this.customerDataSource.paginator = this.paginator;
+          this.customerDataSource.sort = this.sort;
+        }
+      });
+    });
+  }
+
+  addCustomer2Ride(ridePos) {
+    let newCustomers = [];
+    this.customers.forEach(c => {
+      let in_ride = this.riders[ridePos].riders.some(rc => {
+        return c._id === rc._id;
+      });
+      if (!in_ride) {
+        newCustomers.push(c);
+      }
+    });
+    const dialogRef = this.addCustomerDlg.open(AddCustomerToRideDialog, {
+      height: "315px",
+      width: "500px",
+      data: {
+        customers: newCustomers,
+        ride: this.riders[ridePos]
+      }
+    });
+    dialogRef.afterClosed().subscribe(customers => {
+      if (customers) {
+        customers.forEach(c => {
+          this.riders[ridePos].riders.push(c);
+        });
+      }
+    });
+  }
 }

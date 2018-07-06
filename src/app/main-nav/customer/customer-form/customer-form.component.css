@@ -1,9 +1,9 @@
 form {
-    width: 50%;
-    padding: 0px 16px;
-    margin: 20px 0px;
+  width: 50%;
+  padding: 0px 16px;
+  margin: 20px 0px;
 }
-  
+
 form div:last-child {
   margin-top: 20px;
 }
@@ -20,7 +20,7 @@ form div:last-child {
   margin-right: 10px;
 }
 
-button[type=submit] {
+button[type="submit"] {
   margin-top: 20px;
 }
 
@@ -39,15 +39,19 @@ button[type=submit] {
 }
 
 #rate {
-    margin: 16px 0px;
+  margin: 16px 0px;
 }
 
 #rate label {
-    font-family: Roboto,"Helvetica Neue",sans-serif;
-    display: block;
-    margin-bottom: 16px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: block;
+  margin-bottom: 16px;
 }
 
 #rate mat-radio-button:last-child {
-    margin-left: 16px;
+  margin-left: 16px;
+}
+
+#delete_img_btn {
+  margin-left: 16px;
 }

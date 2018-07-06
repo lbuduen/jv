@@ -1,9 +1,9 @@
 form {
-    width: 50%;
-    padding: 0px 16px;
-    margin: 20px 0px;
+  width: 50%;
+  padding: 0px 16px;
+  margin: 20px 0px;
 }
-  
+
 form div:last-child {
   margin-top: 20px;
 }
@@ -12,24 +12,28 @@ form div:last-child {
   width: 100%;
 }
 
-button[type=submit] {
+button[type="submit"] {
   margin-top: 20px;
 }
 
 .dates mat-form-field {
-    width: 49%;
+  width: 49%;
 }
 
 .dates mat-form-field:first-child {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .wrap {
-    display: flex;
+  display: flex;
 }
 
 .wrap .gallery {
-    text-align: center;
-    width: 49%;
-    margin: 15px 0px;
+  text-align: center;
+  width: 49%;
+  margin: 15px 0px;
+}
+
+#delete_img_btn {
+  margin-left: 16px;
 }

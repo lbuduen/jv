@@ -74,6 +74,9 @@
         </div>
         <div>
           <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+          <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
+            <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
+          </button>
         </div>
         <div>
           <button mat-raised-button matStepperNext>Next</button>
@@ -109,6 +112,11 @@
           </mat-form-field>
         </div>
         <div>
+          <mat-form-field class="full-width">
+            <input type="number" matInput placeholder="Price" formControlName="price">
+          </mat-form-field>
+        </div>
+        <div>
           <mat-checkbox formControlName="available">Available</mat-checkbox>
         </div>
         <div>
@@ -133,6 +141,7 @@
             <th class="mat-header-cell">Number</th>
             <th class="mat-header-cell">Type</th>
             <th class="mat-header-cell">Beds</th>
+            <th class="mat-header-cell">Price</th>
             <th class="mat-header-cell"></th>
           </tr>
         </thead>
@@ -141,8 +150,11 @@
             <td class="mat-cell">{{room.number}}</td>
             <td class="mat-cell">{{room.type}}</td>
             <td class="mat-cell">{{room.beds}}</td>
+            <td class="mat-cell">{{room.price}}</td>
             <td class="mat-cell">
-              <button mat-button (click)="deleteRoom(i)">Delete</button>
+              <button mat-icon-button matTooltip="Remove room" (click)="deleteRoom(i)">
+                <mat-icon aria-label="Remove room">remove_circle_outline</mat-icon>
+              </button>
             </td>
           </tr>
         </tbody>

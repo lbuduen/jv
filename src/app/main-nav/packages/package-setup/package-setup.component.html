@@ -1,5 +1,12 @@
 <mat-toolbar>
   <span class="tb-title">Packages</span>
+  <span class="spacer"></span>
+  <button mat-icon-button matTooltip="Save all">
+    <mat-icon aria-label="Save all">save</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Download">
+    <mat-icon aria-label="Download">archive</mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-card>
@@ -80,7 +87,7 @@
           </form>
         </div>
       </mat-tab>
-      <mat-tab label="Customers ({{pkg.customers.length}})">
+      <mat-tab label="Customers ({{customers.length}})">
         <div class="tab-content">
           <div class="filter">
             <mat-form-field>
@@ -121,14 +128,20 @@
             <ng-container matColumnDef="menu">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
-                <button mat-icon-button>
-                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                <button mat-icon-button matTooltip="Mark as approved" (click)="setStatus(element, 'approved')" *ngIf="element.status == 'requested'">
+                  <mat-icon aria-label="Approve">done</mat-icon>
                 </button>
-                <button mat-icon-button>
-                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                <button mat-icon-button matTooltip="Mark as paid" (click)="setStatus(element, 'paid')" *ngIf="element.status == 'approved'">
+                  <mat-icon aria-label="Pay">credit_card</mat-icon>
                 </button>
-                <button mat-icon-button>
-                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                <button mat-icon-button matTooltip="Mark as completed" (click)="setStatus(element, 'completed')" *ngIf="element.status == 'paid'">
+                  <mat-icon aria-label="Approve">done_all</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Completed" color="primary" disabled *ngIf="element.status == 'completed'">
+                  <mat-icon aria-label="Approve">done_all</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Remove from tour" (click)="removeFromPackage(element)">
+                  <mat-icon aria-label="Remove customer">remove_circle_outline</mat-icon>
                 </button>
               </td>
             </ng-container>
@@ -154,45 +167,64 @@
             <div>
               <mat-form-field class="full-width">
                 <mat-select placeholder="Customers" formControlName="customers" multiple>
-                  <mat-option *ngFor="let c of customers" [value]="c">
-                    {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
-                  </mat-option>
+                  <ng-container *ngFor="let c of customers">
+                    <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
+                      {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                    </mat-option>
+                  </ng-container>
                 </mat-select>
               </mat-form-field>
             </div>
             <div>
               <mat-form-field class="full-width">
-                <input matInput [matDatepicker]="trdate" placeholder="Date" formControlName="date">
+                <input type="text" matInput placeholder="Pick up point" formControlName="pickup" required>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input type="text" matInput placeholder="Drop off point" formControlName="dropoff" required>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="full-width">
+                <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="trdate" placeholder="Date" formControlName="date">
                 <mat-datepicker-toggle matSuffix [for]="trdate"></mat-datepicker-toggle>
                 <mat-datepicker #trdate></mat-datepicker>
               </mat-form-field>
             </div>
             <button mat-raised-button color="primary" [disabled]="transportationForm.invalid || (transportationForm.get('customers').value.length > transportationForm.get('vehicle').value.capacity)"
               (click)="setRiders()">Save</button>
-            <!-- <button mat-raised-button (click)="clearTransportationForm()">Clear</button> -->{{ transportationForm.get('customers').value.length }} / {{ transportationForm.get('vehicle').value.capacity
-            }}
+            <!-- <button mat-raised-button (click)="clearTransportationForm()">Clear</button> -->
+            <mat-chip-list *ngIf="transportationForm.get('customers').value && transportationForm.get('vehicle').value">
+              <mat-chip>{{ transportationForm.get('customers').value.length }} / {{ transportationForm.get('vehicle').value.capacity
+                }}
+              </mat-chip>
+            </mat-chip-list>
           </form>
           <table class="mat-table mat-elevation-z8" *ngIf="riders.length">
-            <ng-container *ngFor="let ride of riders">
+            <ng-container *ngFor="let ride of riders; index as i">
               <tr class="mat-header-row">
                 <th class="mat-header-cell">{{ ride.vehicle.brand }} {{ ride.vehicle.model }} [{{ ride.vehicle.plate }}] ({{ride.riders.length}} / {{
                   ride.vehicle.capacity }})</th>
                 <th class="mat-header-cell">{{ride.date | date}}</th>
                 <th class="mat-header-cell">
-                  <button mat-icon-button>
-                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                  <button mat-icon-button (click)="addCustomer2Ride(i)" *ngIf="ride.riders.length < ride.vehicle.capacity">
+                    <mat-icon aria-label="Add customer">person_add</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Delete ride" (click)="deleteRide(i)">
+                    <mat-icon aria-label="Delete ride">remove_circle</mat-icon>
                   </button>
                 </th>
               </tr>
-              <tr class="mat-row" *ngFor="let r of ride.riders">
+              <tr class="mat-row" *ngFor="let r of ride.riders; index as j">
                 <td class="mat-cell">{{r.firstName + ' ' + r.lastName}}</td>
                 <td class="mat-cell">{{r.rate}}</td>
                 <td class="mat-cell">
-                  <button mat-icon-button>
-                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                  </button>
-                  <button mat-icon-button>
-                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                  <!-- <button mat-icon-button>
+                    <mat-icon aria-label="Move customer">compare_arrows</mat-icon>
+                  </button> -->
+                  <button mat-icon-button matTooltip="Delete customer from ride" (click)="deleteRider(i, j)">
+                    <mat-icon aria-label="Delete customer from ride">remove_circle_outline</mat-icon>
                   </button>
                 </td>
               </tr>

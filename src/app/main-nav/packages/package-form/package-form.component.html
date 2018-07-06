@@ -72,6 +72,9 @@
     </div>
     <div>
       <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+      <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
+        <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
+      </button>
     </div>
     <button type="submit" [disabled]="detailsForm.invalid" mat-raised-button>Save</button>
   </form>

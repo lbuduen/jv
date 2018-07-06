@@ -1,32 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { Observable, of } from "rxjs";
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from "rxjs/operators";
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from "@angular/material";
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ "Content-Type": "application/json" })
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class PackageService {
+  private apiURL = "api/packages";
 
-  private apiURL = 'api/packages';
-
-  constructor(
-    private http: HttpClient,
-    private snackBar: MatSnackBar
-  ) { }
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   create(pkg): Observable<any> {
-    return this.http.post(this.apiURL, pkg, { headers: new HttpHeaders() }).pipe(
-      catchError(this.handleError('Create package'))
-    );
+    return this.http
+      .post(this.apiURL, pkg, { headers: new HttpHeaders() })
+      .pipe(catchError(this.handleError("Create package")));
   }
 
   list(): Observable<any> {
@@ -38,9 +34,9 @@ export class PackageService {
   }
 
   update(id, pkg): Observable<any> {
-    return this.http.put(`${this.apiURL}/${id}`, pkg, { headers: new HttpHeaders() }).pipe(
-      catchError(this.handleError('Update package'))
-    );
+    return this.http
+      .put(`${this.apiURL}/${id}`, pkg, { headers: new HttpHeaders() })
+      .pipe(catchError(this.handleError("Update package")));
   }
 
   delete(id: String): Observable<any> {
@@ -51,13 +47,36 @@ export class PackageService {
     return this.http.get(`${this.apiURL}/${route}`);
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  setStatus(pkg, customer, status): Observable<any> {
+    return this.http.put(
+      `${this.apiURL}/status`,
+      {
+        pkg: pkg,
+        customer: customer,
+        status: status
+      },
+      httpOptions
+    );
+  }
+
+  removeCustomer(pkg, customer): Observable<any> {
+    return this.http.patch(
+      `${this.apiURL}/remove/customer`,
+      {
+        pkg: pkg,
+        customer: customer
+      },
+      httpOptions
+    );
+  }
+
+  private handleError<T>(operation = "operation", result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      this.snackBar.open(`${operation} failed: ${error.error.message}`, '', {
-        duration: 3000,
+      this.snackBar.open(`${operation} failed: ${error.error.message}`, "", {
+        duration: 3000
       });
       return of(result as T);
-    }
+    };
   }
 }

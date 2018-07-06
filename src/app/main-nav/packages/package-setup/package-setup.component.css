@@ -1,20 +1,25 @@
 mat-card {
-    margin: 16px;
+  margin: 16px;
 }
 
 .tab-content {
-    padding: 16px;
+  padding: 16px;
 }
 
 form {
-    width: 50%;
-    margin: 10px 0px;
+  width: 50%;
+  margin: 10px 0px;
 }
 
-#transportationForm, #activitiesForm {
-    width: 45%;
+#transportationForm,
+#activitiesForm {
+  width: 45%;
 }
-  
+
+#transportationForm mat-chip-list {
+  float: right;
+}
+
 form div:last-child {
   margin-top: 20px;
 }
@@ -23,35 +28,40 @@ form div:last-child {
   width: 100%;
 }
 
-button[type=submit] {
+button[type="submit"] {
   margin-top: 20px;
 }
 
 .dates mat-form-field {
-    width: 49%;
+  width: 49%;
 }
 
 .dates mat-form-field:first-child {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .wrap {
-    display: flex;
+  display: flex;
 }
 
 .wrap table {
-    width: 54%;
-    margin-left: 16px;
+  width: 54%;
+  margin-left: 16px;
 }
 
-table, mat-form-field {
-    width: 100%;
+table,
+mat-form-field {
+  width: 100%;
 }
 
 .filter {
-    width: 100%;
+  width: 100%;
 }
 
 th.mat-sort-header-sorted {
-    color: black;
+  color: black;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
