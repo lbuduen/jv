@@ -74,8 +74,9 @@ const PackageSchema = new Schema({
   ],
   guests: [
     {
-      id: { type: Schema.Types.ObjectId, ref: "Accomodation" },
-      customers: { type: Schema.Types.ObjectId, ref: "Customer" },
+      accomodation: { type: Schema.Types.ObjectId, ref: "Accomodation" },
+      room: { type: Schema.Types.ObjectId },
+      customer: { type: Schema.Types.ObjectId, ref: "Customer" },
       startDate: Date,
       endDate: Date
     }

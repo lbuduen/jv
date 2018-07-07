@@ -91,6 +91,7 @@ router
 router.route("/packages/accomodation").get(package.getAccomodation);
 router.route("/packages/transportation").get(package.getTransportation);
 router.route("/packages/activities").get(package.getActivities);
+router.route("/packages/guides").get(package.getGuides);
 router.route("/packages/status").put(package.setStatus);
 router.route("/packages/remove/customer").patch(package.removeCustomer);
 router.route("/packages/:pkgId").get(package.read);

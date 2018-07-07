@@ -6,7 +6,8 @@ import { FormControl, Validators } from "@angular/forms";
   template: `
     <h2 mat-dialog-title>Add customer</h2>
     <mat-dialog-content>
-    <p>{{ data.ride.vehicle.brand }} {{ data.ride.vehicle.model }} [{{ data.ride.vehicle.plate }}]</p>
+    <p *ngIf="data.for == 'ride'">{{ data.ride.vehicle.brand }} {{ data.ride.vehicle.model }} [{{ data.ride.vehicle.plate }}]</p>
+    <p *ngIf="data.for == 'activity'">{{ data.activist.activity.name }} {{ data.activist.date | date }}</p>
 
       <mat-form-field>
         <mat-select placeholder="Customers" [formControl]="customerSelect" multiple required>
@@ -21,7 +22,8 @@ import { FormControl, Validators } from "@angular/forms";
     </mat-dialog-content>
     <mat-dialog-actions>
       <button mat-raised-button mat-dialog-close>Cancel</button>
-      <button
+
+      <button *ngIf="data.for == 'ride'"
       mat-raised-button
       color="primary"
       [mat-dialog-close]="customerSelect.value"
@@ -30,6 +32,13 @@ import { FormControl, Validators } from "@angular/forms";
       [disabled]="customerSelect.invalid || customerSelect.value.length > data.ride.vehicle.capacity - data.ride.riders.length">
         Add
       </button>
+
+      <button *ngIf="data.for == 'activity'"
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="customerSelect.value"
+      [disabled]="customerSelect.invalid"
+      >Add</button>
     </mat-dialog-actions>
     `,
   styles: [

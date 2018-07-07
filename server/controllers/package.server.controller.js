@@ -74,7 +74,7 @@ function getErrorMessage(err) {
 }
 
 exports.getAccomodation = function(req, res) {
-  Accomodation.find({}, "name type rooms")
+  Accomodation.find({ active: true }, "name type rooms")
     .sort("name")
     .exec((err, accom) => {
       if (err) {
@@ -105,6 +105,18 @@ exports.getActivities = function(req, res) {
         return next(err);
       } else {
         res.status(200).json(act);
+      }
+    });
+};
+
+exports.getGuides = function(req, res) {
+  User.find({ role: "guide" }, "firstName lastName")
+    .sort("firstName")
+    .exec((err, guides) => {
+      if (err) {
+        return next(err);
+      } else {
+        res.status(200).json(guides);
       }
     });
 };

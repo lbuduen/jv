@@ -92,9 +92,14 @@ export class PackageSetupComponent implements OnInit {
       this.activities = act;
     });
 
+    this.pkgServ.get("guides").subscribe(guides => {
+      this.guides = guides;
+    });
+
     this.createDetailsForm();
     this.createTransportationForm();
     this.createActivitiesForm();
+    this.createAccomodationForm();
 
     this.id = this.route.snapshot.paramMap.get("id");
 
@@ -182,10 +187,20 @@ export class PackageSetupComponent implements OnInit {
 
   createActivitiesForm() {
     this.activitiesForm = this.fb.group({
-      id: "",
+      activity: ["", Validators.required],
       guide: "",
-      customers: "",
+      customers: ["", Validators.required],
       date: ""
+    });
+  }
+
+  createAccomodationForm() {
+    this.accomodationForm = this.fb.group({
+      accomodation: ["", Validators.required],
+      room: ["", Validators.required],
+      startDate: ["", Validators.required],
+      endDate: ["", Validators.required],
+      customers: ["", Validators.required]
     });
   }
 
@@ -198,13 +213,15 @@ export class PackageSetupComponent implements OnInit {
     }
   }
 
+  /* ------------------------------------------Transportation set up----------------------------------------------------*/
+
   setRiders() {
     const ride = {
       vehicle: {},
       riders: [],
       pickup: "",
       dropoff: "",
-      date: ""
+      date: Date
     };
 
     const veh = this.transportationForm.get("vehicle").value;
@@ -239,6 +256,34 @@ export class PackageSetupComponent implements OnInit {
     }
   }
 
+  addCustomer2Ride(ridePos) {
+    let newCustomers = [];
+    this.customers.forEach(c => {
+      let in_ride = this.riders[ridePos].riders.some(rc => {
+        return c._id === rc._id;
+      });
+      if (!in_ride) {
+        newCustomers.push(c);
+      }
+    });
+    const dialogRef = this.addCustomerDlg.open(AddCustomerToRideDialog, {
+      height: "315px",
+      width: "500px",
+      data: {
+        customers: newCustomers,
+        ride: this.riders[ridePos],
+        for: "ride"
+      }
+    });
+    dialogRef.afterClosed().subscribe(customers => {
+      if (customers) {
+        customers.forEach(c => {
+          this.riders[ridePos].riders.push(c);
+        });
+      }
+    });
+  }
+
   deleteRide(pos) {
     this.riders.splice(pos, 1);
   }
@@ -249,6 +294,7 @@ export class PackageSetupComponent implements OnInit {
       this.riders.splice(ride, 1);
     }
   }
+  /* ----------------------------------------end of Transportation set up----------------------------------------------*/
 
   setStatus(customer, toStatus) {
     this.pkgServ.setStatus(this.id, customer._id, toStatus).subscribe(res => {
@@ -269,13 +315,43 @@ export class PackageSetupComponent implements OnInit {
     });
   }
 
-  addCustomer2Ride(ridePos) {
-    let newCustomers = [];
+  /* ----------------------------------------Activity set up----------------------------------------------*/
+
+  setActivist() {
+    const activist = {
+      activity: "",
+      guide: "",
+      customers: [],
+      date: Date
+    };
+
+    activist.activity = this.activitiesForm.get("activity").value;
+    activist.guide = this.activitiesForm.get("guide").value;
+    activist.date = this.activitiesForm.get("date").value;
+
+    const activistsTmp = this.activitiesForm.get("customers").value;
+    const activistsCpy = [];
+    activistsTmp.forEach(actv => {
+      activistsCpy.push(Object.assign({}, actv));
+    });
+    activist.customers = activistsCpy;
+    this.activists.push(activist);
+  }
+
+  deleteActivist(pos, activist) {
+    this.activists[pos].customers.splice(activist, 1);
+    if (!this.activists[pos].customers.length) {
+      this.activists.splice(pos, 1);
+    }
+  }
+
+  addCustomer2Activity(actPos) {
+    const newCustomers = [];
     this.customers.forEach(c => {
-      let in_ride = this.riders[ridePos].riders.some(rc => {
-        return c._id === rc._id;
+      const in_act = this.activists[actPos].customers.some(ac => {
+        return c._id === ac._id;
       });
-      if (!in_ride) {
+      if (!in_act) {
         newCustomers.push(c);
       }
     });
@@ -284,15 +360,49 @@ export class PackageSetupComponent implements OnInit {
       width: "500px",
       data: {
         customers: newCustomers,
-        ride: this.riders[ridePos]
+        activist: this.activists[actPos],
+        for: "activity"
       }
     });
     dialogRef.afterClosed().subscribe(customers => {
       if (customers) {
         customers.forEach(c => {
-          this.riders[ridePos].riders.push(c);
+          this.activists[actPos].customers.push(c);
         });
       }
     });
   }
+
+  deleteActivity(actPos) {
+    this.activists.splice(actPos, 1);
+  }
+  /* ----------------------------------------end of Activity set up----------------------------------------------*/
+
+  /* ----------------------------------------Accomodation set up----------------------------------------------*/
+
+  setAccomodation() {
+    const row = {
+      accomodation: {},
+      room: {},
+      customers: [],
+      startDate: Date,
+      endDate: Date
+    };
+
+    row.accomodation = this.accomodationForm.get("accomodation").value;
+    row.room = this.accomodationForm.get("room").value;
+    row.startDate = this.accomodationForm.get("startDate").value;
+    row.endDate = this.accomodationForm.get("endDate").value;
+
+    const guestsTmp = this.accomodationForm.get("customers").value;
+    const guestsCpy = [];
+    guestsTmp.forEach(g => {
+      guestsCpy.push(Object.assign({}, g));
+    });
+    row.customers = guestsCpy;
+
+    this.guests.push(row);
+  }
+
+  /* ----------------------------------------Accomodation set up----------------------------------------------*/
 }

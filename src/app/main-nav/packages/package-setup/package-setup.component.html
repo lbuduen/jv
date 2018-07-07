@@ -234,7 +234,78 @@
       </mat-tab>
       <mat-tab label="Accomodation">
         <div class="tab-content">
-
+          <form id="accomodationForm" [formGroup]="accomodationForm">
+            <mat-form-field>
+              <mat-select placeholder="Accomodation" formControlName="accomodation" required>
+                <mat-option *ngFor="let acc of pkg.accomodation" [value]="acc">
+                  {{ acc.name }} {{acc.type}}
+                </mat-option>
+              </mat-select>
+              <!-- <mat-hint>{{accomodationForm.get('accomodation').value?.rooms.length}} room(s)</mat-hint> -->
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Room" formControlName="room" required>
+                <ng-container *ngFor="let r of accomodationForm.get('accomodation').value.rooms">
+                  <mat-option *ngIf="r.available" [value]="r">
+                    {{ r.number }} {{r.type}}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-hint *ngIf="accomodationForm.get('room').value">{{accomodationForm.get('room').value?.beds}} bed(s)</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="acrsdate" placeholder="Start date" formControlName="startDate"
+                required>
+              <mat-datepicker-toggle matSuffix [for]="acrsdate"></mat-datepicker-toggle>
+              <mat-datepicker #acrsdate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="acredate" placeholder="End date" formControlName="endDate"
+                required>
+              <mat-datepicker-toggle matSuffix [for]="acredate"></mat-datepicker-toggle>
+              <mat-datepicker #acredate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Customers" formControlName="customers" multiple required>
+                <ng-container *ngFor="let c of customers">
+                  <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
+                    {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </form>
+          <button mat-raised-button color="primary" [disabled]="accomodationForm.invalid" (click)="setAccomodation()">Save</button>
+          <table class="mat-table mat-elevation-z4" *ngIf="guests.length">
+            <ng-container *ngFor="let row of guests; index as i">
+              <tr class="mat-header-row">
+                <th>{{ row.accomodation.name }} {{row.accomodation.type}} </th>
+                <th class="mat-header-cell">Room
+                  <b>{{ row.room.number }}</b> ({{ row.room.type }})
+                  <b>{{ row.room.beds }}</b> bed(s) </th>
+                <th class="mat-header-cell">{{ row.startDate | date }} - {{ row.endDate | date }}</th>
+                <th class="mat-header-cell" colspan="2">
+                  <button mat-icon-button>
+                    <mat-icon aria-label="Add customer">person_add</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Delete room">
+                    <mat-icon aria-label="Delete room">remove_circle</mat-icon>
+                  </button>
+                </th>
+              </tr>
+              <tr class="mat-row" *ngFor="let c of row.customers; index as c">
+                <td class="mat-cell">{{c.firstName + ' ' + c.lastName}}</td>
+                <td class="mat-cell">{{c.email }} </td>
+                <td class="mat-cell">{{c.rate }} </td>
+                <td class="mat-cell">{{c.status }} </td>
+                <td class="mat-cell">
+                  <button mat-icon-button matTooltip="Delete customer from room">
+                    <mat-icon aria-label="Delete customer from room">remove_circle_outline</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </table>
         </div>
       </mat-tab>
       <mat-tab label="Activities">
@@ -242,8 +313,8 @@
           <form id="activitiesForm" [formGroup]="activitiesForm">
             <div>
               <mat-form-field class="full-width">
-                <mat-select placeholder="Activity" formControlName="id">
-                  <mat-option *ngFor="let act of pkg.activities" [value]="act._id">
+                <mat-select placeholder="Activity" formControlName="activity" required>
+                  <mat-option *ngFor="let act of pkg.activities" [value]="act">
                     {{ act.name }}
                   </mat-option>
                 </mat-select>
@@ -252,7 +323,7 @@
             <div>
               <mat-form-field class="full-width">
                 <mat-select placeholder="Guide" formControlName="guide">
-                  <mat-option *ngFor="let g of guides" [value]="g._id">
+                  <mat-option *ngFor="let g of guides" [value]="g">
                     {{ g.firstName }} {{ g.lastName }}
                   </mat-option>
                 </mat-select>
@@ -260,41 +331,48 @@
             </div>
             <div>
               <mat-form-field class="full-width">
-                <mat-select placeholder="Customers" formControlName="customers" multiple>
-                  <mat-option *ngFor="let c of customers" [value]="c._id">
-                    {{ c.name }}
-                  </mat-option>
+                <mat-select placeholder="Customers" formControlName="customers" multiple required>
+                  <ng-container *ngFor="let c of customers">
+                    <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
+                      {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                    </mat-option>
+                  </ng-container>
                 </mat-select>
               </mat-form-field>
             </div>
             <div>
               <mat-form-field class="full-width">
-                <input matInput [matDatepicker]="actdate" placeholder="Date" formControlName="date">
+                <input matInput [matDatepicker]="actdate" [min]="pkg.startDate" [max]="pkg.endDate" placeholder="Activity date" formControlName="date">
                 <mat-datepicker-toggle matSuffix [for]="actdate"></mat-datepicker-toggle>
                 <mat-datepicker #actdate></mat-datepicker>
               </mat-form-field>
             </div>
-            <button mat-raised-button color="primary">Save</button>
+            <button mat-raised-button color="primary" [disabled]="activitiesForm.invalid" (click)="setActivist()">Save</button>
           </form>
           <table class="mat-table mat-elevation-z8" *ngIf="activists.length">
-            <thead>
+            <ng-container *ngFor="let activist of activists; index as i">
               <tr class="mat-header-row">
-                <th class="mat-header-cell">Customer</th>
-                <th class="mat-header-cell">Vehicle</th>
-                <th class="mat-header-cell">Date</th>
-                <th class="mat-header-cell"></th>
+                <th class="mat-header-cell">{{ activist.activity.name }}</th>
+                <th class="mat-header-cell">{{activist.date | date}}</th>
+                <th class="mat-header-cell">
+                  <button mat-icon-button (click)="addCustomer2Activity(i)">
+                    <mat-icon aria-label="Add customer">person_add</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Delete activity" (click)="deleteActivity(i)">
+                    <mat-icon aria-label="Delete activity">remove_circle</mat-icon>
+                  </button>
+                </th>
               </tr>
-            </thead>
-            <tbody>
-              <tr class="mat-row" *ngFor="let rd of riders; index as i" (click)="selectRide(i)">
-                <td class="mat-cell"></td>
-                <td class="mat-cell"></td>
-                <td class="mat-cell"></td>
+              <tr class="mat-row" *ngFor="let a of activist.customers; index as j">
+                <td class="mat-cell">{{a.firstName + ' ' + a.lastName}}</td>
+                <td class="mat-cell">{{a.rate}}</td>
                 <td class="mat-cell">
-                  <button mat-button (click)="deleteRide(i)">Delete</button>
+                  <button mat-icon-button matTooltip="Delete customer from activity" (click)="deleteActivist(i, j)">
+                    <mat-icon aria-label="Delete customer from activity">remove_circle_outline</mat-icon>
+                  </button>
                 </td>
               </tr>
-            </tbody>
+            </ng-container>
           </table>
         </div>
       </mat-tab>
