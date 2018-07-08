@@ -67,9 +67,6 @@ export class PackageFormComponent implements OnInit {
       endDate: "",
       privateRate: "",
       joinerRate: "",
-      transportation: "",
-      accomodation: "",
-      activities: "",
       description: ""
     });
   }

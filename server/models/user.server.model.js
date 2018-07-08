@@ -1,67 +1,73 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ROLES = ['admin', 'driver', 'landlord', 'guide'];
+const ROLES = ["admin", "driver", "landlord", "guide"];
 
-const UserSchema = new Schema({
+const UserSchema = new Schema(
+  {
     firstName: String,
     lastName: String,
     email: {
-        type: String,
-        unique: true,
-        required: 'Email is required',
-        match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]
+      type: String,
+      unique: true,
+      required: "Email is required",
+      match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]
     },
     photo: String,
     phone: String,
     role: {
-        type: [String],
-        enum: ROLES
+      type: [String],
+      enum: ROLES
     },
     salt: String,
     password: {
-        type: String,
-        validate: [
-            function (password) {
-                if (password) {
-                    return password && password.length >= 8;
-                }
-                return true;
-            }, 'Password should be longer'
-        ]
+      type: String,
+      validate: [
+        function(password) {
+          if (password) {
+            return password && password.length >= 8;
+          }
+          return true;
+        },
+        "Password should be longer"
+      ]
     },
     created: {
-        type: Date,
-        default: Date.now
+      type: Date,
+      default: Date.now
     }
+  },
+  { toJSON: { virtuals: true } }
+);
+
+UserSchema.virtual("fullName")
+  .get(function() {
+    return this.firstName + " " + this.lastName;
+  })
+  .set(function(fullName) {
+    var splitName = fullName.split(" ");
+    this.firstName = splitName[0] || "";
+    this.lastName = splitName[1] || "";
+  });
+
+UserSchema.pre("save", function(next) {
+  if (this.password) {
+    this.salt = new Buffer(crypto.randomBytes(16).toString("base64"), "base64");
+    this.password = this.hashPassword(this.password);
+  }
+  next();
 });
 
-UserSchema.virtual('fullName')
-    .get(function () {
-        return this.firstName + ' ' + this.lastName;
-    })
-    .set(function (fullName) {
-        var splitName = fullName.split(' ');
-        this.firstName = splitName[0] || '';
-        this.lastName = splitName[1] || '';
-    });
-
-UserSchema.pre('save', function (next) {
-    if (this.password) {
-        this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-        this.password = this.hashPassword(this.password);
-    }
-    next();
-});
-
-UserSchema.methods.hashPassword = function (password) {
-    return crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha1').toString('base64');
+UserSchema.methods.hashPassword = function(password) {
+  return crypto
+    .pbkdf2Sync(password, this.salt, 10000, 64, "sha1")
+    .toString("base64");
 };
 
-UserSchema.methods.authenticate = function (password) {
-    return this.password === this.hashPassword(password);
+UserSchema.methods.authenticate = function(password) {
+  return this.password === this.hashPassword(password);
 };
 
-mongoose.model('User', UserSchema);
+mongoose.model("User", UserSchema);

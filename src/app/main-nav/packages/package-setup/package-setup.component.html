@@ -1,7 +1,7 @@
 <mat-toolbar>
   <span class="tb-title">Packages</span>
   <span class="spacer"></span>
-  <button mat-icon-button matTooltip="Save all">
+  <button mat-icon-button matTooltip="Save all" (click)="setUp()">
     <mat-icon aria-label="Save all">save</mat-icon>
   </button>
   <button mat-icon-button matTooltip="Download">
@@ -51,43 +51,14 @@
             </div>
             <div>
               <mat-form-field class="full-width">
-                <mat-select placeholder="Accomodation" formControlName="accomodation" multiple required>
-                  <mat-option *ngFor="let acc of accomodation" [value]="acc._id">
-                    {{ acc.name }} {{acc.type}} ({{acc.rooms.length}})
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field class="full-width">
-                <mat-select placeholder="Transportation" formControlName="transportation" multiple required>
-                  <mat-option *ngFor="let tr of transportation" [value]="tr._id">
-                    {{ tr.brand }} {{ tr.model }} [{{ tr.plate }}] ({{ tr.capacity }})
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field class="full-width">
-                <mat-select placeholder="Activities" formControlName="activities" multiple>
-                  <mat-option *ngFor="let act of activities" [value]="act._id">
-                    {{ act.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field class="full-width">
                 <textarea matInput placeholder="Description" formControlName="description"></textarea>
               </mat-form-field>
             </div>
-            <div>
-              <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
-            </div>
+            <button mat-raised-button color="primary" (click)="updatePkg()">Save</button>
           </form>
         </div>
       </mat-tab>
-      <mat-tab label="Customers ({{customers.length}})">
+      <mat-tab [disabled]="!customers.length" label="Customers ({{customers.length}})">
         <div class="tab-content">
           <div class="filter">
             <mat-form-field>
@@ -97,7 +68,7 @@
           <table mat-table [dataSource]="customerDataSource" matSort>
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.fullName }} </td>
             </ng-container>
 
             <ng-container matColumnDef="email">
@@ -158,7 +129,7 @@
             <div>
               <mat-form-field class="full-width">
                 <mat-select placeholder="Vehicle" formControlName="vehicle">
-                  <mat-option *ngFor="let tr of pkg.transportation" [value]="tr">
+                  <mat-option *ngFor="let tr of transportation" [value]="tr">
                     {{ tr.brand }} {{ tr.model }} [{{ tr.plate }}] ({{ tr.capacity }})
                   </mat-option>
                 </mat-select>
@@ -169,13 +140,16 @@
                 <mat-select placeholder="Customers" formControlName="customers" multiple>
                   <ng-container *ngFor="let c of customers">
                     <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
-                      {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                      {{c.fullName}} ({{c.rate}})
                     </mat-option>
                   </ng-container>
                 </mat-select>
+                <mat-hint *ngIf="transportationForm.get('customers').value && transportationForm.get('vehicle').value">
+                  {{ transportationForm.get('customers').value.length }} / {{ transportationForm.get('vehicle').value.capacity }}
+                </mat-hint>
               </mat-form-field>
             </div>
-            <div>
+            <div [ngClass]="{ mt10: transportationForm.get('customers').value && transportationForm.get('vehicle').value }">
               <mat-form-field class="full-width">
                 <input type="text" matInput placeholder="Pick up point" formControlName="pickup" required>
               </mat-form-field>
@@ -194,12 +168,6 @@
             </div>
             <button mat-raised-button color="primary" [disabled]="transportationForm.invalid || (transportationForm.get('customers').value.length > transportationForm.get('vehicle').value.capacity)"
               (click)="setRiders()">Save</button>
-            <!-- <button mat-raised-button (click)="clearTransportationForm()">Clear</button> -->
-            <mat-chip-list *ngIf="transportationForm.get('customers').value && transportationForm.get('vehicle').value">
-              <mat-chip>{{ transportationForm.get('customers').value.length }} / {{ transportationForm.get('vehicle').value.capacity
-                }}
-              </mat-chip>
-            </mat-chip-list>
           </form>
           <table class="mat-table mat-elevation-z8" *ngIf="riders.length">
             <ng-container *ngFor="let ride of riders; index as i">
@@ -217,7 +185,7 @@
                 </th>
               </tr>
               <tr class="mat-row" *ngFor="let r of ride.riders; index as j">
-                <td class="mat-cell">{{r.firstName + ' ' + r.lastName}}</td>
+                <td class="mat-cell">{{r.fullName}}</td>
                 <td class="mat-cell">{{r.rate}}</td>
                 <td class="mat-cell">
                   <!-- <button mat-icon-button>
@@ -237,7 +205,7 @@
           <form id="accomodationForm" [formGroup]="accomodationForm">
             <mat-form-field>
               <mat-select placeholder="Accomodation" formControlName="accomodation" required>
-                <mat-option *ngFor="let acc of pkg.accomodation" [value]="acc">
+                <mat-option *ngFor="let acc of accomodation" [value]="acc">
                   {{ acc.name }} {{acc.type}}
                 </mat-option>
               </mat-select>
@@ -269,10 +237,11 @@
               <mat-select placeholder="Customers" formControlName="customers" multiple required>
                 <ng-container *ngFor="let c of customers">
                   <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
-                    {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                    {{c.fullName}} ({{c.rate}})
                   </mat-option>
                 </ng-container>
               </mat-select>
+              <mat-hint *ngIf="accomodationForm.get('customers').value">{{accomodationForm.get('customers').value?.length}} customer(s)</mat-hint>
             </mat-form-field>
           </form>
           <button mat-raised-button color="primary" [disabled]="accomodationForm.invalid" (click)="setAccomodation()">Save</button>
@@ -285,21 +254,21 @@
                   <b>{{ row.room.beds }}</b> bed(s) </th>
                 <th class="mat-header-cell">{{ row.startDate | date }} - {{ row.endDate | date }}</th>
                 <th class="mat-header-cell" colspan="2">
-                  <button mat-icon-button>
+                  <button mat-icon-button matTooltip="Add customer" (click)="addGuest(i)">
                     <mat-icon aria-label="Add customer">person_add</mat-icon>
                   </button>
-                  <button mat-icon-button matTooltip="Delete room">
+                  <button mat-icon-button matTooltip="Delete room" (click)="deleteRoom(i)">
                     <mat-icon aria-label="Delete room">remove_circle</mat-icon>
                   </button>
                 </th>
               </tr>
               <tr class="mat-row" *ngFor="let c of row.customers; index as c">
-                <td class="mat-cell">{{c.firstName + ' ' + c.lastName}}</td>
+                <td class="mat-cell">{{c.fullName}}</td>
                 <td class="mat-cell">{{c.email }} </td>
+                <td class="mat-cell">{{c.phone }} </td>
                 <td class="mat-cell">{{c.rate }} </td>
-                <td class="mat-cell">{{c.status }} </td>
                 <td class="mat-cell">
-                  <button mat-icon-button matTooltip="Delete customer from room">
+                  <button mat-icon-button matTooltip="Delete customer from room" (click)="deleteGuest(i, c)">
                     <mat-icon aria-label="Delete customer from room">remove_circle_outline</mat-icon>
                   </button>
                 </td>
@@ -314,7 +283,7 @@
             <div>
               <mat-form-field class="full-width">
                 <mat-select placeholder="Activity" formControlName="activity" required>
-                  <mat-option *ngFor="let act of pkg.activities" [value]="act">
+                  <mat-option *ngFor="let act of activities" [value]="act">
                     {{ act.name }}
                   </mat-option>
                 </mat-select>
@@ -334,7 +303,7 @@
                 <mat-select placeholder="Customers" formControlName="customers" multiple required>
                   <ng-container *ngFor="let c of customers">
                     <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
-                      {{c.firstName + ' ' + c.lastName}} ({{c.rate}})
+                      {{c.fullName}} ({{c.rate}})
                     </mat-option>
                   </ng-container>
                 </mat-select>
@@ -364,7 +333,7 @@
                 </th>
               </tr>
               <tr class="mat-row" *ngFor="let a of activist.customers; index as j">
-                <td class="mat-cell">{{a.firstName + ' ' + a.lastName}}</td>
+                <td class="mat-cell">{{a.fullName}}</td>
                 <td class="mat-cell">{{a.rate}}</td>
                 <td class="mat-cell">
                   <button mat-icon-button matTooltip="Delete customer from activity" (click)="deleteActivist(i, j)">

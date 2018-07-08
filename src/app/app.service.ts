@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class AppService {
 
-  private appPrefix = 'travelOnAsia_';
+  private appPrefix = 'travelNowAsia_';
 
   constructor(
     private http: HttpClient,

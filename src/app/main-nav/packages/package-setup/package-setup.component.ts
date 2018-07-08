@@ -19,7 +19,8 @@ import {
   MatTableDataSource,
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA
+  MAT_DIALOG_DATA,
+  MatTabChangeEvent
 } from "@angular/material";
 
 import { PackageService } from "../package.service";
@@ -110,30 +111,6 @@ export class PackageSetupComponent implements OnInit {
 
           this.detailsForm.patchValue(pkg);
 
-          const accomodations = [];
-          pkg.accomodation.forEach(acc => {
-            accomodations.push(acc._id);
-          });
-          this.detailsForm.patchValue({
-            accomodation: accomodations
-          });
-
-          const transportations = [];
-          pkg.transportation.forEach(tr => {
-            transportations.push(tr._id);
-          });
-          this.detailsForm.patchValue({
-            transportation: transportations
-          });
-
-          const activities = [];
-          pkg.activities.forEach(act => {
-            activities.push(act._id);
-          });
-          this.detailsForm.patchValue({
-            activities: activities
-          });
-
           pkg.customers.forEach(c => {
             const customer = c.id;
             customer.rate = c.rate;
@@ -142,6 +119,17 @@ export class PackageSetupComponent implements OnInit {
             customer.requested = c.requested;
             this.customers.push(customer);
           });
+
+          /* pkg.riders.forEach(ride => {
+            const rd = {
+              vehicle: ride.id,
+              riders: ride.customers,
+              pickup: ride.pickup,
+              dropoff: ride.dropoff,
+              date: ride.date
+            };
+            this.riders.push(rd);
+          }); */
 
           this.customerDataSource = new MatTableDataSource(this.customers);
           this.customerDataSource.paginator = this.paginator;
@@ -213,6 +201,88 @@ export class PackageSetupComponent implements OnInit {
     }
   }
 
+  setStatus(customer, toStatus) {
+    this.pkgServ.setStatus(this.id, customer._id, toStatus).subscribe(res => {
+      customer.status = toStatus;
+    });
+  }
+
+  removeFromPackage(customer) {
+    this.pkgServ.removeCustomer(this.id, customer._id).subscribe(res => {
+      this.customers.forEach((c, i) => {
+        if (c._id === customer._id) {
+          this.customers.splice(i, 1);
+          this.customerDataSource = new MatTableDataSource(this.customers);
+          this.customerDataSource.paginator = this.paginator;
+          this.customerDataSource.sort = this.sort;
+        }
+      });
+    });
+  }
+
+  updatePkg() {
+    if (this.detailsForm.valid) {
+      this.pkgServ.update(this.id, this.detailsForm.value).subscribe(
+        res => {
+          // TODO update pkg with new pkg after being updated
+          this.snackBar.open(`Package details have been updated`, "", {
+            duration: 3000
+          });
+        },
+        err => {}
+      );
+    }
+  }
+
+  setUp() {
+    const data = {
+      activists: [],
+      riders: [],
+      guests: []
+    };
+
+    this.activists.forEach(activist => {
+      const act = {
+        id: activist.activity._id,
+        guide: activist.guide._id,
+        customers: activist.customers.map(cust =>  cust._id),
+        date: activist.date
+      };
+      data.activists.push(act);
+    });
+
+    this.riders.forEach(r => {
+      const ride = {
+        id: r.vehicle._id,
+        customers: r.riders.map(cust => cust._id),
+        pickup: r.pickup,
+        dropoff: r.dropoff,
+        date: r.date
+      };
+      data.riders.push(ride);
+    });
+
+    this.guests.forEach(g => {
+      const guest = {
+        accomodation: g.accomodation._id,
+        room: g.room._id,
+        customers: g.customers.map(cust => cust._id),
+        startDate: g.startDate,
+        endDate: g.endDate
+      };
+      data.guests.push(guest);
+    });
+
+    this.pkgServ.setUp(this.id, data).subscribe(
+      res => {
+        this.snackBar.open(`The package information has been saved`, "", {
+          duration: 3000
+        });
+      },
+      err => {}
+    );
+  }
+
   /* ------------------------------------------Transportation set up----------------------------------------------------*/
 
   setRiders() {
@@ -223,12 +293,11 @@ export class PackageSetupComponent implements OnInit {
       dropoff: "",
       date: Date
     };
-
     const veh = this.transportationForm.get("vehicle").value;
     const date = this.transportationForm.get("date").value;
 
     const in_array = this.riders.some(r => {
-      return r.vehicle === veh && r.date === date;
+      return r.vehicle._id === veh._id && r.date.getTime() === date.getTime();
     });
 
     if (!in_array) {
@@ -244,7 +313,9 @@ export class PackageSetupComponent implements OnInit {
       ride.pickup = this.transportationForm.get("pickup").value;
       ride.dropoff = this.transportationForm.get("dropoff").value;
       this.riders.push(ride);
-      this.transportationForm.reset();
+      this.transportationForm.reset({
+        date: ""
+      });
     } else {
       this.snackBar.open(
         `There is already a ride set up for this vehicle at this date`,
@@ -295,25 +366,6 @@ export class PackageSetupComponent implements OnInit {
     }
   }
   /* ----------------------------------------end of Transportation set up----------------------------------------------*/
-
-  setStatus(customer, toStatus) {
-    this.pkgServ.setStatus(this.id, customer._id, toStatus).subscribe(res => {
-      customer.status = toStatus;
-    });
-  }
-
-  removeFromPackage(customer) {
-    this.pkgServ.removeCustomer(this.id, customer._id).subscribe(res => {
-      this.customers.forEach((c, i) => {
-        if (c._id === customer._id) {
-          this.customers.splice(i, 1);
-          this.customerDataSource = new MatTableDataSource(this.customers);
-          this.customerDataSource.paginator = this.paginator;
-          this.customerDataSource.sort = this.sort;
-        }
-      });
-    });
-  }
 
   /* ----------------------------------------Activity set up----------------------------------------------*/
 
@@ -389,19 +441,100 @@ export class PackageSetupComponent implements OnInit {
       endDate: Date
     };
 
-    row.accomodation = this.accomodationForm.get("accomodation").value;
-    row.room = this.accomodationForm.get("room").value;
-    row.startDate = this.accomodationForm.get("startDate").value;
-    row.endDate = this.accomodationForm.get("endDate").value;
+    const room = this.accomodationForm.get("room").value;
+    const startDate = this.accomodationForm.get("startDate").value;
+    const endDate = this.accomodationForm.get("endDate").value;
 
-    const guestsTmp = this.accomodationForm.get("customers").value;
-    const guestsCpy = [];
-    guestsTmp.forEach(g => {
-      guestsCpy.push(Object.assign({}, g));
+    const exists = this.guests.some(r => {
+      return (
+        r.room._id === room._id &&
+        r.startDate === startDate &&
+        r.endDate === endDate
+      );
     });
-    row.customers = guestsCpy;
 
-    this.guests.push(row);
+    if (!exists) {
+      row.room = room;
+      row.startDate = startDate;
+      row.endDate = endDate;
+
+      const guestsTmp = this.accomodationForm.get("customers").value;
+      const guestsCpy = [];
+      guestsTmp.forEach(gt => {
+        guestsCpy.push(Object.assign({}, gt));
+
+        this.guests.forEach(g => {
+          if (g.customers.some(gc => gc._id === gt._id)) {
+            this.snackBar.open(
+              `Warning: Customer ${gt.firstName} is already in room ${
+                room.number
+              } `,
+              "",
+              {
+                duration: 5000
+              }
+            );
+          }
+        });
+      });
+      if (guestsCpy.length) {
+        row.customers = guestsCpy;
+        row.accomodation = this.accomodationForm.get("accomodation").value;
+
+        this.guests.push(row);
+      }
+    } else {
+      this.snackBar.open(
+        `Room ${
+          room.number
+        } is already set up between ${new Intl.DateTimeFormat("en-US").format(
+          startDate
+        )} and ${new Intl.DateTimeFormat("en-US").format(endDate)}`,
+        "",
+        {
+          duration: 3000
+        }
+      );
+    }
+  }
+
+  deleteRoom(pos) {
+    this.guests.splice(pos, 1);
+  }
+
+  deleteGuest(roomPos, custPos) {
+    this.guests[roomPos].customers.splice(custPos, 1);
+    if (!this.guests[roomPos].customers.length) {
+      this.guests.splice(roomPos, 1);
+    }
+  }
+
+  addGuest(roomPos) {
+    const newCustomers = [];
+    this.customers.forEach(c => {
+      const in_room = this.guests[roomPos].customers.some(ac => {
+        return c._id === ac._id;
+      });
+      if (!in_room) {
+        newCustomers.push(c);
+      }
+    });
+    const dialogRef = this.addCustomerDlg.open(AddCustomerToRideDialog, {
+      height: "315px",
+      width: "500px",
+      data: {
+        customers: newCustomers,
+        guest: this.guests[roomPos],
+        for: "accomodation"
+      }
+    });
+    dialogRef.afterClosed().subscribe(customers => {
+      if (customers) {
+        customers.forEach(c => {
+          this.guests[roomPos].customers.push(c);
+        });
+      }
+    });
   }
 
   /* ----------------------------------------Accomodation set up----------------------------------------------*/

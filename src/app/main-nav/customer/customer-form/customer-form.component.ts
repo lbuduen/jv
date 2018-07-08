@@ -70,7 +70,7 @@ export class CustomerFormComponent implements OnInit {
       lastName: "",
       email: ["", [Validators.required, Validators.email]],
       phone: "",
-      pkg: "",
+      pkg: ["", Validators.required],
       password: ["", Validators.minLength(8)],
       photo: "",
       rate: "joiner",

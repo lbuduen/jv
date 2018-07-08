@@ -20,16 +20,17 @@ form {
   float: right;
 }
 
-form div:last-child {
-  margin-top: 20px;
-}
-
 .full-width {
   width: 100%;
 }
 
 button[type="submit"] {
   margin-top: 20px;
+}
+
+.dates,
+.mt10 {
+  margin-top: 10px;
 }
 
 .dates mat-form-field {

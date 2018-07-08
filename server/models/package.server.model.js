@@ -37,33 +37,15 @@ const PackageSchema = new Schema({
       }
     }
   ],
-  accomodation: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Accomodation"
-    }
-  ],
-  transportation: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "TransportationByLand"
-    }
-  ],
   activities: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Activity"
-    }
-  ],
-  activists: [
     {
       id: { type: Schema.Types.ObjectId, ref: "Activity" },
       guide: { type: Schema.Types.ObjectId, ref: "User" },
-      customers: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
+      customers: [{type: Schema.Types.ObjectId, ref: "Customer"}],
       date: Date
     }
   ],
-  riders: [
+  transportation: [
     {
       id: { type: Schema.Types.ObjectId, ref: "TransportationByLand" },
       customers: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
@@ -72,11 +54,11 @@ const PackageSchema = new Schema({
       date: Date
     }
   ],
-  guests: [
+  accomodation: [
     {
       accomodation: { type: Schema.Types.ObjectId, ref: "Accomodation" },
       room: { type: Schema.Types.ObjectId },
-      customer: { type: Schema.Types.ObjectId, ref: "Customer" },
+      customers: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
       startDate: Date,
       endDate: Date
     }

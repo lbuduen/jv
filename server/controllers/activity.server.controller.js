@@ -85,7 +85,7 @@ exports.read = function(req, res) {
 
 exports.delete = function(req, res, next) {
   const activity = req.activity;
-  Package.find({ activities: activity._id }, (err, act) => {
+  Package.find({ 'activities.id': activity._id }, (err, act) => {
     if (err) {
       return next(err);
     }

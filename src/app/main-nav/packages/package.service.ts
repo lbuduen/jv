@@ -33,10 +33,16 @@ export class PackageService {
     return this.http.get(`${this.apiURL}/${id}`);
   }
 
+  setUp(id, pkg): Observable<any> {
+    return this.http
+      .patch(`${this.apiURL}/${id}`, pkg, httpOptions)
+      .pipe(catchError(this.handleError("set up package")));
+  }
+
   update(id, pkg): Observable<any> {
     return this.http
-      .put(`${this.apiURL}/${id}`, pkg, { headers: new HttpHeaders() })
-      .pipe(catchError(this.handleError("Update package")));
+      .put(`${this.apiURL}/${id}`, pkg, httpOptions)
+      .pipe(catchError(this.handleError("update package details")));
   }
 
   delete(id: String): Observable<any> {

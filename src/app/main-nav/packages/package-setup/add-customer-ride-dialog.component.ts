@@ -8,6 +8,10 @@ import { FormControl, Validators } from "@angular/forms";
     <mat-dialog-content>
     <p *ngIf="data.for == 'ride'">{{ data.ride.vehicle.brand }} {{ data.ride.vehicle.model }} [{{ data.ride.vehicle.plate }}]</p>
     <p *ngIf="data.for == 'activity'">{{ data.activist.activity.name }} {{ data.activist.date | date }}</p>
+    <div *ngIf="data.for == 'accomodation'">
+     <b>{{ data.guest.accomodation.name }}</b> {{ data.guest.accomodation.type }}
+      [Room <b>{{ data.guest.room.number }}</b> ({{data.guest.room.type}}) <b>{{data.guest.room.beds}}</b> bed(s)]
+    </div>
 
       <mat-form-field>
         <mat-select placeholder="Customers" [formControl]="customerSelect" multiple required>
@@ -33,7 +37,7 @@ import { FormControl, Validators } from "@angular/forms";
         Add
       </button>
 
-      <button *ngIf="data.for == 'activity'"
+      <button *ngIf="data.for == 'activity' || data.for == 'accomodation'"
       mat-raised-button
       color="primary"
       [mat-dialog-close]="customerSelect.value"

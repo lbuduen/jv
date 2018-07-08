@@ -9,12 +9,7 @@ const Activity = require("mongoose").model("Activity");
 const TransportationByLand = require("mongoose").model("TransportationByLand");
 
 exports.create = function(req, res, next) {
-  const package = req.body;
-  package.transportation = package.transportation.split(",");
-  package.accomodation = package.accomodation.split(",");
-  package.activities = package.activities.split(",");
-
-  const pkg = new Package(package);
+  const pkg = new Package(req.body);
 
   pkg.save((err, package) => {
     if (err) {
@@ -137,9 +132,18 @@ exports.packageById = function(req, res, next, id) {
       path: "customers.id",
       select: "-_id -salt -password"
     })
-    .populate("accomodation")
-    .populate("transportation")
-    .populate("activities")
+    .populate({
+      path: "activities.id"
+    })
+    .populate({
+      path: "activities.guide"
+    })
+    .populate({
+      path: "transportation.id"
+    })
+    .populate({
+      path: "accomodation.accomodation"
+    })
     .exec((err, package) => {
       if (err) {
         return next(err);
@@ -198,5 +202,45 @@ exports.removeCustomer = function(req, res, next) {
       }
       res.status(204).end();
     });
+  });
+};
+
+exports.setUp = function(req, res, next) {
+  const pkg = req.package;
+
+  pkg.activities = req.body.activists;
+  pkg.transportation = req.body.riders;
+  pkg.accomodation = req.body.guests;
+
+  pkg.save((err, p) => {
+    if (err) {
+      return res.status(400).send({
+        message: getErrorMessage(err)
+      });
+    }
+    res.status(204).end();
+  });
+};
+
+exports.update = function(req, res, next) {
+  const pkg = req.package;
+  pkg.update({ $set: req.body }, (err, raw) => {
+    if (err) {
+      return res.status(400).send({
+        message: getErrorMessage(err)
+      });
+    }
+    console.log(raw);
+    res.status(204).end();
+  });
+};
+
+exports.delete = function(req, res, next) {
+  const pkg = req.package;
+  pkg.remove(err => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json(pkg);
   });
 };
