@@ -78,7 +78,7 @@ export class PackageSetupComponent implements OnInit {
     private elemRef: ElementRef,
     private eventServ: EventService,
     private addCustomerDlg: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.pkgServ.get("accomodation").subscribe(acc => {
@@ -107,11 +107,11 @@ export class PackageSetupComponent implements OnInit {
     if (this.id) {
       this.pkgServ.read(this.id).subscribe(
         pkg => {
-          this.pkg = pkg;
+          this.pkg = pkg.details;
 
-          this.detailsForm.patchValue(pkg);
+          this.detailsForm.patchValue(pkg.details);
 
-          pkg.customers.forEach(c => {
+          pkg.details.customers.forEach(c => {
             const customer = c.id;
             customer.rate = c.rate;
             customer.status = c.status;
@@ -120,16 +120,37 @@ export class PackageSetupComponent implements OnInit {
             this.customers.push(customer);
           });
 
-          /* pkg.riders.forEach(ride => {
-            const rd = {
-              vehicle: ride.id,
-              riders: ride.customers,
-              pickup: ride.pickup,
-              dropoff: ride.dropoff,
-              date: ride.date
+          pkg.transportation.forEach(tr => {
+            const ride = {
+              vehicle: tr.vehicle,
+              riders: this.processCustomers(tr.riders),
+              pickup: tr.pickup,
+              dropoff: tr.dropoff,
+              date: tr.date
             };
-            this.riders.push(rd);
-          }); */
+            this.riders.push(ride);
+          });
+
+          pkg.accomodation.forEach(acc => {
+            const row = {
+              accomodation: acc.accomodation,
+              room: acc.room,
+              customers: this.processCustomers(acc.customers),
+              startDate: acc.startDate,
+              endDate: acc.endDate
+            };
+            this.guests.push(row);
+          });
+
+          pkg.activities.forEach(act => {
+            const activist = {
+              activity: act.activity,
+              guide: act.guide,
+              customers: this.processCustomers(act.customers),
+              date: act.date
+            };
+            this.activists.push(activist);
+          });
 
           this.customerDataSource = new MatTableDataSource(this.customers);
           this.customerDataSource.paginator = this.paginator;
@@ -145,6 +166,19 @@ export class PackageSetupComponent implements OnInit {
     }
   }
 
+  private processCustomers(customers) {
+    const processed_customers = [];
+    customers.forEach(c => {
+      const customer = c.id;
+      customer.rate = c.rate;
+      customer.status = c.status;
+      customer._id = c._id;
+      customer.requested = c.requested;
+      processed_customers.push(customer);
+    });
+    return processed_customers;
+  }
+
   createDetailsForm() {
     this.detailsForm = this.fb.group({
       name: ["", Validators.required],
@@ -153,10 +187,8 @@ export class PackageSetupComponent implements OnInit {
       endDate: "",
       privateRate: "",
       joinerRate: "",
-      transportation: "",
-      accomodation: "",
-      activities: "",
-      description: ""
+      description: "",
+      active: ""
     });
   }
 
@@ -229,7 +261,7 @@ export class PackageSetupComponent implements OnInit {
             duration: 3000
           });
         },
-        err => {}
+        err => { }
       );
     }
   }
@@ -245,7 +277,7 @@ export class PackageSetupComponent implements OnInit {
       const act = {
         id: activist.activity._id,
         guide: activist.guide._id,
-        customers: activist.customers.map(cust =>  cust._id),
+        customers: activist.customers.map(cust => cust._id),
         date: activist.date
       };
       data.activists.push(act);
@@ -279,7 +311,7 @@ export class PackageSetupComponent implements OnInit {
           duration: 3000
         });
       },
-      err => {}
+      err => { }
     );
   }
 
@@ -313,9 +345,6 @@ export class PackageSetupComponent implements OnInit {
       ride.pickup = this.transportationForm.get("pickup").value;
       ride.dropoff = this.transportationForm.get("dropoff").value;
       this.riders.push(ride);
-      this.transportationForm.reset({
-        date: ""
-      });
     } else {
       this.snackBar.open(
         `There is already a ride set up for this vehicle at this date`,
@@ -467,7 +496,7 @@ export class PackageSetupComponent implements OnInit {
           if (g.customers.some(gc => gc._id === gt._id)) {
             this.snackBar.open(
               `Warning: Customer ${gt.firstName} is already in room ${
-                room.number
+              room.number
               } `,
               "",
               {
@@ -486,7 +515,7 @@ export class PackageSetupComponent implements OnInit {
     } else {
       this.snackBar.open(
         `Room ${
-          room.number
+        room.number
         } is already set up between ${new Intl.DateTimeFormat("en-US").format(
           startDate
         )} and ${new Intl.DateTimeFormat("en-US").format(endDate)}`,

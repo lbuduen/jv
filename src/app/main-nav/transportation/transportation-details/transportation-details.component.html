@@ -13,16 +13,16 @@
 </mat-toolbar>
 <mat-card>
   <mat-card-header>
-    <mat-card-title>{{ transportation.brand }}</mat-card-title>
+    <mat-card-title><mat-icon>directions_car</mat-icon> {{ transportation.brand }}</mat-card-title>
     <mat-card-subtitle>{{ transportation.model }}</mat-card-subtitle>
   </mat-card-header>
   <img *ngIf="transportation.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/transportation/{{transportation._id}}/{{ transportation.photos[0]}}"
     alt="{{ transportation.brand}} {{ transportation.model}}">
   <mat-card-content>
     <p id="plate">{{transportation.plate}} </p>
-    <p>Capacity: {{transportation.capacity}} </p>
-    <p>Driver:
-      <a routerLink="/admin/users/details/{{transportation.driver._id}}">{{transportation.driver.firstName}} {{transportation.driver.lastName}}</a>
+    <p matTooltip="Price"><mat-icon >attach_money</mat-icon> {{transportation.price}}</p>
+    <p matTooltip="Capacity"><mat-icon >airline_seat_recline_extra</mat-icon> {{transportation.capacity}} seat(s)</p>
+    <p matTooltip="Driver"><mat-icon>person</mat-icon> <a routerLink="/admin/users/details/{{transportation.driver._id}}">{{transportation.driver.firstName}} {{transportation.driver.lastName}}</a>
     </p>
     <p>{{transportation.observations}} </p>
   </mat-card-content>

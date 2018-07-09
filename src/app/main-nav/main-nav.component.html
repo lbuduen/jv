@@ -2,26 +2,27 @@
   <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="'navigation'" [mode]="'side'" [opened]="true">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon> Dashboard</a>
       <a mat-list-item routerLink="/admin/customers" routerLinkActive="active">
-        <span matBadge="{{ totals.customers }}" matBadgeOverlap="false">Customers</span>
+        <mat-icon>person</mat-icon> <span matBadge="{{ totals.customers }}" matBadgeOverlap="false">Customers</span>
       </a>
       <a mat-list-item routerLink="/admin/accomodation" routerLinkActive="active">
-        <span matBadge="{{ totals.accomodation }}" matBadgeOverlap="false">Accomodation</span>
+        <mat-icon>hotel</mat-icon> <span matBadge="{{ totals.accomodation }}" matBadgeOverlap="false">Accomodation</span>
       </a>
       <a mat-list-item routerLink="/admin/activities" routerLinkActive="active">
-        <span matBadge="{{ totals.activities }}" matBadgeOverlap="false">Activities</span>
+        <mat-icon>golf_course</mat-icon> <span matBadge="{{ totals.activities }}" matBadgeOverlap="false">Activities</span>
       </a>
       <a mat-list-item routerLink="/admin/transportation" routerLinkActive="active">
-        <span matBadge="{{ totals.transportation }}" matBadgeOverlap="false">Transportation</span>
+        <mat-icon>commute</mat-icon> <span matBadge="{{ totals.transportation }}" matBadgeOverlap="false">Transportation</span>
       </a>
       <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
-        <span matBadge="{{ totals.users }}" matBadgeOverlap="false">Users</span>
+        <mat-icon>person_outline</mat-icon> <span matBadge="{{ totals.users }}" matBadgeOverlap="false">Users</span>
       </a>
       <a mat-list-item routerLink="/admin/packages" routerLinkActive="active">
-        <span matBadge="{{ totals.packages }}" matBadgeOverlap="false">Packages</span>
+        <mat-icon>work_outline</mat-icon> <span matBadge="{{ totals.packages }}" matBadgeOverlap="false">Packages</span>
       </a>
-      <a mat-list-item routerLink="/admin/media" routerLinkActive="active">Media</a>
+      <a mat-list-item routerLink="/admin/media" routerLinkActive="active"><mat-icon>collections</mat-icon> Media</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

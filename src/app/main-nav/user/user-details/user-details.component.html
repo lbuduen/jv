@@ -1,13 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Users</span>
   <span class="spacer"></span>
-  <a routerLink="/admin/users/add">
+  <a routerLink="/admin/users/add" matTooltip="Add user">
     <mat-icon>add_circle_outline</mat-icon>
   </a>
-  <a routerLink="/admin/users/edit/{{user._id}}">
+  <a routerLink="/admin/users/edit/{{user._id}}" matTooltip="Edit user">
     <mat-icon>edit</mat-icon>
   </a>
-  <a (click)="delete(user._id)">
+  <a (click)="delete(user._id)" matTooltip="Delete user">
     <mat-icon>delete_outline</mat-icon>
   </a>
 </mat-toolbar>
@@ -19,9 +19,11 @@
     <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p>
-      <a href="mailto:{{ user.email }}">{{ user.email }}</a>
-    </p>
-    <p>{{ user.phone }}</p>
+    <div>
+      <mat-icon>email</mat-icon> <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+    </div>
+    <div>
+      <mat-icon>phone</mat-icon>{{ user.phone }}
+    </div>
   </mat-card-content>
 </mat-card>

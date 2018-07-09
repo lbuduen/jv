@@ -44,6 +44,9 @@
       </mat-form-field>
     </div>
     <div>
+      <mat-checkbox formControlName="active">Active</mat-checkbox>
+    </div>
+    <div>
       <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
       <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
         <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>

@@ -187,23 +187,25 @@
             </mat-chip-list>
           </div>
         </div>
-        <table class="mat-table" *ngIf="rooms.length">
-          <caption>Rooms</caption>
-          <thead>
-            <tr class="mat-header-row">
-              <th class="mat-header-cell">Number</th>
-              <th class="mat-header-cell">Type</th>
-              <th class="mat-header-cell">Beds</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
-              <td class="mat-cell">{{room.number}}</td>
-              <td class="mat-cell">{{room.type}}</td>
-              <td class="mat-cell">{{room.beds}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          <h3>Rooms</h3>
+          <table class="mat-table" *ngIf="rooms.length">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Number</th>
+                <th class="mat-header-cell">Type</th>
+                <th class="mat-header-cell">Beds</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
+                <td class="mat-cell">{{room.number}}</td>
+                <td class="mat-cell">{{room.type}}</td>
+                <td class="mat-cell">{{room.beds}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </mat-card-content>
     </mat-card>
     <div>

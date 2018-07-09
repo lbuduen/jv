@@ -78,9 +78,9 @@ export class TransportationFormComponent implements OnInit {
       brand: "",
       model: "",
       plate: "",
-      capacity: "",
+      capacity: ["", Validators.required],
       color: "",
-      driver: "",
+      driver: ["", Validators.required],
       price: "",
       photo: "",
       observations: ""

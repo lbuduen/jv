@@ -14,7 +14,7 @@
     <mat-tab-group class="demo-tab-group">
       <mat-tab label="Details">
         <div class="tab-content">
-          <form [formGroup]="detailsForm">
+          <form [formGroup]="detailsForm" id="detailsForm">
             <div>
               <mat-form-field class="full-width">
                 <input type="text" matInput placeholder="Name" formControlName="name" required>
@@ -53,6 +53,9 @@
               <mat-form-field class="full-width">
                 <textarea matInput placeholder="Description" formControlName="description"></textarea>
               </mat-form-field>
+            </div>
+            <div>
+              <mat-checkbox formControlName="active">Active</mat-checkbox>
             </div>
             <button mat-raised-button color="primary" (click)="updatePkg()">Save</button>
           </form>
@@ -248,7 +251,7 @@
           <table class="mat-table mat-elevation-z4" *ngIf="guests.length">
             <ng-container *ngFor="let row of guests; index as i">
               <tr class="mat-header-row">
-                <th>{{ row.accomodation.name }} {{row.accomodation.type}} </th>
+                <th><mat-icon id="hotel-icon">hotel</mat-icon> {{ row.accomodation.name }} {{row.accomodation.type}} </th>
                 <th class="mat-header-cell">Room
                   <b>{{ row.room.number }}</b> ({{ row.room.type }})
                   <b>{{ row.room.beds }}</b> bed(s) </th>
@@ -329,6 +332,14 @@
                   </button>
                   <button mat-icon-button matTooltip="Delete activity" (click)="deleteActivity(i)">
                     <mat-icon aria-label="Delete activity">remove_circle</mat-icon>
+                  </button>
+                </th>
+              </tr>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell"><mat-icon>person_outline</mat-icon> {{ activist.guide.fullName }}</th>
+                <th class="mat-header-cell" colspan="2">
+                  <button mat-icon-button (click)="addCustomer2Activity(i)">
+                    <mat-icon aria-label="Add customer">person_add</mat-icon>
                   </button>
                 </th>
               </tr>

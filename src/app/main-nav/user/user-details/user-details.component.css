@@ -11,3 +11,12 @@ mat-toolbar mat-icon {
 .spacer {
     flex: 1 1 auto;
 }
+
+mat-card mat-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+mat-card-content >  * {
+    margin-bottom: 32px;
+}

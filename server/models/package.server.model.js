@@ -17,6 +17,10 @@ const PackageSchema = new Schema({
   endDate: Date,
   joinerRate: Number,
   privateRate: Number,
+  active: {
+    type: Boolean,
+    default: false
+  },
   customers: [
     {
       id: {

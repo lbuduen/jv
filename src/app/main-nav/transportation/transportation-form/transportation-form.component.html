@@ -10,7 +10,7 @@
   <form [formGroup]="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
     <div>
       <mat-form-field class="full-width">
-        <mat-select placeholder="Driver" formControlName="driver">
+        <mat-select placeholder="Driver" formControlName="driver" required>
           <mat-option *ngFor="let d of drivers" [value]="d._id">
             {{ d.firstName }} {{ d.lastName }}
           </mat-option>
@@ -35,7 +35,7 @@
     </div>
     <div>
       <mat-form-field class="full-width">
-        <input type="number" matInput placeholder="Capacity" formControlName="capacity">
+        <input type="number" matInput placeholder="Capacity" formControlName="capacity" required>
       </mat-form-field>
     </div>
     <div>

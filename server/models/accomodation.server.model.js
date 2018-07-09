@@ -26,7 +26,7 @@ const ROOM_TYPE = [
   "other"
 ];
 
-const AMENITIES = ["pool", "gym", "spa", ""];
+const AMENITIES = ["", "Kitchen facilities", "Television", "Internet access", "Room service", "All inclusive", "Vending machines", "Swimming pool", "Fitness center", "Parking", "Continental breakfast"];
 
 const RoomSchema = new Schema({
   number: {

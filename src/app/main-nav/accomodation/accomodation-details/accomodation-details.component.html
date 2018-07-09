@@ -14,7 +14,8 @@
 
 <mat-card>
   <mat-card-header>
-    <mat-card-title>{{ accomodation.name}} ({{ accomodation.type}})</mat-card-title>
+    <mat-card-title>
+      <mat-icon>hotel</mat-icon> {{ accomodation.name}} ({{ accomodation.type}})</mat-card-title>
     <mat-card-subtitle>
       <a href="{{ accomodation.webpage}}" target="_blank">{{ accomodation.webpage}}</a>
     </mat-card-subtitle>
@@ -22,19 +23,22 @@
   <img *ngIf="accomodation.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/accomodation/{{accomodation._id}}/{{ accomodation.photos[0]}}"
     alt="{{ accomodation.name}} {{ accomodation.type}}">
   <mat-card-content>
-    <div>
+    <div matTooltip="Contact person">
+      <mat-icon>person</mat-icon>
       <a routerLink="/admin/users/details/{{accomodation.contact._id}}">{{ accomodation.contact.firstName }} {{ accomodation.contact.lastName }}</a>
     </div>
     <div>
-      <address>
-        {{ accomodation.address}}
+      <address matTooltip="Address">
+        <mat-icon>place</mat-icon> {{ accomodation.address}}
       </address>
     </div>
-    <div>
-      {{ accomodation.phone }}
+    <div matTooltip="Accomodation phone number">
+      <mat-icon>phone</mat-icon> {{ accomodation.phone }}
     </div>
+    <p matTooltip="Description">
+      <mat-icon>description</mat-icon> {{ accomodation.description}}
+    </p>
     <div>
-      <p>{{ accomodation.description}}</p>
       <div *ngIf="accomodation.amenities">
         <h3>Amenities</h3>
         <mat-chip-list>
@@ -42,25 +46,30 @@
         </mat-chip-list>
       </div>
     </div>
-    <h3 *ngIf="rooms.length">Rooms</h3>
-    <table class="mat-table" *ngIf="rooms.length">
-      <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell">Number</th>
-          <th class="mat-header-cell">Type</th>
-          <th class="mat-header-cell">Beds</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
-          <td class="mat-cell">{{room.number}}</td>
-          <td class="mat-cell">{{room.type}}</td>
-          <td class="mat-cell">{{room.beds}}</td>
-        </tr>
-      </tbody>
-    </table>
     <div>
-      {{ accomodation.observations }}
+      <h3 *ngIf="rooms.length">Rooms</h3>
+      <table class="mat-table" *ngIf="rooms.length">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Number</th>
+            <th class="mat-header-cell">Type</th>
+            <th class="mat-header-cell">Beds</th>
+            <th class="mat-header-cell">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-row" *ngFor="let room of rooms; index as i" (click)="selectRoom(i)">
+            <td class="mat-cell">{{room.number}}</td>
+            <td class="mat-cell">{{room.type}}</td>
+            <td class="mat-cell">{{room.beds}}</td>
+            <td class="mat-cell">{{room.price}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div matTooltip="Observations">
+      <mat-icon>note</mat-icon>{{ accomodation.observations }}
     </div>
   </mat-card-content>
 </mat-card>

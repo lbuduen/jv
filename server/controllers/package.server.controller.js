@@ -8,7 +8,7 @@ const User = require("mongoose").model("User");
 const Activity = require("mongoose").model("Activity");
 const TransportationByLand = require("mongoose").model("TransportationByLand");
 
-exports.create = function(req, res, next) {
+exports.create = function (req, res, next) {
   const pkg = new Package(req.body);
 
   pkg.save((err, package) => {
@@ -24,7 +24,7 @@ exports.create = function(req, res, next) {
         let photos = [];
         if (Array.isArray(req.files.photos)) {
           req.files.photos.forEach(photo => {
-            photo.mv(`${updir}/${photo.name}`, function(err) {
+            photo.mv(`${updir}/${photo.name}`, function (err) {
               if (err) {
                 return res.status(500).send(err);
               }
@@ -33,7 +33,7 @@ exports.create = function(req, res, next) {
           });
         } else {
           let photo = req.files.photos;
-          photo.mv(`${updir}/${photo.name}`, function(err) {
+          photo.mv(`${updir}/${photo.name}`, function (err) {
             if (err) {
               return res.status(500).send(err);
             }
@@ -68,7 +68,7 @@ function getErrorMessage(err) {
   }
 }
 
-exports.getAccomodation = function(req, res) {
+exports.getAccomodation = function (req, res) {
   Accomodation.find({ active: true }, "name type rooms")
     .sort("name")
     .exec((err, accom) => {
@@ -80,7 +80,7 @@ exports.getAccomodation = function(req, res) {
     });
 };
 
-exports.getTransportation = function(req, res) {
+exports.getTransportation = function (req, res) {
   TransportationByLand.find({}, "brand model plate capacity")
     .sort("-capacity")
     .exec((err, transp) => {
@@ -92,7 +92,7 @@ exports.getTransportation = function(req, res) {
     });
 };
 
-exports.getActivities = function(req, res) {
+exports.getActivities = function (req, res) {
   Activity.find({}, "name")
     .sort("name")
     .exec((err, act) => {
@@ -104,7 +104,7 @@ exports.getActivities = function(req, res) {
     });
 };
 
-exports.getGuides = function(req, res) {
+exports.getGuides = function (req, res) {
   User.find({ role: "guide" }, "firstName lastName")
     .sort("firstName")
     .exec((err, guides) => {
@@ -116,7 +116,7 @@ exports.getGuides = function(req, res) {
     });
 };
 
-exports.list = function(req, res, next) {
+exports.list = function (req, res, next) {
   Package.find((err, packages) => {
     if (err) {
       return next(err);
@@ -126,7 +126,7 @@ exports.list = function(req, res, next) {
   });
 };
 
-exports.packageById = function(req, res, next, id) {
+exports.packageById = function (req, res, next, id) {
   Package.findById(id)
     .populate({
       path: "customers.id",
@@ -144,6 +144,7 @@ exports.packageById = function(req, res, next, id) {
     .populate({
       path: "accomodation.accomodation"
     })
+
     .exec((err, package) => {
       if (err) {
         return next(err);
@@ -151,16 +152,86 @@ exports.packageById = function(req, res, next, id) {
       if (!package) {
         return next(new Error("Failed to load package " + id));
       }
-      req.package = package;
+
+      const activities = [];
+      const accomodation = [];
+      const transportation = [];
+
+      package.activities.forEach(act => {
+        const activity = {
+          activity: act.id,
+          guide: act.guide,
+          customers: [],
+          date: act.date
+        };
+        act.customers.forEach(id => {
+          package.customers.forEach(customer => {
+            if (customer._id.toString() == id) {
+              activity.customers.push(customer);
+            }
+          });
+        });
+        activities.push(activity);
+      });
+
+      package.accomodation.forEach(acc => {
+        const accom = {
+          accomodation: acc.accomodation,
+          room: {},
+          customers: [],
+          startDate: acc.startDate,
+          endDate: acc.endDate
+        };
+        acc.accomodation.rooms.forEach(room => {
+          if (room._id.toString() == acc.room) {
+            accom.room = room;
+          }
+        });
+        acc.customers.forEach(id => {
+          package.customers.forEach(customer => {
+            if (customer._id.toString() == id) {
+              accom.customers.push(customer);
+            }
+          });
+        });
+        accomodation.push(accom);
+      });
+
+      package.transportation.forEach(transport => {
+        const transp = {
+          vehicle: transport.id,
+          riders: [],
+          pickup: transport.pickup,
+          dropoff: transport.dropoff,
+          date: transport.date
+        };
+
+        transport.customers.forEach(id => {
+          package.customers.forEach(customer => {
+            if (customer._id.toString() == id) {
+              transp.riders.push(customer);
+            }
+          });
+        });
+
+        transportation.push(transp);
+      });
+
+      req.package = {
+        details: package,
+        activities: activities,
+        accomodation: accomodation,
+        transportation: transportation,
+      };
       next();
     });
 };
 
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   res.status(200).json(req.package);
 };
 
-exports.setStatus = function(req, res, next) {
+exports.setStatus = function (req, res, next) {
   Package.findById(req.body.pkg, (err, pkg) => {
     if (err) {
       return res.status(400).send({
@@ -183,7 +254,7 @@ exports.setStatus = function(req, res, next) {
   });
 };
 
-exports.removeCustomer = function(req, res, next) {
+exports.removeCustomer = function (req, res, next) {
   Package.findById(req.body.pkg, (err, pkg) => {
     if (err) {
       return res.status(400).send({
@@ -205,8 +276,8 @@ exports.removeCustomer = function(req, res, next) {
   });
 };
 
-exports.setUp = function(req, res, next) {
-  const pkg = req.package;
+exports.setUp = function (req, res, next) {
+  const pkg = req.package.details;
 
   pkg.activities = req.body.activists;
   pkg.transportation = req.body.riders;
@@ -222,21 +293,20 @@ exports.setUp = function(req, res, next) {
   });
 };
 
-exports.update = function(req, res, next) {
-  const pkg = req.package;
+exports.update = function (req, res, next) {
+  const pkg = req.package.details;
   pkg.update({ $set: req.body }, (err, raw) => {
     if (err) {
       return res.status(400).send({
         message: getErrorMessage(err)
       });
     }
-    console.log(raw);
     res.status(204).end();
   });
 };
 
-exports.delete = function(req, res, next) {
-  const pkg = req.package;
+exports.delete = function (req, res, next) {
+  const pkg = req.package.details;
   pkg.remove(err => {
     if (err) {
       return next(err);
