@@ -307,10 +307,15 @@ exports.update = function (req, res, next) {
 
 exports.delete = function (req, res, next) {
   const pkg = req.package.details;
-  pkg.remove(err => {
-    if (err) {
-      return next(err);
-    }
-    res.status(200).json(pkg);
-  });
+  if (!pkg.active) {
+    pkg.remove(err => {
+      if (err) {
+        return next(err);
+      }
+      res.status(200).json(pkg);
+    });
+  }
+  else {
+    res.status(412).end();
+  }
 };

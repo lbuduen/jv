@@ -190,7 +190,7 @@ exports.login = function (req, res) {
 };
 
 exports.getPackages = function (req, res) {
-    Package.find({}, 'name startDate endDate')
+    Package.find({'active': true}, 'name startDate endDate')
         .sort('name')
         .exec((err, act) => {
             if (err) {

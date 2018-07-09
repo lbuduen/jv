@@ -26,6 +26,7 @@ import {
 import { PackageService } from "../package.service";
 import { EventService } from "../../../event.service";
 import { AddCustomerToRideDialog } from "./add-customer-ride-dialog.component";
+import { PackageDeleteDialog } from "../package-delete-dialog.component";
 import { refCount } from "rxjs/operators";
 
 @Component({
@@ -77,7 +78,8 @@ export class PackageSetupComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private elemRef: ElementRef,
     private eventServ: EventService,
-    private addCustomerDlg: MatDialog
+    private addCustomerDlg: MatDialog,
+    private delDialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -313,6 +315,30 @@ export class PackageSetupComponent implements OnInit {
       },
       err => { }
     );
+  }
+
+  delete(id: String) {
+    let dialogRef = this.delDialog.open(PackageDeleteDialog, {
+      height: '200px',
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.pkgServ.delete(id).subscribe(res => {
+          this.eventServ.broadcast('recount');
+
+          this.snackBar.open(`Package ${res.name} has been deleted`, '', {
+            duration: 3000,
+          });
+
+          this.router.navigate(['/admin/packages']);
+        }, err => {
+          this.snackBar.open(`Package can not be deleted because it's currently active`, '', {
+            duration: 3000,
+          });
+        });
+      }
+    });
   }
 
   /* ------------------------------------------Transportation set up----------------------------------------------------*/

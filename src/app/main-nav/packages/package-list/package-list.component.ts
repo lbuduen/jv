@@ -55,6 +55,10 @@ export class PackageListComponent implements OnInit {
           this.snackBar.open(`Package ${res.name} has been deleted`, '', {
             duration: 3000,
           });
+        }, err => {
+          this.snackBar.open(`Package can not be deleted because it's currently active`, '', {
+            duration: 3000,
+          });
         });
       }
     });

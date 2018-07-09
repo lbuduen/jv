@@ -7,6 +7,9 @@
   <button mat-icon-button matTooltip="Download">
     <mat-icon aria-label="Download">archive</mat-icon>
   </button>
+  <button mat-icon-button (click)="delete(pkg._id)" matTooltip="Delete package">
+    <mat-icon>delete_outline</mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-card>
@@ -332,14 +335,6 @@
                   </button>
                   <button mat-icon-button matTooltip="Delete activity" (click)="deleteActivity(i)">
                     <mat-icon aria-label="Delete activity">remove_circle</mat-icon>
-                  </button>
-                </th>
-              </tr>
-              <tr class="mat-header-row">
-                <th class="mat-header-cell"><mat-icon>person_outline</mat-icon> {{ activist.guide.fullName }}</th>
-                <th class="mat-header-cell" colspan="2">
-                  <button mat-icon-button (click)="addCustomer2Activity(i)">
-                    <mat-icon aria-label="Add customer">person_add</mat-icon>
                   </button>
                 </th>
               </tr>
