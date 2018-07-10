@@ -94,12 +94,14 @@ router.route("/packages/activities").get(package.getActivities);
 router.route("/packages/guides").get(package.getGuides);
 router.route("/packages/status").put(package.setStatus);
 router.route("/packages/remove/customer").patch(package.removeCustomer);
+router.route("/packages/:pkgId/spreadsheet").get(package.createSpreadsheet);
 router
   .route("/packages/:pkgId")
   .get(package.read)
   .delete(package.delete)
   .put(package.update)
   .patch(package.setUp);
+
 router.param("pkgId", package.packageById);
 
 module.exports = router;

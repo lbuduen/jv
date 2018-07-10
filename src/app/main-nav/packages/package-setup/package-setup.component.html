@@ -4,7 +4,7 @@
   <button mat-icon-button matTooltip="Save all" (click)="setUp()">
     <mat-icon aria-label="Save all">save</mat-icon>
   </button>
-  <button mat-icon-button matTooltip="Download">
+  <button mat-icon-button matTooltip="Download" (click)="downloadSpreadsheet()">
     <mat-icon aria-label="Download">archive</mat-icon>
   </button>
   <button mat-icon-button (click)="delete(pkg._id)" matTooltip="Delete package">

@@ -128,7 +128,7 @@ export class PackageSetupComponent implements OnInit {
               riders: this.processCustomers(tr.riders),
               pickup: tr.pickup,
               dropoff: tr.dropoff,
-              date: tr.date
+              date: new Date(tr.date)
             };
             this.riders.push(ride);
           });
@@ -138,8 +138,8 @@ export class PackageSetupComponent implements OnInit {
               accomodation: acc.accomodation,
               room: acc.room,
               customers: this.processCustomers(acc.customers),
-              startDate: acc.startDate,
-              endDate: acc.endDate
+              startDate: new Date(acc.startDate),
+              endDate: new Date(acc.endDate)
             };
             this.guests.push(row);
           });
@@ -149,7 +149,7 @@ export class PackageSetupComponent implements OnInit {
               activity: act.activity,
               guide: act.guide,
               customers: this.processCustomers(act.customers),
-              date: act.date
+              date: new Date(act.date)
             };
             this.activists.push(activist);
           });
@@ -318,7 +318,7 @@ export class PackageSetupComponent implements OnInit {
   }
 
   delete(id: String) {
-    let dialogRef = this.delDialog.open(PackageDeleteDialog, {
+    const dialogRef = this.delDialog.open(PackageDeleteDialog, {
       height: '200px',
       width: '400px'
     });
@@ -339,6 +339,10 @@ export class PackageSetupComponent implements OnInit {
         });
       }
     });
+  }
+
+  downloadSpreadsheet() {
+    this.pkgServ.get('spreadsheet', this.id).subscribe(res => {});
   }
 
   /* ------------------------------------------Transportation set up----------------------------------------------------*/
@@ -383,7 +387,7 @@ export class PackageSetupComponent implements OnInit {
   }
 
   addCustomer2Ride(ridePos) {
-    let newCustomers = [];
+    const newCustomers = [];
     this.customers.forEach(c => {
       let in_ride = this.riders[ridePos].riders.some(rc => {
         return c._id === rc._id;
@@ -521,9 +525,7 @@ export class PackageSetupComponent implements OnInit {
         this.guests.forEach(g => {
           if (g.customers.some(gc => gc._id === gt._id)) {
             this.snackBar.open(
-              `Warning: Customer ${gt.firstName} is already in room ${
-              room.number
-              } `,
+              `Warning: Customer ${gt.firstName} is already booked in another room`,
               "",
               {
                 duration: 5000

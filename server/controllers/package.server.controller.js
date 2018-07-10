@@ -319,3 +319,110 @@ exports.delete = function (req, res, next) {
     res.status(412).end();
   }
 };
+
+exports.createSpreadsheet = function (req, res, next) {
+  const xl = require("excel4node");
+
+  const wb = new xl.Workbook();
+
+  const details_ws = wb.addWorksheet("Details");
+  const customers_ws = wb.addWorksheet("Customers");
+  const transp_ws = wb.addWorksheet("Transportation");
+  const accom_ws = wb.addWorksheet("Accomodation");
+  const act_ws = wb.addWorksheet("Activities");
+
+  // details headers 
+  details_ws.cell(1, 1).string('Package');
+  details_ws.cell(1, 2).string('Quota');
+  details_ws.cell(1, 3).string('Start date');
+  details_ws.cell(1, 4).string('End date');
+  details_ws.cell(1, 5).string('Private rate');
+  details_ws.cell(1, 6).string("Joiner's rate");
+  details_ws.cell(1, 7).string("Description");
+
+  // details content
+  details_ws.cell(2, 1).string(req.package.details.name);
+  details_ws.cell(2, 2).number(req.package.details.quota);
+  details_ws.cell(2, 3).date(req.package.details.startDate);
+  details_ws.cell(2, 4).date(req.package.details.endDate);
+  details_ws.cell(2, 5).number(req.package.details.privateRate);
+  details_ws.cell(2, 6).number(req.package.details.joinerRate);
+  details_ws.cell(2, 7).string(req.package.details.description);
+
+
+  // customers headers
+  customers_ws.cell(1, 1).string('Full name');
+  customers_ws.cell(1, 2).string('Email');
+  customers_ws.cell(1, 3).string('Phone number');
+  customers_ws.cell(1, 4).string('Requested');
+  customers_ws.cell(1, 5).string('Status');
+  customers_ws.cell(1, 6).string("Rate");
+  customers_ws.cell(1, 7).string("Amount");
+
+  // customers content
+  let row = 2;
+  req.package.details.customers.forEach((customer) => {
+    customers_ws.cell(row, 1).string(customer.id.fullName);
+    customers_ws.cell(row, 2).string(customer.id.email);
+    customers_ws.cell(row, 3).string(customer.id.phone);
+    customers_ws.cell(row, 4).date(customer.requested);
+    customers_ws.cell(row, 5).string(customer.status);
+    customers_ws.cell(row, 6).string(customer.rate);
+
+    let amount = customer.rate == 'private' ? req.package.details.privateRate : req.package.details.joinerRate;
+    customers_ws.cell(row++, 7).number((customer.status == 'paid' || customer.status == 'completed') ? amount : 0);
+  });
+  customers_ws.cell(row, 6).string('Total:');
+  if (row > 3) {
+    customers_ws.cell(row, 7).formula(`G2 + G${row - 1}`);
+  }
+  else {
+    customers_ws.cell(row, 7).formula(`G2 + 0`);
+  }
+
+  // transportation content
+  row = 0;
+  req.package.transportation.forEach((transp) => {
+    transp_ws.cell(row += 2, 1).string(`${transp.vehicle.brand} ${transp.vehicle.model}`);
+    transp_ws.cell(row, 2).string(transp.vehicle.plate);
+    transp_ws.cell(row, 3).date(transp.date);
+
+    transp.riders.forEach((customer) => {
+      transp_ws.cell(++row, 1).string(customer.id.fullName);
+      transp_ws.cell(row, 2).string(customer.rate);
+    });
+
+  });
+
+  // accomodation content
+  row = 0;
+  req.package.accomodation.forEach(accom => {
+    accom_ws.cell(row += 2, 1).string(`${accom.accomodation.name} ${accom.accomodation.type}`);
+    accom_ws.cell(++row, 1).string(`Room ${accom.room.number} (${accom.room.type})`);
+    accom_ws.cell(row, 2).string(`Room ${accom.room.beds} bed(s)`);
+    accom_ws.cell(row, 3).date(accom.startDate);
+    accom_ws.cell(row, 4).date(accom.endDate);
+
+    accom.customers.forEach((customer) => {
+      accom_ws.cell(++row, 1).string(customer.id.fullName);
+      accom_ws.cell(row, 2).string(customer.rate);
+    });
+  });
+
+  row = 0;
+  req.package.activities.forEach(act => {
+    act_ws.cell(row += 2, 1).string(act.activity.name);
+    act_ws.cell(row, 2).date(act.date);
+
+    act_ws.cell(++row, 1).string('Guide');
+    act_ws.cell(row, 2).string(act.guide.fullName);
+    act_ws.cell(row, 3).string(act.guide.phone);
+    
+    act.customers.forEach((customer) => {
+      act_ws.cell(++row, 1).string(customer.id.fullName);
+      act_ws.cell(row, 2).string(customer.rate);
+    });
+  });
+
+  wb.write("Package.xlsx");
+};

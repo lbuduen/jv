@@ -49,8 +49,9 @@ export class PackageService {
     return this.http.delete(`${this.apiURL}/${id}`);
   }
 
-  get(route): Observable<any> {
-    return this.http.get(`${this.apiURL}/${route}`);
+  get(route: String, id?: String): Observable<any> {
+    const url = id ? `${this.apiURL}/${id}/${route}` : `${this.apiURL}/${route}`;
+    return this.http.get(url);
   }
 
   setStatus(pkg, customer, status): Observable<any> {
