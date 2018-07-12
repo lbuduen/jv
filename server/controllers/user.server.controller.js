@@ -130,7 +130,9 @@ exports.update = function (req, res) {
   user.email = req.body.email;
   user.phone = req.body.phone;
   user.role = req.body.role;
-  user.password = req.body.password;
+  if (req.body.password) {
+    user.password = req.body.password;
+  }
 
   user.save(err => {
     if (err) {

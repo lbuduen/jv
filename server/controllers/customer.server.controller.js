@@ -133,11 +133,13 @@ exports.update = function (req, res) {
     customer.lastName = req.body.lastName;
     customer.email = req.body.email;
     customer.phone = req.body.phone;
-    customer.password = req.body.password;
     customer.packages = [];
     customer.packages.push(req.body.pkg);
     customer.rate = req.body.rate;
     customer.status = req.body.status;
+    if (req.body.password) {
+        user.password = req.body.password;
+    }
 
     customer.save(err => {
         if (err) {
@@ -190,7 +192,7 @@ exports.login = function (req, res) {
 };
 
 exports.getPackages = function (req, res) {
-    Package.find({'active': true}, 'name startDate endDate')
+    Package.find({ 'active': true }, 'name startDate endDate')
         .sort('name')
         .exec((err, act) => {
             if (err) {
