@@ -20,8 +20,8 @@ mat-radio-group {
   margin-left: 15px;
 }
 
-mat-radio-group mat-radio-button:last-child {
-  margin-left: 10px;
+mat-radio-group mat-radio-button{
+  margin-right: 16px;
 }
 
 mat-card:first-child {
