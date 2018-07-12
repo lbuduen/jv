@@ -54,6 +54,11 @@ export class PackageService {
     return this.http.get(url);
   }
 
+  download(route: String, id?: String): Observable<any> {
+    const url = id ? `${this.apiURL}/${id}/${route}` : `${this.apiURL}/${route}`;
+    return this.http.get(url, {responseType: 'arraybuffer'});
+  }
+
   setStatus(pkg, customer, status): Observable<any> {
     return this.http.put(
       `${this.apiURL}/status`,

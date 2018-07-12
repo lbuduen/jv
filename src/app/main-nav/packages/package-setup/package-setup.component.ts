@@ -278,10 +278,13 @@ export class PackageSetupComponent implements OnInit {
     this.activists.forEach(activist => {
       const act = {
         id: activist.activity._id,
-        guide: activist.guide._id,
+        guide: "",
         customers: activist.customers.map(cust => cust._id),
         date: activist.date
       };
+      if (activist.guide) {
+        act.guide = activist.guide._id;
+      } 
       data.activists.push(act);
     });
 
@@ -342,7 +345,25 @@ export class PackageSetupComponent implements OnInit {
   }
 
   downloadSpreadsheet() {
-    this.pkgServ.get('spreadsheet', this.id).subscribe(res => {});
+    this.pkgServ.download('spreadsheet', this.id).subscribe(res => {
+      const file = new Blob([res], { type: 'octet/stream' });
+      if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(file, `Package.xlsx`);
+      }
+      else {
+        const url = window.URL.createObjectURL(file);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = `Package.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
+
+
+    });
   }
 
   /* ------------------------------------------Transportation set up----------------------------------------------------*/

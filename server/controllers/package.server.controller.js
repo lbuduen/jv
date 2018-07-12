@@ -414,15 +414,17 @@ exports.createSpreadsheet = function (req, res, next) {
     act_ws.cell(row += 2, 1).string(act.activity.name);
     act_ws.cell(row, 2).date(act.date);
 
-    act_ws.cell(++row, 1).string('Guide');
-    act_ws.cell(row, 2).string(act.guide.fullName);
-    act_ws.cell(row, 3).string(act.guide.phone);
-    
+    if (act.guide) {
+      act_ws.cell(++row, 1).string('Guide');
+      act_ws.cell(row, 2).string(act.guide.fullName);
+      act_ws.cell(row, 3).string(act.guide.phone);
+    }
+
     act.customers.forEach((customer) => {
       act_ws.cell(++row, 1).string(customer.id.fullName);
       act_ws.cell(row, 2).string(customer.rate);
     });
   });
 
-  wb.write("Package.xlsx");
+  wb.write("Package.xlsx", res);
 };

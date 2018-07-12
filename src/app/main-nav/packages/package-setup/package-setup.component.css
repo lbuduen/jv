@@ -86,6 +86,6 @@ th.mat-sort-header-sorted {
   margin-right: 5px;
 }
 
-#detailsForm div:last-child {
+#detailsForm div:last-of-type {
   margin-bottom: 20px;
 }

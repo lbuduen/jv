@@ -117,7 +117,7 @@
                 <button mat-icon-button matTooltip="Completed" color="primary" disabled *ngIf="element.status == 'completed'">
                   <mat-icon aria-label="Approve">done_all</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Remove from tour" (click)="removeFromPackage(element)">
+                <button mat-icon-button matTooltip="Remove from tour" [disabled]="element.status == 'requested'" (click)="removeFromPackage(element)">
                   <mat-icon aria-label="Remove customer">remove_circle_outline</mat-icon>
                 </button>
               </td>
@@ -298,6 +298,7 @@
             <div>
               <mat-form-field class="full-width">
                 <mat-select placeholder="Guide" formControlName="guide">
+                  <mat-option>None</mat-option>
                   <mat-option *ngFor="let g of guides" [value]="g">
                     {{ g.firstName }} {{ g.lastName }}
                   </mat-option>
