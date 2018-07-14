@@ -33,13 +33,3 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
-# System Files
-.DS_Store
-Thumbs.db
-assets/img/accomodation/*
-assets/img/activities/*
-assets/img/customer/*
-assets/img/packages/*
-assets/img/transportation/*
-assets/img/user/*
