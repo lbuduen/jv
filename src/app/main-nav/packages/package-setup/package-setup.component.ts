@@ -200,7 +200,10 @@ export class PackageSetupComponent implements OnInit {
       customers: ["", Validators.required],
       pickup: ["", Validators.required],
       dropoff: ["", Validators.required],
-      date: ["", Validators.required]
+      date: ["", Validators.required],
+      hour: ["", Validators.required],
+      minutes: ["", Validators.required],
+      m: ["AM", Validators.required]
     });
   }
   clearTransportationForm() {
@@ -212,7 +215,10 @@ export class PackageSetupComponent implements OnInit {
       activity: ["", Validators.required],
       guide: "",
       customers: ["", Validators.required],
-      date: ""
+      date: "",
+      hour: '',
+      minutes: '',
+      m: "AM"
     });
   }
 
@@ -284,7 +290,7 @@ export class PackageSetupComponent implements OnInit {
       };
       if (activist.guide) {
         act.guide = activist.guide._id;
-      } 
+      }
       data.activists.push(act);
     });
 
@@ -379,6 +385,12 @@ export class PackageSetupComponent implements OnInit {
     const veh = this.transportationForm.get("vehicle").value;
     const date = this.transportationForm.get("date").value;
 
+    let hour = this.transportationForm.get("hour").value;
+    if (this.transportationForm.get("m").value === 'PM') {
+      hour += 12;
+    }
+    date.setHours(hour, this.transportationForm.get("minutes").value, 0, 0);
+
     const in_array = this.riders.some(r => {
       return r.vehicle._id === veh._id && r.date.getTime() === date.getTime();
     });
@@ -459,7 +471,16 @@ export class PackageSetupComponent implements OnInit {
 
     activist.activity = this.activitiesForm.get("activity").value;
     activist.guide = this.activitiesForm.get("guide").value;
-    activist.date = this.activitiesForm.get("date").value;
+    const date = this.activitiesForm.get("date").value;
+
+    if (this.activitiesForm.get("hour").dirty && this.activitiesForm.get("minutes").dirty) {
+      let hour = this.activitiesForm.get("hour").value;
+      if (this.activitiesForm.get("m").value === 'PM') {
+        hour += 12;
+      }
+      date.setHours(hour, this.activitiesForm.get("minutes").value, 0, 0);
+    }
+    activist.date = date;
 
     const activistsTmp = this.activitiesForm.get("customers").value;
     const activistsCpy = [];

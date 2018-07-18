@@ -11,7 +11,10 @@ const PackageSchema = new Schema({
     required: true
   },
   description: String,
-  quota: Number,
+  quota: {
+    type: Number,
+    default: Infinity
+  },
   photos: [String],
   startDate: Date,
   endDate: Date,

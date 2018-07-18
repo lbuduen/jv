@@ -1,0 +1,28 @@
+<mat-toolbar>
+  <span class="tb-title">Customer</span>
+  <span class="spacer"></span>
+  <a routerLink="/admin/customers/add" matTooltip="Add customer">
+    <mat-icon>add_circle_outline</mat-icon>
+  </a>
+  <a routerLink="/admin/customers/edit/{{customer._id}}" matTooltip="Edit customer">
+    <mat-icon>edit</mat-icon>
+  </a>
+  <a (click)="delete(customer._id)" matTooltip="Delete customer">
+    <mat-icon>delete_outline</mat-icon>
+  </a>
+</mat-toolbar>
+
+<mat-card>
+  <mat-card-header>
+    <img *ngIf="customer.photo" mat-card-avatar src="{{MEDIA_URL}}/img/customer/{{customer._id}}/{{ customer.photo}}" alt="{{ customer.fullName }}">
+    <mat-card-title>{{ customer.fullName }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <mat-icon>email</mat-icon> <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
+    </div>
+    <div>
+      <mat-icon>phone</mat-icon>{{ customer.phone }}
+    </div>
+  </mat-card-content>
+</mat-card>

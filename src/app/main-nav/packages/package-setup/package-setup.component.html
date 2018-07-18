@@ -134,7 +134,7 @@
           <form id="transportationForm" [formGroup]="transportationForm">
             <div>
               <mat-form-field class="full-width">
-                <mat-select placeholder="Vehicle" formControlName="vehicle">
+                <mat-select placeholder="Vehicle" formControlName="vehicle" required>
                   <mat-option *ngFor="let tr of transportation" [value]="tr">
                     {{ tr.brand }} {{ tr.model }} [{{ tr.plate }}] ({{ tr.capacity }})
                   </mat-option>
@@ -143,7 +143,7 @@
             </div>
             <div>
               <mat-form-field class="full-width">
-                <mat-select placeholder="Customers" formControlName="customers" multiple>
+                <mat-select placeholder="Customers" formControlName="customers" multiple required>
                   <ng-container *ngFor="let c of customers">
                     <mat-option *ngIf="c.status == 'approved' || c.status == 'paid'" [value]="c">
                       {{c.fullName}} ({{c.rate}})
@@ -166,10 +166,50 @@
               </mat-form-field>
             </div>
             <div>
-              <mat-form-field class="full-width">
-                <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="trdate" placeholder="Date" formControlName="date">
+              <mat-form-field>
+                <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="trdate" placeholder="Date" formControlName="date" required>
                 <mat-datepicker-toggle matSuffix [for]="trdate"></mat-datepicker-toggle>
                 <mat-datepicker #trdate></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="time">
+              <mat-form-field>
+                <mat-select placeholder="Hour" formControlName="hour" required>
+                  <mat-option [value]="1">1</mat-option>
+                  <mat-option [value]="2">2</mat-option>
+                  <mat-option [value]="3">3</mat-option>
+                  <mat-option [value]="4">4</mat-option>
+                  <mat-option [value]="5">5</mat-option>
+                  <mat-option [value]="6">6</mat-option>
+                  <mat-option [value]="7">7</mat-option>
+                  <mat-option [value]="8">8</mat-option>
+                  <mat-option [value]="9">9</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="11">11</mat-option>
+                  <mat-option [value]="0">12</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="Minutes" formControlName="minutes" required>
+                  <mat-option [value]="0">00</mat-option>
+                  <mat-option [value]="5">05</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="15">15</mat-option>
+                  <mat-option [value]="20">20</mat-option>
+                  <mat-option [value]="25">25</mat-option>
+                  <mat-option [value]="30">30</mat-option>
+                  <mat-option [value]="35">35</mat-option>
+                  <mat-option [value]="40">40</mat-option>
+                  <mat-option [value]="45">45</mat-option>
+                  <mat-option [value]="50">50</mat-option>
+                  <mat-option [value]="55">55</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="m">
+                  <mat-option [value]="'AM'" selected>AM</mat-option>
+                  <mat-option [value]="'PM'">PM</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
             <button mat-raised-button color="primary" [disabled]="transportationForm.invalid || (transportationForm.get('customers').value.length > transportationForm.get('vehicle').value.capacity)"
@@ -180,7 +220,7 @@
               <tr class="mat-header-row">
                 <th class="mat-header-cell">{{ ride.vehicle.brand }} {{ ride.vehicle.model }} [{{ ride.vehicle.plate }}] ({{ride.riders.length}} / {{
                   ride.vehicle.capacity }})</th>
-                <th class="mat-header-cell">{{ride.date | date}}</th>
+                <th class="mat-header-cell">{{ride.date | date: 'MMM d, y, h:mm a'}}</th>
                 <th class="mat-header-cell">
                   <button mat-icon-button (click)="addCustomer2Ride(i)" *ngIf="ride.riders.length < ride.vehicle.capacity">
                     <mat-icon aria-label="Add customer">person_add</mat-icon>
@@ -254,7 +294,8 @@
           <table class="mat-table mat-elevation-z4" *ngIf="guests.length">
             <ng-container *ngFor="let row of guests; index as i">
               <tr class="mat-header-row">
-                <th><mat-icon id="hotel-icon">hotel</mat-icon> {{ row.accomodation.name }} {{row.accomodation.type}} </th>
+                <th>
+                  <mat-icon id="hotel-icon">hotel</mat-icon> {{ row.accomodation.name }} {{row.accomodation.type}} </th>
                 <th class="mat-header-cell">Room
                   <b>{{ row.room.number }}</b> ({{ row.room.type }})
                   <b>{{ row.room.beds }}</b> bed(s) </th>
@@ -323,13 +364,53 @@
                 <mat-datepicker #actdate></mat-datepicker>
               </mat-form-field>
             </div>
+            <div class="time">
+              <mat-form-field>
+                <mat-select placeholder="Hour" formControlName="hour">
+                  <mat-option [value]="1">1</mat-option>
+                  <mat-option [value]="2">2</mat-option>
+                  <mat-option [value]="3">3</mat-option>
+                  <mat-option [value]="4">4</mat-option>
+                  <mat-option [value]="5">5</mat-option>
+                  <mat-option [value]="6">6</mat-option>
+                  <mat-option [value]="7">7</mat-option>
+                  <mat-option [value]="8">8</mat-option>
+                  <mat-option [value]="9">9</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="11">11</mat-option>
+                  <mat-option [value]="0">12</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="Minutes" formControlName="minutes">
+                  <mat-option [value]="0">00</mat-option>
+                  <mat-option [value]="5">05</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="15">15</mat-option>
+                  <mat-option [value]="20">20</mat-option>
+                  <mat-option [value]="25">25</mat-option>
+                  <mat-option [value]="30">30</mat-option>
+                  <mat-option [value]="35">35</mat-option>
+                  <mat-option [value]="40">40</mat-option>
+                  <mat-option [value]="45">45</mat-option>
+                  <mat-option [value]="50">50</mat-option>
+                  <mat-option [value]="55">55</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="m">
+                  <mat-option [value]="'AM'" selected>AM</mat-option>
+                  <mat-option [value]="'PM'">PM</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
             <button mat-raised-button color="primary" [disabled]="activitiesForm.invalid" (click)="setActivist()">Save</button>
           </form>
           <table class="mat-table mat-elevation-z8" *ngIf="activists.length">
             <ng-container *ngFor="let activist of activists; index as i">
               <tr class="mat-header-row">
                 <th class="mat-header-cell">{{ activist.activity.name }}</th>
-                <th class="mat-header-cell">{{activist.date | date}}</th>
+                <th class="mat-header-cell">{{activist.date | date: 'MMM d, y, h:mm a'}}</th>
                 <th class="mat-header-cell">
                   <button mat-icon-button (click)="addCustomer2Activity(i)">
                     <mat-icon aria-label="Add customer">person_add</mat-icon>

@@ -45,6 +45,7 @@ import { PackageSetupComponent } from "./packages/package-setup/package-setup.co
 import { AddCustomerToRideDialog } from "./packages/package-setup/add-customer-ride-dialog.component";
 import { PackageListComponent } from "./packages/package-list/package-list.component";
 import { PackageDeleteDialog } from "./packages/package-delete-dialog.component";
+import { CustomerDetailsComponent } from './customer/customer-details/customer-details.component';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import { PackageDeleteDialog } from "./packages/package-delete-dialog.component"
     PackageSetupComponent,
     PackageListComponent,
     PackageDeleteDialog,
-    AddCustomerToRideDialog
+    AddCustomerToRideDialog,
+    CustomerDetailsComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,

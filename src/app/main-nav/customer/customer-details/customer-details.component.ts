@@ -2,60 +2,60 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 
 import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ActivityDeleteDialog } from "../activity-delete-dialog.component";
+import { CustomerDeleteDialog } from "../customer-delete-dialog.component";
 
-import { ActivityService } from "../activity.service";
+import { CustomerService } from "../customer.service";
 import { EventService } from "../../../event.service";
 import { Globals } from "../../../globals";
 
-
 @Component({
-  selector: 'app-activity-details',
-  templateUrl: './activity-details.component.html',
-  styleUrls: ['./activity-details.component.css']
+  selector: 'app-customer-details',
+  templateUrl: './customer-details.component.html',
+  styleUrls: ['./customer-details.component.css']
 })
-export class ActivityDetailsComponent implements OnInit {
+export class CustomerDetailsComponent implements OnInit {
 
   private MEDIA_URL = Globals.MEDIA_URL;
 
-  activity = {};
+  customer = {};
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
     private delDialog: MatDialog,
-    private actServ: ActivityService,
+    private customServ: CustomerService,
     private eventServ: EventService
   ) { }
 
   ngOnInit() {
-    this.actServ.read(this.route.snapshot.paramMap.get('id')).subscribe(activity => {
-      this.activity = activity;
+    this.customServ.read(this.route.snapshot.paramMap.get('id')).subscribe(customer => {
+      this.customer = customer;
     }, error => {
-      this.snackBar.open('Error retrieving the details of this activity', '', {
+      this.snackBar.open('Error retrieving the details of this customer', '', {
         duration: 3000,
       });
-      this.router.navigate(['/admin/activities']);
+      this.router.navigate(['/admin/customers']);
     });
   }
 
   delete(id: String) {
-    const dialogRef = this.delDialog.open(ActivityDeleteDialog, {
+    const dialogRef = this.delDialog.open(CustomerDeleteDialog, {
       height: '200px',
       width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.actServ.delete(id).subscribe(res => {
+        this.customServ.delete(id).subscribe(res => {
           this.eventServ.broadcast('recount');
 
-          this.snackBar.open(`Activity ${res.name} has been deleted`, '', {
+          this.snackBar.open(`Customer ${res.firstName} has been deleted`, '', {
             duration: 3000,
           });
-          this.router.navigate(['/admin/activities']);
+          this.router.navigate(['/admin/customers']);
         });
       }
     });
   }
+
 }

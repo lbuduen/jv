@@ -33,6 +33,7 @@ import { MediaComponent } from './media/media.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerFormComponent } from './customer/customer-form/customer-form.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+import { CustomerDetailsComponent } from './customer/customer-details/customer-details.component';
 
 import { PackagesComponent } from './packages/packages.component';
 import { PackageFormComponent } from './packages/package-form/package-form.component';
@@ -167,10 +168,10 @@ const mainNavRoutes: Routes = [
             path: 'edit/:id',
             component: CustomerFormComponent
           },
-          /* {
+          {
             path: 'details/:id',
-            component: UserDetailsComponent
-          },*/
+            component: CustomerDetailsComponent
+          },
           {
             path: '',
             component: CustomerListComponent

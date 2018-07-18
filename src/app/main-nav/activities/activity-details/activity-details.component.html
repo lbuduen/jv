@@ -1,13 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Activities</span>
   <span class="spacer"></span>
-  <a routerLink="/admin/activities/add">
+  <a routerLink="/admin/activities/add" matTooltip="Add activity">
     <mat-icon>add_circle_outline</mat-icon>
   </a>
-  <a routerLink="/admin/activities/edit/{{activity._id}}">
+  <a routerLink="/admin/activities/edit/{{activity._id}}" matTooltip="Edit activity">
     <mat-icon>edit</mat-icon>
   </a>
-  <a (click)="delete(activity._id)">
+  <a (click)="delete(activity._id)" matTooltip="Delete activity">
     <mat-icon>delete_outline</mat-icon>
   </a>
 </mat-toolbar>

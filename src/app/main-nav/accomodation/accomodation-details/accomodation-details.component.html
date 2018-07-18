@@ -1,13 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Accomodation</span>
   <span class="spacer"></span>
-  <a routerLink="/admin/accomodation/add">
+  <a routerLink="/admin/accomodation/add" matTooltip="Add accomodation">
     <mat-icon>add_circle_outline</mat-icon>
   </a>
-  <a routerLink="/admin/accomodation/edit/{{accomodation._id}}">
+  <a routerLink="/admin/accomodation/edit/{{accomodation._id}}" matTooltip="Edit accomodation">
     <mat-icon>edit</mat-icon>
   </a>
-  <a (click)="delete(accomodation._id)">
+  <a (click)="delete(accomodation._id)" matTooltip="Delete accomodation">
     <mat-icon>delete_outline</mat-icon>
   </a>
 </mat-toolbar>

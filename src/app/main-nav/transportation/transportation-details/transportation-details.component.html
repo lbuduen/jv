@@ -1,13 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Transportation</span>
   <span class="spacer"></span>
-  <a routerLink="/admin/transportation/add">
+  <a routerLink="/admin/transportation/add" matTooltip="Add transportation">
     <mat-icon>add_circle_outline</mat-icon>
   </a>
-  <a routerLink="/admin/transportation/edit/{{transportation._id}}">
+  <a routerLink="/admin/transportation/edit/{{transportation._id}}" matTooltip="Edit transportation">
     <mat-icon>edit</mat-icon>
   </a>
-  <a (click)="delete(transportation._id)">
+  <a (click)="delete(transportation._id)" matTooltip="Delete transportation">
     <mat-icon>delete_outline</mat-icon>
   </a>
 </mat-toolbar>

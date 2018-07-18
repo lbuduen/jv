@@ -1,0 +1,26 @@
+mat-card {
+    margin: 16px;
+    width: 400px;
+}
+
+mat-toolbar mat-icon {
+    vertical-align: text-bottom;
+    padding: 0px 14px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+mat-card mat-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+mat-card-content >  * {
+    margin-bottom: 32px;
+}
+
+mat-card-content div:first-child {
+    margin-top: 16px;
+}

@@ -89,3 +89,18 @@ th.mat-sort-header-sorted {
 #detailsForm div:last-of-type {
   margin-bottom: 20px;
 }
+
+
+.time {
+  display: flex;
+}
+
+.time mat-form-field {
+  width: 40%;
+  margin-right: 5px;
+}
+
+.time mat-form-field:last-child {
+  width: 19%;
+  margin-right: 0;
+}
