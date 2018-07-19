@@ -1,6 +1,9 @@
 <mat-toolbar>
-  <span class="tb-title">Packages</span>
+  <span class="tb-title">Package <b>{{pkg.name}}</b></span>
   <span class="spacer"></span>
+  <button mat-icon-button matTooltip="Add customer" *ngIf="addCustomerBtn" (click)="addCustomer2Pkg()">
+    <mat-icon aria-label="Add customer">person_add</mat-icon>
+  </button>
   <button mat-icon-button matTooltip="Save all" (click)="setUp()">
     <mat-icon aria-label="Save all">save</mat-icon>
   </button>
@@ -14,7 +17,7 @@
 
 <mat-card>
   <mat-card-content>
-    <mat-tab-group class="demo-tab-group">
+    <mat-tab-group class="demo-tab-group" (selectedTabChange)="tabChanged($event)">
       <mat-tab label="Details">
         <div class="tab-content">
           <form [formGroup]="detailsForm" id="detailsForm">
@@ -64,8 +67,8 @@
           </form>
         </div>
       </mat-tab>
-      <mat-tab [disabled]="!customers.length" label="Customers ({{customers.length}})">
-        <div class="tab-content">
+      <mat-tab label="Customers ({{customers.length}})">
+        <div class="tab-content" *ngIf="customers.length">
           <div class="filter">
             <mat-form-field>
               <input matInput (keyup)="applyCustomersFilter($event.target.value)" placeholder="Filter">

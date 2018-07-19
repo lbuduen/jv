@@ -17,7 +17,8 @@ export class CustomerDetailsComponent implements OnInit {
 
   private MEDIA_URL = Globals.MEDIA_URL;
 
-  customer = {};
+  customer;
+  pkg;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +31,8 @@ export class CustomerDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.customServ.read(this.route.snapshot.paramMap.get('id')).subscribe(customer => {
-      this.customer = customer;
+      this.customer = customer.customer;
+      this.pkg = customer.packages;
     }, error => {
       this.snackBar.open('Error retrieving the details of this customer', '', {
         duration: 3000,

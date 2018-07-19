@@ -17,7 +17,7 @@ const httpOptions = {
 export class PackageService {
   private apiURL = "api/packages";
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) { }
 
   create(pkg): Observable<any> {
     return this.http
@@ -56,7 +56,7 @@ export class PackageService {
 
   download(route: String, id?: String): Observable<any> {
     const url = id ? `${this.apiURL}/${id}/${route}` : `${this.apiURL}/${route}`;
-    return this.http.get(url, {responseType: 'arraybuffer'});
+    return this.http.get(url, { responseType: 'arraybuffer' });
   }
 
   setStatus(pkg, customer, status): Observable<any> {
@@ -69,6 +69,14 @@ export class PackageService {
       },
       httpOptions
     );
+  }
+
+  getNewCustomers(idPkg): Observable<any> {
+    return this.http.post(`${this.apiURL}/newcustomers`, { id: idPkg }, httpOptions);
+  }
+
+  setNewCustomers(data): Observable<any> {
+    return this.http.patch(`${this.apiURL}/addcustomers`, data, httpOptions);
   }
 
   removeCustomer(pkg, customer): Observable<any> {

@@ -93,6 +93,8 @@ router.route("/packages/transportation").get(package.getTransportation);
 router.route("/packages/activities").get(package.getActivities);
 router.route("/packages/guides").get(package.getGuides);
 router.route("/packages/status").put(package.setStatus);
+router.route("/packages/newcustomers").post(package.getNewCustomers);
+router.route("/packages/addcustomers").patch(package.setNewCustomers);
 router.route("/packages/remove/customer").patch(package.removeCustomer);
 router.route("/packages/:pkgId/spreadsheet").get(package.createSpreadsheet);
 router

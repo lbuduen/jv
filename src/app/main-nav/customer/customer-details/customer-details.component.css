@@ -1,6 +1,6 @@
 mat-card {
     margin: 16px;
-    width: 400px;
+    width: 650px;
 }
 
 mat-toolbar mat-icon {
@@ -23,4 +23,8 @@ mat-card-content >  * {
 
 mat-card-content div:first-child {
     margin-top: 16px;
+}
+
+table {
+    width: 100%;
 }

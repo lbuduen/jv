@@ -19,10 +19,36 @@
   </mat-card-header>
   <mat-card-content>
     <div>
-      <mat-icon>email</mat-icon> <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
+      <mat-icon>email</mat-icon>
+      <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
     </div>
     <div>
       <mat-icon>phone</mat-icon>{{ customer.phone }}
+    </div>
+    <div>
+      <h3>Packages</h3>
+      <table class="mat-table" *ngIf="pkg.length">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Package</th>
+            <th class="mat-header-cell">Request date</th>
+            <th class="mat-header-cell">Rate</th>
+            <th class="mat-header-cell">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-row" *ngFor="let p of pkg; index as i">
+            <td class="mat-cell"><a routerLink="/admin/packages/setup/{{p._id}}">{{p.name}} ({{p.startDate | date}} - {{p.endDate | date}})</a></td>
+            <ng-container *ngFor="let c of p.customers">
+              <ng-container *ngIf="c.id === customer._id">
+                <td class="mat-cell">{{ c.requested | date: 'MMM d, y, h:mm a' }}</td>
+                <td class="mat-cell">{{ c.rate }}</td>
+                <td class="mat-cell">{{ c.status }}</td>
+              </ng-container>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </mat-card-content>
 </mat-card>

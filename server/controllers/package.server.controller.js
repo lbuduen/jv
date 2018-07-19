@@ -7,8 +7,13 @@ const Accomodation = require("mongoose").model("Accomodation");
 const User = require("mongoose").model("User");
 const Activity = require("mongoose").model("Activity");
 const TransportationByLand = require("mongoose").model("TransportationByLand");
+const Customer = require('mongoose').model('Customer');
 
 exports.create = function (req, res, next) {
+  if (req.body.quota == 'null') {
+    delete req.body.quota;
+  }
+
   const pkg = new Package(req.body);
 
   pkg.save((err, package) => {
@@ -342,7 +347,7 @@ exports.createSpreadsheet = function (req, res, next) {
 
   // details content
   details_ws.cell(2, 1).string(req.package.details.name);
-  details_ws.cell(2, 2).number(req.package.details.quota);
+  details_ws.cell(2, 2).string(req.package.details.quota ? req.package.details.quota : '-');
   details_ws.cell(2, 3).date(req.package.details.startDate);
   details_ws.cell(2, 4).date(req.package.details.endDate);
   details_ws.cell(2, 5).number(req.package.details.privateRate);
@@ -409,6 +414,7 @@ exports.createSpreadsheet = function (req, res, next) {
     });
   });
 
+  // activities content
   row = 0;
   req.package.activities.forEach(act => {
     act_ws.cell(row += 2, 1).string(act.activity.name);
@@ -427,4 +433,48 @@ exports.createSpreadsheet = function (req, res, next) {
   });
 
   wb.write("Package.xlsx", res);
+};
+
+exports.getNewCustomers = function (req, res, next) {
+  Package.findById(req.body.id, 'customers', (err, pkg) => {
+    if (err) {
+      return next(err);
+    }
+    const ids = pkg.customers.map(cust => cust.id);
+    Customer.find({ _id: { $nin: ids } }, (err, customers) => {
+      if (err) {
+        return next(err);
+      }
+      else {
+        res.status(200).json(customers);
+      }
+    });
+  });
+};
+
+exports.setNewCustomers = function (req, res, next) {
+  Package.findById(req.body.id, 'customers', (err, pkg) => {
+    if (err) {
+      return next(err);
+    }
+
+    req.body.customers.forEach(customer => {
+      const cust = {
+        id: customer._id,
+        rate: customer.rate,
+        status: customer.status,
+        requested: customer.requested
+      };
+      pkg.customers.push(cust);
+    });
+
+    pkg.save((err, pkg) => {
+      if (err) {
+        return res.status(400).send({
+          message: getErrorMessage(err)
+        });
+      }
+      res.status(204).end();
+    });
+  });
 };

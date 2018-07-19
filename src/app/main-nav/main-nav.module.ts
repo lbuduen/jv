@@ -46,6 +46,7 @@ import { AddCustomerToRideDialog } from "./packages/package-setup/add-customer-r
 import { PackageListComponent } from "./packages/package-list/package-list.component";
 import { PackageDeleteDialog } from "./packages/package-delete-dialog.component";
 import { CustomerDetailsComponent } from './customer/customer-details/customer-details.component';
+import { AddCustomerComponent } from './packages/add-customer/add-customer.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { CustomerDetailsComponent } from './customer/customer-details/customer-d
     PackageListComponent,
     PackageDeleteDialog,
     AddCustomerToRideDialog,
-    CustomerDetailsComponent
+    CustomerDetailsComponent,
+    AddCustomerComponent
   ],
   entryComponents: [
     AccomodationDeleteDialog,
@@ -97,7 +99,8 @@ import { CustomerDetailsComponent } from './customer/customer-details/customer-d
     TransportationDeleteDialog,
     CustomerDeleteDialog,
     PackageDeleteDialog,
-    AddCustomerToRideDialog
+    AddCustomerToRideDialog,
+    AddCustomerComponent
   ]
 })
 export class MainNavModule {}

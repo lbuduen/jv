@@ -27,6 +27,7 @@ import { PackageService } from "../package.service";
 import { EventService } from "../../../event.service";
 import { AddCustomerToRideDialog } from "./add-customer-ride-dialog.component";
 import { PackageDeleteDialog } from "../package-delete-dialog.component";
+import { AddCustomerComponent } from "../add-customer/add-customer.component";
 import { refCount } from "rxjs/operators";
 
 @Component({
@@ -36,7 +37,7 @@ import { refCount } from "rxjs/operators";
 })
 export class PackageSetupComponent implements OnInit {
   id: String = ""; // package id
-  pkg = {};
+  pkg;
 
   // forms
   detailsForm: FormGroup;
@@ -68,6 +69,8 @@ export class PackageSetupComponent implements OnInit {
   customerDataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
+  addCustomerBtn = false;
 
   constructor(
     private fb: FormBuilder,
@@ -181,6 +184,13 @@ export class PackageSetupComponent implements OnInit {
     return processed_customers;
   }
 
+  tabChanged(event: MatTabChangeEvent) {
+    /* console.log('event => ', event);
+    console.log('index => ', event.index);
+    console.log('tab => ', event.tab); */
+    this.addCustomerBtn = (event.index == 1) ? true : false;
+  }
+
   createDetailsForm() {
     this.detailsForm = this.fb.group({
       name: ["", Validators.required],
@@ -290,6 +300,8 @@ export class PackageSetupComponent implements OnInit {
       };
       if (activist.guide) {
         act.guide = activist.guide._id;
+      } else {
+        delete act.guide;
       }
       data.activists.push(act);
     });
@@ -328,8 +340,8 @@ export class PackageSetupComponent implements OnInit {
 
   delete(id: String) {
     const dialogRef = this.delDialog.open(PackageDeleteDialog, {
-      height: '200px',
-      width: '400px'
+      height: '600px',
+      width: '800px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -355,8 +367,7 @@ export class PackageSetupComponent implements OnInit {
       const file = new Blob([res], { type: 'octet/stream' });
       if (window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(file, `Package.xlsx`);
-      }
-      else {
+      } else {
         const url = window.URL.createObjectURL(file);
         const a = document.createElement("a");
         a.style.display = "none";
@@ -369,6 +380,32 @@ export class PackageSetupComponent implements OnInit {
       }
 
 
+    });
+  }
+
+  addCustomer2Pkg() {
+    const dialogRef = this.addCustomerDlg.open(AddCustomerComponent, {
+      height: "600px",
+      width: "800px",
+      data: {
+        pkg: this.pkg
+      }
+    });
+    dialogRef.afterClosed().subscribe(customers => {
+      if (customers && customers.length) {
+        const data = {
+          id: this.pkg._id,
+          customers: customers
+        };
+
+        this.pkgServ.setNewCustomers(data).subscribe(res => {
+          this.customers.push(...customers);
+          this.customerDataSource = new MatTableDataSource(this.customers);
+          this.customerDataSource.paginator = this.paginator;
+          this.customerDataSource.sort = this.sort;
+          this.snackBar.open(`Added ${customers.length} customer(s) to this package`, "", { duration: 3000 });
+        }, err => { });
+      }
     });
   }
 
@@ -463,14 +500,16 @@ export class PackageSetupComponent implements OnInit {
 
   setActivist() {
     const activist = {
-      activity: "",
-      guide: "",
+      activity: this.activitiesForm.get("activity").value,
+      guide: this.activitiesForm.get("guide").value,
       customers: [],
       date: Date
     };
 
-    activist.activity = this.activitiesForm.get("activity").value;
-    activist.guide = this.activitiesForm.get("guide").value;
+    if (!activist.guide) {
+      delete activist.guide;
+    }
+
     const date = this.activitiesForm.get("date").value;
 
     if (this.activitiesForm.get("hour").dirty && this.activitiesForm.get("minutes").dirty) {
@@ -488,6 +527,7 @@ export class PackageSetupComponent implements OnInit {
       activistsCpy.push(Object.assign({}, actv));
     });
     activist.customers = activistsCpy;
+    console.log(activist);
     this.activists.push(activist);
   }
 

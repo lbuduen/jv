@@ -122,8 +122,16 @@ exports.customerById = function (req, res, next, id) {
     });
 };
 
-exports.read = function (req, res) {
-    res.status(200).json(req.customer);
+exports.read = function (req, res, next) {
+    Package.find({ 'customers.id': req.customer._id }, 'name customers startDate endDate', (err, pkg) => {
+        if (err) {
+            return next(err);
+        }
+        res.status(200).json({
+            customer: req.customer,
+            packages: pkg
+        });
+    });
 };
 
 exports.update = function (req, res) {

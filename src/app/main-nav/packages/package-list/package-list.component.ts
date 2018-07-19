@@ -13,7 +13,7 @@ import { EventService } from "../../../event.service";
 })
 export class PackageListComponent implements OnInit {
 
-  displayedColumns = ['name', 'startDate', 'endDate', 'quota', 'requests', 'menu'];
+  displayedColumns = ['active', 'name', 'startDate', 'endDate', 'quota', 'requests', 'menu'];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
