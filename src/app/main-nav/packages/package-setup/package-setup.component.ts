@@ -267,6 +267,36 @@ export class PackageSetupComponent implements OnInit {
           this.customerDataSource.sort = this.sort;
         }
       });
+      this.activists.forEach((activist, i) => {
+        const actCust = activist.customers.map(cust => cust._id);
+        const pos = actCust.indexOf(customer._id);
+        if (pos !== -1) {
+          activist.customers.splice(pos, 1);
+        }
+        if (!this.activists[i].customers.length) {
+          this.activists.splice(i, 1);
+        }
+      });
+      this.riders.forEach((ride, i) => {
+        const rideCust = ride.riders.map(cust => cust._id);
+        const pos = rideCust.indexOf(customer._id);
+        if (pos !== -1) {
+          ride.riders.splice(pos, 1);
+        }
+        if (!this.riders[i].riders.length) {
+          this.riders.splice(i, 1);
+        }
+      });
+      this.guests.forEach((guest, i) => {
+        const gCust = guest.customers.map(cust => cust._id);
+        const pos = gCust.indexOf(customer._id);
+        if (pos !== -1) {
+          guest.customers.splice(pos, 1);
+        }
+        if (!this.guests[i].customers.length) {
+          this.guests.splice(i, 1);
+        }
+      });
     });
   }
 
@@ -340,8 +370,8 @@ export class PackageSetupComponent implements OnInit {
 
   delete(id: String) {
     const dialogRef = this.delDialog.open(PackageDeleteDialog, {
-      height: '600px',
-      width: '800px'
+      height: '200px',
+      width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -378,8 +408,6 @@ export class PackageSetupComponent implements OnInit {
         a.remove();
         window.URL.revokeObjectURL(url);
       }
-
-
     });
   }
 

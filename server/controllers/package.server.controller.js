@@ -269,7 +269,27 @@ exports.removeCustomer = function (req, res, next) {
     if (!pkg) {
       return next(new Error("Failed to load package " + req.body.pkg));
     }
+
+    pkg.activities.forEach(act => {
+      const pos = act.customers.indexOf(req.body.customer);
+      if (pos !== -1) {
+        act.customers.splice(pos, 1);
+      }
+    });
+    pkg.transportation.forEach(tr => {
+      const pos = tr.customers.indexOf(req.body.customer);
+      if (pos !== -1) {
+        tr.customers.splice(pos, 1);
+      }
+    });
+    pkg.accomodation.forEach(acc => {
+      const pos = acc.customers.indexOf(req.body.customer);
+      if (pos !== -1) {
+        acc.customers.splice(pos, 1);
+      }
+    });
     pkg.customers.id(req.body.customer).remove();
+    
     pkg.save(err => {
       if (err) {
         return res.status(400).send({
@@ -404,7 +424,7 @@ exports.createSpreadsheet = function (req, res, next) {
   req.package.accomodation.forEach(accom => {
     accom_ws.cell(row += 2, 1).string(`${accom.accomodation.name} ${accom.accomodation.type}`);
     accom_ws.cell(++row, 1).string(`Room ${accom.room.number} (${accom.room.type})`);
-    accom_ws.cell(row, 2).string(`Room ${accom.room.beds} bed(s)`);
+    accom_ws.cell(row, 2).string(`${accom.room.beds} bed(s)`);
     accom_ws.cell(row, 3).date(accom.startDate);
     accom_ws.cell(row, 4).date(accom.endDate);
 
