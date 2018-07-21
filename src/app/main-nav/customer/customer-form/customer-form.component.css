@@ -28,13 +28,12 @@ button[type="submit"] {
   display: flex;
 }
 
-.wrap table {
+.wrap aside {
   width: 49%;
+  padding: 16px
 }
 
-.wrap .gallery {
-  text-align: center;
-  width: 49%;
+.gallery {
   margin: 15px 0px;
 }
 

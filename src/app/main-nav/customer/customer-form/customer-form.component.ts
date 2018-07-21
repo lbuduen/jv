@@ -12,6 +12,8 @@ import { CustomerService } from "../customer.service";
 import { EventService } from "../../../event.service";
 
 import { RATES, STATUS } from "../data.model";
+import { Globals } from "../../../globals";
+
 
 @Component({
   selector: "app-customer-form",
@@ -19,6 +21,8 @@ import { RATES, STATUS } from "../data.model";
   styleUrls: ["./customer-form.component.css"]
 })
 export class CustomerFormComponent implements OnInit {
+  private MEDIA_URL = Globals.MEDIA_URL;
+
   rates = RATES;
   status = STATUS;
 
@@ -28,6 +32,7 @@ export class CustomerFormComponent implements OnInit {
   data = new FormData();
 
   packages = [];
+  selectedPkg;
 
   constructor(
     private fb: FormBuilder,
@@ -118,7 +123,7 @@ export class CustomerFormComponent implements OnInit {
       this.data.append(key, this.customerForm.controls[key].value);
     });
 
-    let pkg = {
+    const pkg = {
       id: this.customerForm.get("pkg").value,
       rate: this.customerForm.get("rate").value,
       status: this.customerForm.get("status").value
@@ -154,5 +159,10 @@ export class CustomerFormComponent implements OnInit {
         this.router.navigate(["/admin/customers"]);
       });
     }
+  }
+
+  selectPkg(event) {
+    const pkgids = this.packages.map(pkg => pkg._id);
+    this.selectedPkg = this.packages[pkgids.indexOf(event.value)];
   }
 }

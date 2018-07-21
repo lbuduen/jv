@@ -25,7 +25,7 @@
     </div>
     <div>
       <mat-form-field class="full-width">
-        <mat-select placeholder="Package" formControlName="pkg" required>
+        <mat-select placeholder="Package" formControlName="pkg" required (selectionChange)="selectPkg($event)">
           <mat-option *ngFor="let p of packages" [value]="p._id">
             {{ p.name }} ({{ p.startDate | date }} - {{ p.endDate | date }})
           </mat-option>
@@ -61,5 +61,25 @@
     </div>
     <button type="submit" [disabled]="customerForm.invalid" mat-raised-button>Save</button>
   </form>
-  <div class="gallery"></div>
+  <aside>
+    <mat-card *ngIf="selectedPkg">
+      <mat-card-header>
+        <mat-card-title>
+          {{ selectedPkg.name }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{selectedPkg.startDate | date}} - {{selectedPkg.endDate | date}}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <img *ngIf="selectedPkg.photos[0]" mat-card-image src="{{MEDIA_URL}}/img/packages/{{selectedPkg._id}}/{{ selectedPkg.photos[0]}}"
+        alt="{{ selectedPkg.name}}">
+      <mat-card-content>
+        <p>Private rate: {{selectedPkg.privateRate}} </p>
+        <p>Joiner rate: {{selectedPkg.joinerRate}} </p>
+        <p>{{selectedPkg.customers.length}} customers <span *ngIf="selectedPkg.quota">/ {{selectedPkg.quota}} </span></p>
+        <p>{{selectedPkg.description}} </p>
+      </mat-card-content>
+    </mat-card>
+    <div class="gallery"></div>
+  </aside>
 </div>

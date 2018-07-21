@@ -200,14 +200,14 @@ exports.login = function (req, res) {
 };
 
 exports.getPackages = function (req, res) {
-    Package.find({ 'active': true }, 'name startDate endDate')
+    Package.find({ 'active': true })
         .sort('name')
-        .exec((err, act) => {
+        .exec((err, pkg) => {
             if (err) {
                 return next(err);
             }
             else {
-                res.status(200).json(act);
+                res.status(200).json(pkg);
             }
         });
 };
