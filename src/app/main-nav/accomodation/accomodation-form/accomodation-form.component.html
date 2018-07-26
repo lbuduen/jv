@@ -73,7 +73,11 @@
           </mat-form-field>
         </div>
         <div>
-          <input type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+          <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">
+            <mat-icon aria-label="Select images">library_add</mat-icon>
+            <span style="margin-left: 10px;">Choose accomodation photo(s)</span>
+            <input #fileInput [hidden]="true" type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+          </button>
           <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
             <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
           </button>
