@@ -11,6 +11,10 @@ form {
   margin: 10px 0px;
 }
 
+#detailsForm {
+  width: 100%;
+}
+
 #transportationForm,
 #activitiesForm {
   width: 45%;

@@ -427,7 +427,7 @@ export class PackageSetupComponent implements OnInit {
         };
 
         this.pkgServ.setNewCustomers(data).subscribe(res => {
-          this.customers.push(...customers);
+          this.customers = this.processCustomers(res.customers);
           this.customerDataSource = new MatTableDataSource(this.customers);
           this.customerDataSource.paginator = this.paginator;
           this.customerDataSource.sort = this.sort;

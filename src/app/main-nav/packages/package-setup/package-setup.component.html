@@ -1,5 +1,7 @@
 <mat-toolbar>
-  <span class="tb-title">Package <b>{{pkg.name}}</b></span>
+  <span class="tb-title">Package
+    <b>{{pkg.name}}</b>
+  </span>
   <span class="spacer"></span>
   <button mat-icon-button matTooltip="Add customer" *ngIf="addCustomerBtn" (click)="addCustomer2Pkg()">
     <mat-icon aria-label="Add customer">person_add</mat-icon>
@@ -56,9 +58,7 @@
               </mat-form-field>
             </div>
             <div>
-              <mat-form-field class="full-width">
-                <textarea matInput placeholder="Description" formControlName="description"></textarea>
-              </mat-form-field>
+              <quill-editor [placeholder]="'Description'" [style]="{height: '300px'}" formControlName="description"></quill-editor>
             </div>
             <div>
               <mat-checkbox formControlName="active">Active</mat-checkbox>
@@ -170,7 +170,8 @@
             </div>
             <div>
               <mat-form-field>
-                <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="trdate" placeholder="Date" formControlName="date" required>
+                <input matInput [min]="pkg.startDate" [max]="pkg.endDate" [matDatepicker]="trdate" placeholder="Date" formControlName="date"
+                  required>
                 <mat-datepicker-toggle matSuffix [for]="trdate"></mat-datepicker-toggle>
                 <mat-datepicker #trdate></mat-datepicker>
               </mat-form-field>

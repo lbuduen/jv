@@ -1,39 +1,39 @@
-form {
-  width: 50%;
+#wrap {
+  width: 95%;
   padding: 0px 16px;
   margin: 20px 0px;
 }
 
-form div:last-child {
-  margin-top: 20px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-button[type="submit"] {
-  margin-top: 20px;
-}
-
-.dates mat-form-field {
-  width: 49%;
-}
-
-.dates mat-form-field:first-child {
-  margin-right: 10px;
-}
-
-.wrap {
+form > div, .gallery {
   display: flex;
+  margin-bottom: 16px;
 }
 
-.wrap .gallery {
-  text-align: center;
-  width: 49%;
-  margin: 15px 0px;
+mat-form-field {
+  margin-right: 12px;
+}
+
+mat-checkbox {
+  margin-right: 20px;
+  margin-top: 10px;
+}
+
+form > div:nth-child(2) mat-form-field {
+  width: 33%;
+}
+
+#name {
+  width: 50%;
+}
+
+.date {
+  width: 24%;
 }
 
 #delete_img_btn {
-  margin-left: 16px;
+  margin-left: 12px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

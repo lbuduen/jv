@@ -149,7 +149,6 @@ exports.packageById = function (req, res, next, id) {
     .populate({
       path: "accomodation.accomodation"
     })
-
     .exec((err, package) => {
       if (err) {
         return next(err);
@@ -289,7 +288,7 @@ exports.removeCustomer = function (req, res, next) {
       }
     });
     pkg.customers.id(req.body.customer).remove();
-    
+
     pkg.save(err => {
       if (err) {
         return res.status(400).send({
@@ -494,7 +493,12 @@ exports.setNewCustomers = function (req, res, next) {
           message: getErrorMessage(err)
         });
       }
-      res.status(204).end();
+      pkg.populate({
+        path: "customers.id",
+        select: "-_id -salt -password"
+      }, (err, pack) => {
+        res.status(200).json(pack);
+      })
     });
   });
 };
