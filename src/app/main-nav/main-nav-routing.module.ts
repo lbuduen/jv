@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuardService } from "../auth-guard.service";
+import { CanDeactivateGuardService } from "../can-deactivate-guard.service";
 
 import { MainNavComponent } from "./main-nav.component";
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -126,7 +127,8 @@ const mainNavRoutes: Routes = [
           },
           {
             path: 'setup/:id',
-            component: PackageSetupComponent
+            component: PackageSetupComponent,
+            canDeactivate: [CanDeactivateGuardService]
           },
           {
             path: '',

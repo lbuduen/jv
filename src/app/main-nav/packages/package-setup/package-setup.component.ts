@@ -71,6 +71,7 @@ export class PackageSetupComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   addCustomerBtn = false;
+  saved = false;
 
   constructor(
     private fb: FormBuilder,
@@ -363,6 +364,7 @@ export class PackageSetupComponent implements OnInit {
         this.snackBar.open(`The package information has been saved`, "", {
           duration: 3000
         });
+        this.saved = true;
       },
       err => { }
     );
@@ -435,6 +437,16 @@ export class PackageSetupComponent implements OnInit {
         }, err => { });
       }
     });
+  }
+
+  canDeactivate(): boolean {
+    if (this.detailsForm.pristine && this.transportationForm.pristine && this.accomodationForm.pristine && this.activitiesForm.pristine) {
+      return true;
+    }
+    if (this.saved) {
+      return true;
+    }
+    return confirm('Discard changes?');
   }
 
   /* ------------------------------------------Transportation set up----------------------------------------------------*/

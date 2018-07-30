@@ -5,6 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { LoginComponent } from '../login/login.component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { CanDeactivateGuardService } from "../can-deactivate-guard.service";
 
 
 const appRoutes: Routes = [
@@ -24,6 +25,9 @@ const appRoutes: Routes = [
   ],
   exports: [
     RouterModule
+  ],
+  providers: [
+    CanDeactivateGuardService
   ]
 })
 export class AppRoutingModule { }
