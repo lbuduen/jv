@@ -1,30 +1,29 @@
 <mat-toolbar>
   <span class="tb-title">Activities</span>
+  <span class="spacer"></span>
+  <button form="actForm" type="submit" [disabled]="actForm.invalid" mat-icon-button matTooltip="Save">
+    <mat-icon aria-label="Save">save</mat-icon>
+  </button>
 </mat-toolbar>
 
-<div class="wrap">
-  <form [formGroup]="actForm" (submit)="save()">
-    <div>
-      <mat-form-field class="full-width">
-        <input type="text" matInput placeholder="Name" formControlName="name" required>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="full-width">
-        <textarea matInput placeholder="Description" formControlName="description"></textarea>
-      </mat-form-field>
-    </div>
-    <div>
-      <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">
-        <mat-icon aria-label="Select images">library_add</mat-icon>
-        <span style="margin-left: 10px;">Choose activity photo(s)</span>
-        <input #fileInput [hidden]="true" type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
-      </button>
-      <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
-        <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
-      </button>
-    </div>
-    <button type="submit" [disabled]="actForm.invalid" mat-raised-button>Save</button>
-  </form>
+<form [formGroup]="actForm" id="actForm" (submit)="save()">
+  <div>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Name" formControlName="name" required>
+    </mat-form-field>
+  </div>
+  <div>
+    <quill-editor [placeholder]="'Description'" [style]="{height: '300px'}" formControlName="description"></quill-editor>
+  </div>
+  <div>
+    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">
+      <mat-icon aria-label="Select images">library_add</mat-icon>
+      <span style="margin-left: 10px;">Choose activity photo(s)</span>
+      <input #fileInput [hidden]="true" type="file" accept="image/png, image/jpeg" multiple (change)="onFileChange($event)">
+    </button>
+    <button mat-icon-button (click)="deleteAllImages($event)" id="delete_img_btn">
+      <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
+    </button>
+  </div>
   <div class="gallery"></div>
-</div>
+</form>

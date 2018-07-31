@@ -1,9 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Customers</span>
+  <span class="spacer"></span>
+  <button form="customerForm" type="submit" [disabled]="customerForm.invalid" mat-icon-button matTooltip="Save">
+    <mat-icon aria-label="Save">save</mat-icon>
+  </button>
 </mat-toolbar>
 
 <div class="wrap">
-  <form [formGroup]="customerForm" (submit)="save()">
+  <form [formGroup]="customerForm" id="customerForm" (submit)="save()">
     <div id="names">
       <mat-form-field>
         <input type="text" matInput placeholder="First name" formControlName="firstName" required>
@@ -63,7 +67,6 @@
         <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
       </button>
     </div>
-    <button type="submit" [disabled]="customerForm.invalid" mat-raised-button>Save</button>
   </form>
   <aside>
     <mat-card *ngIf="selectedPkg">

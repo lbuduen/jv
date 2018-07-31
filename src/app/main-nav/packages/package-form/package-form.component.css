@@ -1,10 +1,9 @@
-#wrap {
-  width: 95%;
+form {
   padding: 0px 16px;
   margin: 20px 0px;
 }
 
-form > div, .gallery {
+form > div {
   display: flex;
   margin-bottom: 16px;
 }

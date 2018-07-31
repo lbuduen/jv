@@ -103,7 +103,7 @@ export class UserFormComponent implements OnInit {
   }
 
   save() {
-    let formkeys = Object.keys(this.userForm.controls);
+    const formkeys = Object.keys(this.userForm.controls);
 
     formkeys.forEach(key => {
       this.data.append(key, this.userForm.controls[key].value);

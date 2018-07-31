@@ -8,6 +8,7 @@ const dir = "./assets/img/user";
 
 exports.create = function (req, res, next) {
   const user = new User(req.body);
+  user.role = req.body.role.split(',');
 
   user.save((err, usr) => {
     if (err) {
@@ -129,7 +130,7 @@ exports.update = function (req, res) {
   user.lastName = req.body.lastName;
   user.email = req.body.email;
   user.phone = req.body.phone;
-  user.role = req.body.role;
+  user.role = req.body.role.split(',');
   if (req.body.password) {
     user.password = req.body.password;
   }

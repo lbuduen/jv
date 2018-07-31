@@ -499,7 +499,7 @@ export class PackageSetupComponent implements OnInit {
   addCustomer2Ride(ridePos) {
     const newCustomers = [];
     this.customers.forEach(c => {
-      let in_ride = this.riders[ridePos].riders.some(rc => {
+      const in_ride = this.riders[ridePos].riders.some(rc => {
         return c._id === rc._id;
       });
       if (!in_ride) {

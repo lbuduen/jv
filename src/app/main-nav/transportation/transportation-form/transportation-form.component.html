@@ -5,10 +5,14 @@
     <mat-radio-button value="air">By Air</mat-radio-button>
     <mat-radio-button value="yacht">Yacht Up!</mat-radio-button>
   </mat-radio-group>
+  <span class="spacer"></span>
+  <button *ngIf="means.value == 'land'" form="byLandForm" type="submit" [disabled]="byLandForm.invalid" mat-icon-button matTooltip="Save">
+    <mat-icon aria-label="Save">save</mat-icon>
+  </button>
 </mat-toolbar>
 <div class="wrap">
 
-  <form [formGroup]="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
+  <form [formGroup]="byLandForm" id="byLandForm" (submit)="save()" *ngIf="means.value == 'land'">
     <div>
       <mat-form-field class="full-width">
         <mat-select placeholder="Driver" formControlName="driver" required>
@@ -64,7 +68,6 @@
         <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
       </button>
     </div>
-    <button type="submit" [disabled]="byLandForm.invalid" mat-raised-button>Save</button>
   </form>
   <div class="gallery">
 

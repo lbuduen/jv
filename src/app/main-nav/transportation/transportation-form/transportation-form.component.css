@@ -12,10 +12,6 @@ form div:last-child {
   width: 100%;
 }
 
-button[type="submit"] {
-  margin-top: 20px;
-}
-
 mat-radio-group {
   margin-left: 15px;
 }
@@ -50,4 +46,8 @@ mat-card mat-form-field:first-child {
 
 #delete_img_btn {
   margin-left: 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

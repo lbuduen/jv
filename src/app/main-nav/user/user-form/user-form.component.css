@@ -20,10 +20,6 @@ form div:last-child {
   margin-right: 10px;
 }
 
-button[type="submit"] {
-  margin-top: 20px;
-}
-
 .wrap {
   display: flex;
 }
@@ -40,4 +36,8 @@ button[type="submit"] {
 
 #delete_img_btn {
   margin-left: 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

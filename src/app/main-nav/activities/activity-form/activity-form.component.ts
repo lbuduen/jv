@@ -75,8 +75,8 @@ export class ActivityFormComponent implements OnInit {
         reader.onload = function() {
           let img: HTMLImageElement = window.document.createElement("img");
           img.src = reader.result;
-          img.style.width = "60%";
-          img.style.marginBottom = "10px";
+          img.style.height = "200px";
+          img.style.marginRight = "12px";
 
           gallery.appendChild(img);
         };

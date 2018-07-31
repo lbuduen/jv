@@ -1,9 +1,13 @@
 <mat-toolbar>
   <span class="tb-title">Users</span>
+  <span class="spacer"></span>
+  <button form="userForm" type="submit" [disabled]="userForm.invalid" mat-icon-button matTooltip="Save">
+    <mat-icon aria-label="Save">save</mat-icon>
+  </button>
 </mat-toolbar>
 
 <div class="wrap">
-  <form [formGroup]="userForm" (submit)="save()">
+  <form [formGroup]="userForm" id="userForm" (submit)="save()">
     <div id="names">
       <mat-form-field>
         <input type="text" matInput placeholder="First name" formControlName="firstName" required>
@@ -35,6 +39,7 @@
     <div>
       <mat-form-field class="full-width">
         <input type="password" matInput placeholder="Password" formControlName="password">
+        <mat-error *ngIf="userForm.get('password').hasError('minLength')">Password should have at least 8 characters</mat-error>
       </mat-form-field>
     </div>
     <div>
@@ -47,7 +52,6 @@
         <mat-icon aria-label="Delete all images" matTooltip="Delete all images">delete_sweep</mat-icon>
       </button>
     </div>
-    <button type="submit" [disabled]="userForm.invalid" mat-raised-button>Save</button>
   </form>
   <div class="gallery"></div>
 </div>
