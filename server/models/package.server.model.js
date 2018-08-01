@@ -41,7 +41,8 @@ const PackageSchema = new Schema({
       requested: {
         type: Date,
         default: Date.now
-      }
+      },
+      paid: Date
     }
   ],
   activities: [

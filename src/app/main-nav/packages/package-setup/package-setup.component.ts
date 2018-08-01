@@ -117,14 +117,10 @@ export class PackageSetupComponent implements OnInit {
 
           this.detailsForm.patchValue(pkg.details);
 
-          pkg.details.customers.forEach(c => {
-            const customer = c.id;
-            customer.rate = c.rate;
-            customer.status = c.status;
-            customer._id = c._id;
-            customer.requested = c.requested;
-            this.customers.push(customer);
-          });
+          this.customers = this.processCustomers(this.pkg.details.customers);
+          this.customerDataSource = new MatTableDataSource(this.customers);
+          this.customerDataSource.paginator = this.paginator;
+          this.customerDataSource.sort = this.sort;
 
           pkg.transportation.forEach(tr => {
             const ride = {
@@ -157,10 +153,6 @@ export class PackageSetupComponent implements OnInit {
             };
             this.activists.push(activist);
           });
-
-          this.customerDataSource = new MatTableDataSource(this.customers);
-          this.customerDataSource.paginator = this.paginator;
-          this.customerDataSource.sort = this.sort;
         },
         error => {
           this.snackBar.open(`Error retrieving package ${this.id}`, "", {

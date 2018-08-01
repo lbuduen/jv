@@ -16,6 +16,8 @@ router.get("/", (req, res) => {
 
 router.route("/totals").get(app.totalCounts);
 
+router.route("/dashboard/summary").post(app.dashboardSummary);
+
 // user routes
 router
   .route("/users")

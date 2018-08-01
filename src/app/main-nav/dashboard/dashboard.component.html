@@ -1,4 +1,47 @@
-<p>
-  dashboard works!
-  <mat-icon svgIcon="thumbs-up"></mat-icon>
-</p>
+<div id="toolbar">
+  <mat-form-field>
+    <input matInput [matDatepicker]="sdate" placeholder="Start date" [formControl]="startDate" required>
+    <mat-datepicker-toggle matSuffix [for]="sdate"></mat-datepicker-toggle>
+    <mat-datepicker #sdate></mat-datepicker>
+  </mat-form-field>
+  -
+  <mat-form-field>
+    <input matInput [matDatepicker]="edate" placeholder="End date" [formControl]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="edate"></mat-datepicker-toggle>
+    <mat-datepicker #edate></mat-datepicker>
+  </mat-form-field>
+
+  <button type="button" mat-icon-button matTooltip="Filter" [disabled]="startDate.invalid" (click)="getSummary(startDate.value, endDate.value)">
+      <mat-icon aria-label="Filter">bar_chart</mat-icon>
+    </button>
+</div>
+
+<div id="wrap">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Total requests
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{startDate.value | date}} <span *ngIf="endDate.value">- {{endDate.value | date}}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h1>{{summary.requests}} </h1>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Total amount
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{startDate.value | date}} <span *ngIf="endDate.value">- {{endDate.value | date}}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h1>{{summary.amount}} </h1>
+    </mat-card-content>
+  </mat-card>
+</div>

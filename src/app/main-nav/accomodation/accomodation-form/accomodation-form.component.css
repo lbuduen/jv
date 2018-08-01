@@ -13,7 +13,8 @@ form div:last-child {
 }
 
 .add-btn-width {
-  width: 95%;
+  width: 90%;
+  margin-right: 25px;
 }
 
 .wrap {

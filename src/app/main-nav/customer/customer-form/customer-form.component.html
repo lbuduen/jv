@@ -83,10 +83,9 @@
       <mat-card-content>
         <p>Private rate: {{selectedPkg.privateRate}} </p>
         <p>Joiner rate: {{selectedPkg.joinerRate}} </p>
-        <p>{{selectedPkg.customers.length}} customers
-          <span *ngIf="selectedPkg.quota">/ {{selectedPkg.quota}} </span>
+        <p>{{selectedPkg.customers.length}} <span *ngIf="selectedPkg.quota">/ {{selectedPkg.quota}} </span>customers
         </p>
-        <p>{{selectedPkg.description}} </p>
+        <p [innerHTML]="selectedPkg.description"></p>
       </mat-card-content>
     </mat-card>
     <div class="gallery"></div>

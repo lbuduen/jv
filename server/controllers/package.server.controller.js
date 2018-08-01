@@ -247,6 +247,9 @@ exports.setStatus = function (req, res, next) {
     }
     const customer = pkg.customers.id(req.body.customer);
     customer.status = req.body.status;
+    if (customer.status == 'paid') {
+      customer.paid = new Date();
+    }
     pkg.save(err => {
       if (err) {
         return res.status(400).send({
@@ -366,7 +369,9 @@ exports.createSpreadsheet = function (req, res, next) {
 
   // details content
   details_ws.cell(2, 1).string(req.package.details.name);
-  details_ws.cell(2, 2).string(req.package.details.quota ? req.package.details.quota : '-');
+  if (req.package.details.quota) {
+    details_ws.cell(2, 2).number(req.package.details.quota);
+  }
   details_ws.cell(2, 3).date(req.package.details.startDate);
   details_ws.cell(2, 4).date(req.package.details.endDate);
   details_ws.cell(2, 5).number(req.package.details.privateRate);
@@ -398,7 +403,7 @@ exports.createSpreadsheet = function (req, res, next) {
   });
   customers_ws.cell(row, 6).string('Total:');
   if (row > 3) {
-    customers_ws.cell(row, 7).formula(`G2 + G${row - 1}`);
+    customers_ws.cell(row, 7).formula(`SUM(G2:G${row - 1})`);
   }
   else {
     customers_ws.cell(row, 7).formula(`G2 + 0`);
